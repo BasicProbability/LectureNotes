@@ -1,0 +1,100 @@
+\documentclass[a4paper,11pt,leqno]{report}
+
+\usepackage{amsmath, amssymb, mdframed}
+\usepackage{hyperref}
+\hypersetup{colorlinks=true, urlcolor=blue, breaklinks=true}
+
+\newmdtheoremenv{Definition}{Definition}
+\newmdtheoremenv{Exercise}{Exercise}
+
+\title{Basic Probability}
+\date{}
+
+\begin{document}
+
+\chapter{Axiomatic Probability Theory}
+
+\section{Axioms of probability}
+In the previous chapter, we have introduced sample spaces and event spaces. 
+In a mathematically concrete sense, we are now going to measure the probability of events. 
+
+\begin{Definition}
+A measure is a function $ \mu: \mathcal{S} \rightarrow \mathbb{R} : S \mapsto \mu (S) $ that maps elements
+from a set of sets $ \mathcal{S} $ (formally a \href{http://en.wikipedia.org/wiki/Sigma-algebra}
+{$ \sigma $-algebra}) to real numbers. Such a measure has the following properties:
+\begin{enumerate}
+\item $ \mu(S) \geq 0 $ for all $ S \in \mathcal{S} $
+\item $ \mu\left( \underset{i = 1}{\overset{\infty}{\bigcup}} S_{i} \right)
+= \underset{i = 1}{\overset{\infty}{\sum}} \mu \left( S_{i} \right) $
+\end{enumerate}
+\end{Definition}
+
+The second property ensures that we can compute the measure of the union of two or more sets by
+first computing the measure of each set individually and then simply adding them up. We have already
+seen an example of a measure, namely the counting measure $ |\cdot| $ that counts the elements in a set.
+
+There is one measure, however, that is going to be the star of the rest of this script, namely 
+the \textbf{probability measure}.
+
+\begin{Definition}
+A probability measure $ \mathbb{P}: \mathcal{A} \rightarrow \mathbb{R} : A \mapsto \mathbb{P}(A) $
+on an event space $ \mathcal{A} $ associated with a sample space $ \Omega $ to the real numbers has the
+following properties.
+\begin{enumerate}
+\item $ \mathbb{P}(A) \geq 0 $ for all $ A \in \mathcal{A} $
+\item $ \mathbb{P}\left( \underset{i = 1}{\overset{\infty}{\bigcup}} A_{i} \right)
+= \underset{i = 1}{\overset{\infty}{\sum}} \mathbb{P} \left( A_{i} \right) $ \label{union}
+\item $ \mathbb{P}(\Omega) = 1 $ \label{unity}
+\end{enumerate}
+\end{Definition}
+
+Notice that we only added item \ref{unity} to the general definition of a measure. This has some
+interesting consequences. For one, since $ \mathbb{P}(\Omega) = 1 $ we know that no event can have
+probability greater than $ 1 $. Moreover, we have 
+\begin{equation}
+\mathbb{P}(\Omega) = \mathbb{P}(\Omega \cup \emptyset) = \mathbb{P}(\Omega) + \mathbb{P}(\emptyset)
+\end{equation}
+which implies that $ \mathbb{P}(\emptyset) = 0 $ always holds. We can therefore safely exclude 
+the empty set from our event spaces.
+
+We have already discussed uniform probability in the previous chapter. Now we can formally explain
+what we meant by that. The uniform probability measure is the measure $ \mathbb{P} $ such that
+$ \mathbb{P}(\{\omega\}) = \frac{1}{|\Omega|} $ for all $ \omega \in \Omega $. This is where the
+distinction between sample and event spaces becomes important. We cannot measure the elements of a
+sample space, only the elements of an event space! Recall our convention that we will always assume
+that $ \mathcal{A} = \mathcal{P}(\Omega) $ which obviously contains a singleton for each element in
+$ \Omega $. This implies the uniform probability measure is indeed well-defined. Whenever we talk about
+\textit{uniform probability} we either mean the uniform probability measure or, more often, the real
+value $ \frac{1}{|\Omega|} $ to which this measure uniformly evaluates.
+
+In order to create a tight relationship between a sample space, an event space and a probability measure,
+we can introduce the concept of a \textbf{probability space}. Probability spaces are also know as 
+(probabilistic) \textbf{experiments}.
+
+\begin{Definition} \label{ProbabiltySpace}
+A probability space is a triple $ (\Omega, \mathcal{A}, \mathbb{P}) $, consisting of a sample space $ \Omega $,
+an event space $ \mathcal{A} $ and a probability measure $ \mathbb{P} $.
+\end{Definition}
+
+If we want to roll a die, for example, we have the sample space $ \Omega = \{1,2,3,4,5,6\} $ and, by convention,
+the event space $ \mathcal{A} = \mathcal{P}(\Omega) $. If we add the uniform probability measure, we have
+constructed ourselves an experiment. We can use it to answer a couple of questions. For example, we might ask 
+what is the probability of obtaining an even number. By item \ref{union} of our definition, this probability
+is given as $ \mathbb{P}(\{2,4,6)\} = \mathbb{P}(\{2\} \cup \{4\} \cup \{6\}) = \mathbb{P}(\{2\}) + \mathbb{P}(\{4\})
++ \mathbb{P}(\{6\}) = \frac{1}{6} + \frac{1}{6} + \frac{1}{6} = \frac{1}{2} $.
+
+It is important to point out that we just chose the uniform probability measure as the one that seems ``natural'' for
+a die roll. However, nobody is forcing us to do so. In fact, def. \ref{ProbabiltySpace} allows us to impose arbitrary
+probability measures.
+
+\begin{Exercise}
+Take $ (\Omega, \mathcal{A}, \mathbb{P}) $ with $ \Omega $ and $ \mathcal{A} $ as before but now use the 
+probability measure $ \mathbb{P} = \{(\{1\},0), (\{2\}, \frac{1}{12}), (\{3\}, \frac{1}{6}), (\{4\}, \frac{1}{6}), (\{5\}, \frac{1}{3}),
+(\{6\},\frac{1}{4}) \} $.
+\begin{enumerate}
+\item Verify that $ \mathbb{P} $ is indeed a probability measure.
+\item Compute the probability of obtaining a number smaller than $ 5 $ in this experiment.
+\end{enumerate}
+\end{Exercise}
+
+\end{document}
