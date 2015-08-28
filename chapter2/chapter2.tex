@@ -21,21 +21,22 @@
 \usepackage{hyperref}
 \hypersetup{colorlinks=true, urlcolor=blue, breaklinks=true}
 
-\newmdtheoremenv{Definition}{Definition}
-\newmdtheoremenv{Exercise}{Exercise}
-\newmdtheoremenv{Theorem}{Theorem}
+\newmdtheoremenv{Definition}{Definition}[chapter]
+\newmdtheoremenv{Exercise}{Exercise}[chapter]
+\newmdtheoremenv{Theorem}{Theorem}[chapter]
 
 \title{Basic Probability}
 \date{}
 
 \begin{document}
 
+\setcounter{chapter}{1}
 \chapter{Axiomatic Probability Theory}
 
 \section{Axioms of probability}
 In the previous chapter, we have introduced sample spaces and event spaces. Now we would like to be able
 to express that certain events are more (or less) likely than others. 
-To achieve this, we are now going to measure the probability of events in a mathematically precise sense. 
+Therefore, we are going to measure the probability of events in a mathematically precise sense. 
 
 \begin{Definition}\label{axioms}
 A finite measure is a function $ \mu: \mathcal{S} \rightarrow \mathbb{R} : S \mapsto \mu (S) $ 
@@ -43,27 +44,27 @@ that maps elements
 from a set of sets $ \mathcal{S} $ (formally a \href{http://en.wikipedia.org/wiki/Sigma-algebra}
 {$ \sigma $-algebra}) to real numbers. Such a measure has the following properties:
 \begin{enumerate}
-\item $ \mu(S) \in \mathbb{R} $ for $ S \in \mathcal{S} $
+\item $ \mu(S) \in \mathbb{R} $ for $ S \in \mathcal{S} \, ,$
 \item $ \mu\left( \underset{i = 1}{\overset{\infty}{\bigcup}} S_{i} \right)
-= \underset{i = 1}{\overset{\infty}{\sum}} \mu \left( S_{i} \right) $ if $ S_{i}\cup S_{j} = \emptyset $ 
-for $ i \not = j $ \label{countableAdditivty}
+= \underset{i = 1}{\overset{\infty}{\sum}} \mu \left( S_{i} \right) $ if $ S_{i}\cap S_{j} = \emptyset $ 
+for $ i \not = j $. \label{countableAdditivty}
 \end{enumerate}
 \end{Definition}
 
 Notice that we are restricting ourselves to finite measures here, i.e. the value of the measure can never
-be infinite. This makes sense as probabilities are finite, as well. Property \ref{countableAdditivty} is 
-known as  \textit{countable additivity}. 
+be infinite. This restriction makes sense as probabilities are finite as well. Property \ref{countableAdditivty} is 
+known as \emph{countable additivity}. 
 
 If we let 
 $ S = \underset{i=1}{\overset{n}{\bigcup}} S_{i} $ for some positive natural number $ n $ and disjoint 
 $ S_{i} $ and $ S_{j} = 
 \emptyset $ for $ j > n $ we get $ \mu(S) = \mu(\underset{i=1}{\overset{\infty}{\bigcup}} S_{i}) $. By
-countable additivity this expands to
+countable additivity, this expands to
 \begin{equation}
 \mu(S) = \mu \left( \underset{i=1}{\overset{n}{\bigcup}} S_{i} \cup 
 \underset{j=n+1}{\overset{\infty}{\bigcup}} \emptyset \right) 
 = \underset{i=1}{\overset{n}{\sum}} \mu ( S_{i} )
-+ \underset{j=n+1}{\overset{\infty}{\sum}} \mu ({\emptyset})
++ \underset{j=n+1}{\overset{\infty}{\sum}} \mu ({\emptyset}) \, .
 \end{equation}
 
 Since the $ S_{i} $ are disjoint, we
@@ -79,53 +80,53 @@ namely the function $ |\cdot| $ that counts the elements of a set (check yoursel
 measure). Another measure is the Dirac-measure that is related to the characteristic
 function of a set. While the characteristic function tells you whether any object belongs to a given set,
 the Dirac-measure tells you whether any set contains a given object. Let us call the object in question
-$ a $. Then its Dirac measure $ \delta_{a}(S) = 1 $ iff $ a \in S $ and 0 otherwise. 
+$ a $. Then its Dirac measure $ \delta_{a}(S) = 1 $ iff $ a \in S $ and 0 otherwise (check again that the Dirac-measure indeed is a measure).
 
-Apart from these examples there is one measure, however, that is going to be the star of the rest of this 
+Apart from these examples, there is one measure, however, that is going to be the star of the rest of this 
 script, namely the \textbf{probability measure}.
 
 \begin{Definition}
 A probability measure $ \mathbb{P}: \mathcal{A} \rightarrow \mathbb{R} : A \mapsto \mathbb{P}(A) $
 on an event space $ \mathcal{A} $ associated with a sample space $ \Omega $ has the
-following properties.
+following properties:
 \begin{enumerate}
-\item $ \mathbb{P}(A) \geq 0 $ for all $ A \in \mathcal{A} $
+\item $ \mathbb{P}(A) \geq 0 $ for all $ A \in \mathcal{A} \,$,
 \item $ \mathbb{P}\left( \underset{i = 1}{\overset{\infty}{\bigcup}} A_{i} \right)
-= \underset{i = 1}{\overset{\infty}{\sum}} \mathbb{P} \left( A_{i} \right) $ \label{union}
-\item $ \mathbb{P}(\Omega) = 1 $ \label{unity}
+= \underset{i = 1}{\overset{\infty}{\sum}} \mathbb{P} \left( A_{i} \right) \,$, \label{union}
+\item $ \mathbb{P}(\Omega) = 1 \,$. \label{unity}
 \end{enumerate}
 \end{Definition}
 
-Notice that we only added item \ref{unity} to the general definition of a measure. This means that a
-\textbf{probability}, i.e. the value that the probability measure assigns to an event, will always lie in
-$ [0,1] $. The above three axioms for a probability measure are often referred to as axioms of probability
-or Kolmogorov axioms after their inventor \href{https://en.wikipedia.org/wiki/Andrey_Kolmogorov}{Andrey
+Notice that we only added Property~\ref{unity} to the general definition of a measure. Hence, a
+\textbf{probability} (the value that the probability measure assigns to an event) will always lie in the real interval 
+$[0,1]$. The above three axioms for a probability measure are often referred to as \emph{axioms of probability}
+or \emph{Kolmogorov axioms} after their inventor \href{https://en.wikipedia.org/wiki/Andrey_Kolmogorov}{Andrey
 Kolmogorov}.
 
-We have already discussed uniform probabilities in the previous chapter. Now we can formally explain
+We have already discussed uniform probabilities in the previous chapter. We can now formally explain
 what we meant by that. The uniform probability measure is the measure $ \mathbb{P} $ such that
-$ \mathbb{P}(\{\omega\}) = \frac{1}{|\Omega|} $ for all $ \omega \in \Omega $. This is where the
+$ \mathbb{P}(\{\omega\}) = \frac{1}{|\Omega|} $ for all $ \omega \in \Omega $. At this point, the
 distinction between sample and event spaces becomes important. We cannot measure the elements of a
 sample space, only the elements of an event space! Recall our convention that we will always assume
 that $ \mathcal{A} = \mathcal{P}(\Omega) $ which obviously contains a singleton for each element in
-$ \Omega $. This implies the uniform probability measure is indeed well-defined. Whenever we talk about
-\textit{uniform probability} we either mean the uniform probability measure or, more often, the real
+$ \Omega $. Using this assumption, the uniform probability measure is indeed well-defined. Whenever we talk about
+\textit{uniform probability}, we either mean the uniform probability measure or, more often, the real
 value $ \frac{1}{|\Omega|} $ to which this measure uniformly evaluates.
 
 In order to create a tight relationship between a sample space, an event space and a probability measure,
-we can introduce the concept of a \textbf{probability space}. Probability spaces are also know as 
+we introduce the concept of a \textbf{probability space}. Probability spaces are also known as 
 (probabilistic) \textbf{experiments}.
 
-\begin{Definition} \label{ProbabiltySpace}
+\begin{Definition} \label{def:ProbabilitySpace}
 A probability space is a triple $ (\Omega, \mathcal{A}, \mathbb{P}) $, consisting of a sample space $ \Omega $,
 an event space $ \mathcal{A} $ and a probability measure $ \mathbb{P} $.
 \end{Definition}
 
-If we want to roll a die, for example, we have the sample space $ \Omega = \{1,2,3,4,5,6\} $ and, by 
+If we roll a die, for example, we have the sample space $ \Omega = \{1,2,3,4,5,6\} $ and, by 
 convention, the event space $ \mathcal{A} = \mathcal{P}(\Omega) $. If we add the uniform probability measure, 
-we have constructed ourselves an experiment. We can use it to answer a couple of questions. For example, we 
-might ask what is the probability of obtaining an even number. By item \ref{union} of our definition, this 
-probability is given as
+we have constructed  a \emph{probabilistic experiment}. We can use it to answer a couple of questions. For example, we 
+might wonder about the probability of obtaining an even number. By Property~\ref{union} of our definition, this 
+probability is given by
 \begin{equation}
 \mathbb{P}(\{2,4,6)\}) = \mathbb{P}(\{2\} \cup \{4\} \cup \{6\}) = \mathbb{P}(\{2
 \}) + \mathbb{P}(\{4\})
@@ -135,20 +136,19 @@ probability is given as
 Notice that this calculation is rather cumbersome. After all, we might just have evaluated 
 $ \mathbb{P}(\{2,4,6)\}) $ directly. However, the above calculation points to an interesting fact. In order
 to fully specify a probability measure, is suffices to specify the measure on the singleton sets of the
-event space. By countable additivity this specifies the measure on the entire event space as we can
+event space. By countable additivity, this assignment already specifies the measure on the entire event space, as we can
 construct any event as a countable union of singletons.
 
 It is important to point out that we just chose the uniform probability measure as the one that seems ``natural'' for
-a die roll. However, nobody is forcing us to do so. In fact, def. \ref{ProbabiltySpace} allows us to impose arbitrary
-probability measures.
+a die roll. However, nobody is forcing us to do so. In fact, Definition~\ref{def:ProbabilitySpace} allows us to impose arbitrary probability measures.
 
 \begin{Exercise}
-Take $ (\Omega, \mathcal{A}, \mathbb{P}) $ with $ \Omega $ and $ \mathcal{A} $ as before but now use the 
+Let us consider a rigged die. Take $ (\Omega, \mathcal{A}, \mathbb{P}) $ with $ \Omega $ and $ \mathcal{A} $ as in the uniform die-roll example before, but now use the 
 probability measure \\ $ \mathbb{P} = \{(\{1\},0), (\{2\}, \frac{1}{12}), (\{3\}, \frac{1}{6}), (\{4\}, \frac{1}{6}), (\{5\}, \frac{1}{3}),
 (\{6\},\frac{1}{4}) \} $.
 \begin{enumerate}
 \item Verify that $ \mathbb{P} $ is indeed a probability measure.
-\item Compute the probability of obtaining a number smaller than $ 5 $ in this experiment.
+\item Compute the probability of obtaining a number strictly smaller than $ 5 $ in this experiment.
 \end{enumerate}
 \end{Exercise}
 
@@ -179,11 +179,12 @@ $ E_{1} \cap E_{2}, E_{1} \cap E_{3}, E_{2} \cap E_{3} $ in order to prevent dou
 we add in $ E_{1} \cap E_{2} \cap E_{3} $. Deductions and additions are indicated by pluses and minuses.}
 \end{figure}
 
-We have now seen how to compute probabilities of events if they can be formed as unions of \textit{disjoint}
-events. The natural question to ask is what to do if we want to compute the probability of the union
-of non-disjoint events. In order to reason about this, we first take a step back and think about the
+\section{Probability of Unions of Events}
+We have seen how to compute probabilities of events if they can be formed as unions of \textit{disjoint}
+events. The natural question to ask is what to do if we want to compute the probability of the \emph{union
+of non-disjoint events}. In order to reason about this problem, we first take a step back and think about the
 outcomes of our probability space. We know that each relevant event contains at least one outcome (since
-$ \mathbb{P}(\emptyset) = 0 $ we can safely ignore it). Now let us assume that we take the union of events
+$ \mathbb{P}(\emptyset) = 0 $, we can safely ignore it). Now let us assume that we take the union of events
 $ E_{1} $ and $ E_{2} $ with $ E_{1} \cap E_{2} = E_{3} \not = \emptyset $. This means that the outcomes
 in $ E_{3} $ are contained in both $ E_{1} $ and $ E_{2} $. This situation is illustrated in fig. 
 \ref{Venn2}. Now if we apply the rule that we have for disjoint events, we get 
