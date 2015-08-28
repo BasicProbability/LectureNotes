@@ -6,15 +6,17 @@
 \usepackage{hyperref}
 \hypersetup{colorlinks=true, urlcolor=blue, breaklinks=true}
 
-\newmdtheoremenv{Definition}{Definition}
-\newmdtheoremenv{Exercise}{Exercise}
-\newmdtheoremenv{Theorem}{Theorem}
+\newmdtheoremenv{Definition}{Definition}[chapter]
+\newmdtheoremenv{Exercise}{Exercise}[chapter]
+\newmdtheoremenv{Theorem}{Theorem}[chapter]
+
 
 \title{Basic Probability}
 \date{}
 
 \begin{document}
 
+\setcounter{chapter}{3}
 \chapter{Bayes' rule and its applications}
 
 \section{The chain rule}
