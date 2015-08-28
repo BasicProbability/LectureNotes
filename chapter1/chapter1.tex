@@ -1,17 +1,22 @@
-\documentclass[a4paper,11pt,leqno]{article}
+\documentclass[a4paper,11pt,leqno]{report}
 
 \usepackage{amsmath, amssymb, mdframed}
 \usepackage{hyperref}
 \hypersetup{colorlinks=true, urlcolor=blue, breaklinks=true}
 
-\newmdtheoremenv{Definition}{Definition}
-\newmdtheoremenv{Exercise}{Exercise}
+\newmdtheoremenv{Definition}{Definition}[chapter]
+\newmdtheoremenv{Exercise}{Exercise}[chapter]
+
+\newcommand{\philip}[1]{ \textcolor{red}{\textbf{Philip:} #1}}
+\newcommand{\chris}[1]{ \textcolor{blue}{\textbf{Chris:} #1}}
+
 
 \title{Basic Probability}
 \date{}
 
 \begin{document}
-\maketitle
+
+\chapter{Basic Probability And Combinatorics}
 
 \section*{Notational conventions}
 In this script we make use of certain notational conventions. We \textbf{bold-face} newly introduced
@@ -39,7 +44,7 @@ example to demonstrate why this is useful: Suppose it is Monday and you have a d
 Friday. Obviously you want to impress your date. Unluckily, however, you have tendency to be broke
 come weekends. The decision you have to make now is whether to take your date to a fancy restaurant
 (the impressive but expensive option) or to just go for drinks (the cheaper option). On what basis can
-you make this decision? Well you can ask yourself whether it is more likely that you are broke on 
+you make this decision? Well, you can ask yourself whether it is more likely that you are broke on 
 Friday night or not. If you think that your being broke is more probable than you go for drinks, otherwise
 you opt for the fancy restaurant.
 
@@ -49,7 +54,7 @@ is something that we are going to develop in some detail in this script. The sec
 of a so-called \textit{decision rule} (e.g. to plan for the circumstances that are most probable to 
 occur in the future) is something that will be covered in later courses.
 
-Here is a second example of what one can do with probability theory. Assume you want to invest on the 
+Here is a second example of what one can do with probability theory. Assume you want to invest in the 
 stock market. You will be putting in some money now and then you want to cash in on your gains (or losses)
 in ten years time, say. Notice that this time around simply asking whether it is more probable that your
 stock has risen or fallen in price is not enough. Even if your stock is worth more in ten years than it
@@ -64,7 +69,7 @@ script, as well.
 
 Alright, we hope that this has gotten you excited for the rest of the script. Let's get going!
 
-\subsection{Sample spaces and events}
+\section{Sample spaces and events}
 The whole of probability theory is based on assigning probability values to elements of a 
 \textbf{sample space}. The members of the sample space are referred to as \textbf{outcomes} or \textbf{samples}.
 
@@ -75,8 +80,7 @@ $ \Omega $. We denote the members of a sample space by $ \omega \in \Omega $.
 Standard examples of sample spaces are the flipping of a coin and the rolling of a die. Formally,
 the sample space of a die roll is $ \Omega = \{1,2,3,4,5,6\} $. The sample space of a coin toss
 would consist of heads and tails. However, it is often more convenient to represent outcomes numerically.
-In the context of this course,we will achieve this by imposing any total order on the sample space and then identifying the
-outcomes with the positions they occupy in the corresponding ordered list. In this spirit we let 
+In the context of this course, we will achieve this by imposing any total order on the sample space and then identifying the outcomes with the positions they occupy in the corresponding ordered list. In this spirit we let 
 the sample space of a coin toss be $ \Omega = \{1,2\} $ where $ 1 $ represents heads and $ 2 $ represents
 tails, say (the other way around would be just as fine). 
 
@@ -95,8 +99,7 @@ other and have to be placed in a particular order.}. Note that this will be a ra
 
 In our sample spaces as defined above, it is easy to distinguish individual outcomes. However, often times
 we do not care about the outcomes themselves but about properties that some of them share. In the
-die example we might be only interested in whether the outcome is even or odd. Transferring this
-to the urn metaphor we would colour the balls with odd numbers green and the balls
+die example we might be only interested in whether the outcome is even or odd. Transferring this scenario to the urn metaphor we would colour the balls with odd numbers green and the balls
 with even numbers red. Again, any other colours are just as fine. All that matters is that 
 we can discriminate a member of $ E = \{2,4,6\} $ from a member of $ O = \{1,3,5\} $. We do \textit{not}
 need to discriminate between the outcomes that are members of the same set! In this particular setting
@@ -129,17 +132,17 @@ different (and arguably more cumbersome) way. How so?
 %$ A^{C_{\Omega}} \in \mathcal{A} $ by item 3. Item 4 then implies that $ \Omega \in \mathcal{A} $.
 \end{Exercise}
 
-The fact that our event spaces are closed under the set complement operation is very convenient. Say I
+The fact that event spaces are closed under the set complement operation is very convenient. Say I
 organized a dinner party and invited $ 10 $ people. The day after you ask me if more than $ 8 $ people
 actually showed up. I just answer that I was very disappointed that my friends Mary and Paul did 
 not come. Although I did not directly address your question you know that the answer is negative. After
 all, I informed you that the complement event of the event you asked about had occurred.
 
 \begin{Exercise} 
-In the above party example, what is the sample space? What is the smallest possible event space?
-%Solution: $ \Omega = \{x_{1} \ldots x_{10} | x_{i} \in \{0,1\}\} $
-%$ \mathcal{A} = \{\Omega, \emptyset, \{\omega \in \Omega | \sum x_{i} > 8\},
-%\{\omega \in \Omega | \sum x_{i} \leq 8\}\} $ 
+In the above party example, what is the sample space? What is the smallest possible event space (in order to...)?
+Solution: $ \Omega = \{x_{1} \ldots x_{10} | x_{i} \in \{0,1\}\} $
+$ \mathcal{A} = \{\Omega, \emptyset, \{\omega \in \Omega | \sum x_{i} > 8\},
+\{\omega \in \Omega | \sum x_{i} \leq 8\}\} $ 
 \end{Exercise}
 
 In general, we will not worry too much about constructing an event space every time we encounter a new
@@ -155,9 +158,9 @@ The power set $ \mathcal{P}(S) $ of any set $ S $ is defined as $ \mathcal{P}(S)
 
 In general, this leaves us with the pair $ (\Omega, \mathcal{P}(\Omega)) $. For outcomes in a sample space,
 let us stress again an important difference, namely that $ \omega \in \Omega $ but 
-$ \{\omega\} \in \mathcal{A} $.
+$ \{\omega\} \in \mathcal{P}(\Omega)$.
 
-\subsection{Some basic combinatorics}
+\section{Some basic combinatorics}
 Combinatorics is the mathematics of counting. Counting is of course a very basic problem that may
 be solved by just looking at each element of a set. However, this na\"ive procedure is often
 unreasonably time consuming. Moreover, it does not allow us to make general statements about sets of any 
@@ -211,7 +214,7 @@ one or more red cards have been issued and exactly four goals have been scored. 
 
 Note that up to now we have implicitly assumed that we would put every drawn ball back into the urn. This
 is also referred to as \textbf{sampling with replacement}. Let us now look at problems for \textbf{sampling
-without replacement}, i.e. problems where we are shrinking our sample space at each draw. One class of such
+without replacement}, i.e.\ problems where we are shrinking our sample space at each draw. One class of such
 problems is known as \textbf{permutation} problems.
 
 \begin{Definition} 
@@ -233,10 +236,11 @@ the permutations of the list $ L = (1,2,3) $ are:
 The way to think about a permutation as a draw from an urn is to look at each of the positions in the list in
 turn and insert an element from $ S = \Omega $. Since a permutation is a bijection, we can only use each
 $ \omega \in \Omega $ exactly once. This is precisely what it means to sample without replacement. Once a ball
-is drawn, it is removed from the urn. Let us make this concrete with the above example. For position one
+is drawn, it is removed from the urn. Let us make this effect concrete in the above example. For position one
 we have three elements to choose from. Hence we are dealing with a sample space of size $ 3 $. Position two
 still leaves us $ 2 $ choices, giving us a sample space of size $ 2 $. Finally, the element in the last position
 is totally determined as we are dealing with a sample space of size $ 1 $.
+% The danger here is that we might be giving the impression that you can sample from a sample space $\Omega$ without replacement which does not make much sense in the probability world.
 
 Applying the basic principle of counting we now know that there are $ 3 \times 2 \times 1 $ permutations of the list
 $ (1,2,3) $. Incidentally, this proves our above example to be correct. More generally, if we have to reorder
@@ -277,7 +281,7 @@ At this point we should take a break and pat our own backs. After all, we have j
 formulas, which is known as the \textbf{binomial coefficient}.
 
 \begin{Definition}
-The binomial coefficient $ \binom{n}{k} $ is defined as \\ $ \binom{n}{k} := \dfrac{n!}{(n-k)!\times k!} $ for $ 0 < n, 0 \leq l \leq n $. 
+The binomial coefficient $ \binom{n}{k} $ is defined as \\ $ \binom{n}{k} := \dfrac{n!}{(n-k)!\times k!} $ for $ 0 < n, 0 \leq k \leq n $. 
 It counts the number of ways
 to sample $ k $ distinct elements from a set with a total of $ n $ elements without regard to the order in which they are drawn.
 For this reason, it is pronounced ``n choose k''.
