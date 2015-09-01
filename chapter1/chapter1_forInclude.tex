@@ -55,7 +55,7 @@ Alright, we hope that this has gotten you excited for the rest of the script. Le
 The whole of probability theory is based on assigning probability values to elements of a 
 \textbf{sample space}. The members of the sample space are referred to as \textbf{outcomes} or \textbf{samples}.
 
-\begin{Definition} A sample space is any \href{http://en.wikipedia.org/wiki/Borel_set}{Borel set} 
+\begin{Definition}[Sample Space] A sample space is any \href{http://en.wikipedia.org/wiki/Borel_set}{Borel set} 
 $ \Omega $. We denote the members of a sample space by $ \omega \in \Omega $.
 \end{Definition}
 
@@ -87,7 +87,7 @@ we can discriminate a member of $ E = \{2,4,6\} $ from a member of $ O = \{1,3,5
 need to discriminate between the outcomes that are members of the same set! In this particular setting
 $ E $ and $ O $ are the \textbf{events} that we are interested in.
 
-\begin{Definition} 
+\begin{Definition}[Event]
 An event $ A $ is any subset $ A \subseteq \Omega $.
 \end{Definition}
 
@@ -95,7 +95,7 @@ Events are what usually interests us in probability theory. Just as with outcome
 also define the notion of an event space.
 
 \newpage
-\begin{Definition} 
+\begin{Definition}[Event space]
 An event space associated with a sample space $ \Omega $ is a set $ \mathcal{A} $ such that
 \begin{enumerate}
 \item $ \mathcal{A} $ is non-empty
@@ -136,7 +136,7 @@ is the construction of sample spaces since we now know how to construct event sp
 simple manner. In case you are a bit rusty, here is a reminder of what a power
 set is.
 
-\begin{Definition} 
+\begin{Definition}[Power Set]
 The power set $ \mathcal{P}(S) $ of any set $ S $ is defined as $ \mathcal{P}(S) := \underset{s \subseteq S}{\bigcup}~s $.
 \end{Definition}
 
@@ -177,7 +177,8 @@ not affect the outcome of the other. Often times, we will simply assume that thi
 The technique of inferring the size of a complex sample space from the sizes of the sample spaces
 it is constructed from is known as the \textbf{basic principle of counting}.
 
-\begin{Definition} The basic principle of counting states that if two draws from sample spaces of size
+\begin{Definition}[Basic principle of counting]
+The basic principle of counting states that if two draws from sample spaces of size
 $ M $ and $ N $ respectively are performed independently of each other then the sample space
 composed from them has size $ M \times N $. 
 \end{Definition}
@@ -201,7 +202,7 @@ is also referred to as \textbf{sampling with replacement}. Let us now look at pr
 without replacement}, i.e.\ problems where we are shrinking our sample space at each draw. One class of such
 problems is known as \textbf{permutation} problems.
 
-\begin{Definition} 
+\begin{Definition}[Permutation]
 A permutation on a set $ S $ is a bijection $ \sigma : S \rightarrow S : s \mapsto \sigma(s) $.
 \end{Definition}
 
@@ -232,7 +233,8 @@ a list with $ n $ distinct elements (or draw without replacement from an urn wit
 are $ n \times (n-1) \times \ldots \times 2 \times 1 $ permutations. Since this is pretty painful to write down
 we introduce a more succinct notation, provided by the \textbf{factorial} function.
 
-\begin{Definition} The factorial $ n! $ of a non-negative natural number $ n \in \mathbb{N} $ is defined recursively as 
+\begin{Definition}[Factorial]
+The factorial $ n! $ of a non-negative natural number $ n \in \mathbb{N} $ is defined recursively as 
 \begin{itemize}
 \item $ 0! = 1 $
 \item $ k! = k\times (k-1)! $ for $ 0 < k \leq n $
@@ -247,9 +249,12 @@ This means we are still drawing without replacement but we do not fully empty th
 many of those k-permutations there are remains exactly the same. There are $ n \times (n-1) \times (n-k+2) 
 \times (n-k+1) $ such permutations (make sure you understand why!). In order to ease notation we can again
 sneak in the factorial through multiplying this number with $ 1 $ in disguise. Concretely, we write
-$ n \times (n-1) \times \ldots \times (n-k+2) \times (n-k+1) \times 1 = n \times (n-1) \times \ldots \times (n-k+2) \times (n-k+1) \times 
-\frac{(n-k)!}{(n-k)!}
-= \frac{n!}{(n-k)!} $ for the number of k-permutations on a set of size $ n $.
+\begin{align*}
+&n \times (n-1) \times \ldots \times (n-k+2) \times (n-k+1) \times 1 \\
+=& n \times (n-1) \times \ldots \times (n-k+2) \times (n-k+1) \times \frac{(n-k)!}{(n-k)!} \\
+=& \frac{n!}{(n-k)!}
+\end{align*}
+for the number of k-permutations on a set of size $ n $.
 
 We will not see k-permutations all that often in this script but they constitute a helpful stepping stone to another
 concept that will be of crucial importance. Let us draw $ k $ balls from an urn with $ n $ balls where $ k \leq n $ and disregard
@@ -263,9 +268,10 @@ balls.
 At this point we should take a break and pat our own backs. After all, we have just derived one of the most important combinatorial 
 formulas, which is known as the \textbf{binomial coefficient}.
 
-\begin{Definition}
-The binomial coefficient $ \binom{n}{k} $ is defined as \\ $ \binom{n}{k} := \dfrac{n!}{(n-k)!\times k!} $ for $ 0 < n, 0 \leq k \leq n $. 
-It counts the number of ways
+\begin{Definition}[Binomial co-efficient]
+The binomial coefficient $ \binom{n}{k} $ is defined as 
+$$ \binom{n}{k} := \dfrac{n!}{(n-k)!\times k!} $$ 
+for $ 0 < n, 0 \leq k \leq n $. It counts the number of ways
 to sample $ k $ distinct elements from a set with a total of $ n $ elements without regard to the order in which they are drawn.
 For this reason, it is pronounced ``n choose k''.
 \end{Definition}
@@ -282,7 +288,7 @@ the number-colour combination right. What is your chance here?
 The binomial coefficient will become crucially important later on. A common application, that you will see in this and other courses
 is counting the number of bit strings with certain properties. A bit is a variable that can take on values in $ \{0,1\} $. By the 
 basic principle of counting there are $ 2^{n} $ bit strings of length $ n $. How many bit strings of length $ 5 $ are there that contain
-exactly $ 3 $ ones? Well, there are $ 2^{5} = 32 $ bit strings of that length in total and $ \binom{5}{3} = 20 $ of them contain exactly
+exactly $ 3 $ ones? Well, there are $ 2^{5} = 32 $ bit strings of that length in total and $ \binom{5}{3} = 10 $ of them contain exactly
 three ones. Unsurprisingly, this is the same number of 5-bit strings with exactly $ 2 $ zeros. 
 The moral lesson here is that $ \binom{n}{k} = \binom{n}{n-k} $ as can be easily seen from the definition. Some other trivia about the
 binomial coefficient are that $ \binom{n}{0} = \binom{n}{n} = 1 $. Again, this follows directly from the definition. Somewhat trickier
@@ -307,9 +313,9 @@ Observe that the last equality follows because many of the factorials cancel and
 only four colours, but the general case follows directly by induction on the number of colours (with the binomial coefficient as base case). 
 Thus, we can define the \textbf{multinomial coefficient}.
 
-\begin{Definition}
-The multinomial coefficient for choosing $ k $ sets of objects with size $ m_{k} $ from a total of $ n = \underset{i=1}{\overset{k}{\sum}m_{i}} $ 
-objects is $ \dfrac{n!}{\underset{i=1}{\overset{k}{\prod}}m_{i}!} $.
+\begin{Definition}[Multinomial co-efficient]
+The multinomial coefficient for choosing $ k $ sets of objects with size $ m_{k} $ from a total of $ 0 < n = \underset{i=1}{\overset{k}{\sum}m_{i}} $ 
+objects is $$ \dfrac{n!}{\underset{i=1}{\overset{k}{\prod}}m_{i}!} $$
 \end{Definition}
 
 \section*{Further material}
