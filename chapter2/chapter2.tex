@@ -25,6 +25,11 @@
 \newmdtheoremenv{Exercise}{Exercise}[chapter]
 \newmdtheoremenv{Theorem}{Theorem}[chapter]
 
+\newcommand{\philip}[1]{ \textcolor{red}{\textbf{Philip:} #1}}
+\newcommand{\chris}[1]{ \textcolor{blue}{\textbf{Chris:} #1}}
+
+
+
 \title{Basic Probability}
 \date{}
 
@@ -34,12 +39,12 @@
 \chapter{Axiomatic Probability Theory}
 
 \section{Axioms of probability}
-In the previous chapter, we have introduced sample spaces and event spaces. Now we would like to be able
+In the previous chapter, we have introduced sample spaces and event spaces. We would like to be able
 to express that certain events are more (or less) likely than others. 
 Therefore, we are going to measure the probability of events in a mathematically precise sense. 
 
 \begin{Definition}\label{axioms}
-A finite measure is a function $ \mu: \mathcal{S} \rightarrow \mathbb{R} : S \mapsto \mu (S) $ 
+A \emph{finite measure} is a function $ \mu: \mathcal{S} \rightarrow \mathbb{R} : S \mapsto \mu (S) $ 
 that maps elements
 from a set of sets $ \mathcal{S} $ (formally a \href{http://en.wikipedia.org/wiki/Sigma-algebra}
 {$ \sigma $-algebra}) to real numbers. Such a measure has the following properties:
@@ -92,7 +97,7 @@ following properties:
 \begin{enumerate}
 \item $ \mathbb{P}(A) \geq 0 $ for all $ A \in \mathcal{A} \,$,
 \item $ \mathbb{P}\left( \underset{i = 1}{\overset{\infty}{\bigcup}} A_{i} \right)
-= \underset{i = 1}{\overset{\infty}{\sum}} \mathbb{P} \left( A_{i} \right) \,$, \label{union}
+= \underset{i = 1}{\overset{\infty}{\sum}} \mathbb{P} \left( A_{i} \right) \,$ for disjoint events $A_1,A_2,\ldots$ \, , \label{union}
 \item $ \mathbb{P}(\Omega) = 1 \,$. \label{unity}
 \end{enumerate}
 \end{Definition}
@@ -104,7 +109,7 @@ or \emph{Kolmogorov axioms} after their inventor \href{https://en.wikipedia.org/
 Kolmogorov}.
 
 We have already discussed uniform probabilities in the previous chapter. We can now formally explain
-what we meant by that. The uniform probability measure is the measure $ \mathbb{P} $ such that
+what we meant by that. The uniform probability measure $ \mathbb{P} $ has the property that
 $ \mathbb{P}(\{\omega\}) = \frac{1}{|\Omega|} $ for all $ \omega \in \Omega $. At this point, the
 distinction between sample and event spaces becomes important. We cannot measure the elements of a
 sample space, only the elements of an event space! Recall our convention that we will always assume
@@ -114,11 +119,11 @@ $ \Omega $. Using this assumption, the uniform probability measure is indeed wel
 value $ \frac{1}{|\Omega|} $ to which this measure uniformly evaluates.
 
 In order to create a tight relationship between a sample space, an event space and a probability measure,
-we introduce the concept of a \textbf{probability space}. Probability spaces are also known as 
-(probabilistic) \textbf{experiments}.
+we introduce the concept of a probability space. Probability spaces are also known as 
+(probabilistic) \textbf{(probabilistic) experiments}.
 
 \begin{Definition} \label{def:ProbabilitySpace}
-A probability space is a triple $ (\Omega, \mathcal{A}, \mathbb{P}) $, consisting of a sample space $ \Omega $,
+A \textbf{probability space} is a triple $ (\Omega, \mathcal{A}, \mathbb{P}) $, consisting of a sample space $ \Omega $,
 an event space $ \mathcal{A} $ and a probability measure $ \mathbb{P} $.
 \end{Definition}
 
@@ -134,7 +139,7 @@ probability is given by
 \end{equation}
 
 Notice that this calculation is rather cumbersome. After all, we might just have evaluated 
-$ \mathbb{P}(\{2,4,6)\}) $ directly. However, the above calculation points to an interesting fact. In order
+$ \mathbb{P}(\{2,4,6)\}) $ directly\chris{how?}. However, the above calculation points to an interesting fact. In order
 to fully specify a probability measure, is suffices to specify the measure on the singleton sets of the
 event space. By countable additivity, this assignment already specifies the measure on the entire event space, as we can
 construct any event as a countable union of singletons.
@@ -143,7 +148,7 @@ It is important to point out that we just chose the uniform probability measure 
 a die roll. However, nobody is forcing us to do so. In fact, Definition~\ref{def:ProbabilitySpace} allows us to impose arbitrary probability measures.
 
 \begin{Exercise}
-Let us consider a rigged die. Take $ (\Omega, \mathcal{A}, \mathbb{P}) $ with $ \Omega $ and $ \mathcal{A} $ as in the uniform die-roll example before, but now use the 
+Let us consider a rigged die. Take $ (\Omega, \mathcal{A}, \mathbb{P}) $ with $ \Omega $ and $ \mathcal{A}=\mathcal{P}(\Omega) $ as in the uniform die-roll example before, but use the 
 probability measure \\ $ \mathbb{P} = \{(\{1\},0), (\{2\}, \frac{1}{12}), (\{3\}, \frac{1}{6}), (\{4\}, \frac{1}{6}), (\{5\}, \frac{1}{3}),
 (\{6\},\frac{1}{4}) \} $.
 \begin{enumerate}
@@ -152,6 +157,7 @@ probability measure \\ $ \mathbb{P} = \{(\{1\},0), (\{2\}, \frac{1}{12}), (\{3\}
 \end{enumerate}
 \end{Exercise}
 
+\section{Probability of Arbitrary Unions of Events}
 \begin{figure}
 \center
 \begin{subfigure}{.4\textwidth}
@@ -179,15 +185,13 @@ $ E_{1} \cap E_{2}, E_{1} \cap E_{3}, E_{2} \cap E_{3} $ in order to prevent dou
 we add in $ E_{1} \cap E_{2} \cap E_{3} $. Deductions and additions are indicated by pluses and minuses.}
 \end{figure}
 
-\section{Probability of Unions of Events}
 We have seen how to compute probabilities of events if they can be formed as unions of \textit{disjoint}
 events. The natural question to ask is what to do if we want to compute the probability of the \emph{union
 of non-disjoint events}. In order to reason about this problem, we first take a step back and think about the
-outcomes of our probability space. We know that each relevant event contains at least one outcome (since
-$ \mathbb{P}(\emptyset) = 0 $, we can safely ignore it). Now let us assume that we take the union of events
+outcomes of our probability space. We know that each event with non-zero probability contains at least one outcome (since
+$ \mathbb{P}(\emptyset) = 0 $, we can safely ignore the empty event). Let us assume that we take the union of events
 $ E_{1} $ and $ E_{2} $ with $ E_{1} \cap E_{2} = E_{3} \not = \emptyset $. This means that the outcomes
-in $ E_{3} $ are contained in both $ E_{1} $ and $ E_{2} $. This situation is illustrated in fig. 
-\ref{Venn2}. Now if we apply the rule that we have for disjoint events, we get 
+in $ E_{3} $ are contained in both $ E_{1} $ and $ E_{2} $. This situation is illustrated in Figure~\ref{Venn2}. If we apply the rule that we have for disjoint events, we get 
 \begin{align} \label{InExFalse}
 \mathbb{P}(E_{1} \cup E_{2}) =& \mathbb{P}(E_{1}) + \mathbb{P}(E_{2})
 = \mathbb{P}(((E_{1}\backslash E_{3}) \cup E_{3}) \cup ((E_{2}\backslash E_{3}) \cup E_{3})) \\
@@ -219,7 +223,7 @@ $$ \mathbb{P} \left( \underset{i=1}{\overset{n}{\bigcup}} E_{i} \right)
 \mathbb{P} \left(E_{j_{1}} \cap \ldots \cap E_{j_{i}} \right) \right)  $$
 \end{Theorem}
 
-We are now going to proceed with a combinatorial proof of the Inclusion-Exclusion principle. It is
+We are going to proceed with a combinatorial proof of the Inclusion-Exclusion principle. It is
 very elegant but invokes the \href{https://en.wikipedia.org/wiki/Binomial_theorem}{binomial theorem}
 which we do not expect you to know. For completeness sake we will prove the binomial theorem
 at the end of this chapter. For now, just trust us that it exists and is correct.
@@ -229,7 +233,7 @@ $ E_{1}, \ldots, E_{m} $. Notice that we can safely neglect all events which do 
 $ \omega $, since $ \omega $ is not going to contribute to their probability. 
 
 For all the $ E_{i} $, $ 1 \leq i \leq m $ in which $ \omega $ is contained, it is certainly true
-that $ \omega $ is also contained in their intersections. Now the Inclusion-Exclusion-principle
+that $ \omega $ is also contained in their intersections. The Inclusion-Exclusion-principle
 adds up the probabilities of intersections of a given size. Notice that any intersection of more
 than $ m $ events will not contain $ \omega $ as we intersect with at least one event that does not
 contain $ \omega $. Thus, we only need to consider intersections of our $ \omega $-containing $ m $
@@ -238,7 +242,7 @@ sets.
 The first intersection is trivial, as it just consists of one event. How many ways are there to pick
 one out of $ m $ events? The answer is $ \binom{m}{1} $. This is the number of times that $ \omega $
 contributes to the overall probability. At this point we have an overestimate of that probability 
-(compare this to eq. \ref{InExFalse}). Next we subtract the probabilities of the mutual intersections.
+(compare this to Equation~\eqref{InExFalse}). Next we subtract the probabilities of the mutual intersections.
 By the same reasoning as before, the contribution of $ \omega $ is deducted $ \binom{m}{2} $ times
 which gives us an underestimate since $ \binom{m}{1} \leq \binom{m}{2} $ for $ m \geq 3 $.
 
@@ -248,41 +252,41 @@ That is we want that
 1 = \underset{i=1}{\overset{m}{\sum}}(-1)^{i-1}\binom{m}{i}
 \end{equation}
 
-And now we are right on our way towards exploiting the binomial theorem. Let us first state it.
+We are right on our way towards exploiting the binomial theorem. Let us first state it.
 \begin{equation} \label{binomTheorem}
 (p + q)^{m} = \underset{i=0}{\overset{m}{\sum}} \binom{m}{i} p^{i}q^{n-i} 
 \end{equation}
 
 It may not be entirely obvious how to use the theorem in our situation, but hold on. First observe
-that the sum in eq. \ref{binomTheorem} actually starts counting at 0 whereas in eq. \ref{InExProofStep1}
+that the sum in Equation~\eqref{binomTheorem} actually starts counting at 0 whereas in \eqref{InExProofStep1}
 it starts counting from 1. However, we already know that $ \binom{m}{0} = 1 $. Thus we can replace the
-the left hand side in eq. \ref{InExProofStep1} with this binomial coefficient and then subtract 1 from the
+the left hand side in \eqref{InExProofStep1} with this binomial coefficient and then subtract 1 from the
 right hand side. This gives us \ref{InExProofStep2}. This is the equality that we are going to proof
-in what follows. Since we derived it from eq. \ref{InExProofStep1}, it implies that if \ref{InExProofStep2}
+in what follows. Since we derived it from Equation~\eqref{InExProofStep1}, it implies that if \ref{InExProofStep2}
 holds, so does \ref{InExProofStep1}.
 \begin{equation} \label{InExProofStep2}
 \underset{i=0}{\overset{m}{\sum}}(-1)^{i}\binom{m}{i} = 0
 \end{equation} 
 
-Now we notice that $ 0 $ in turn can be expressed as $ (1-1) $. Furthermore, any power of 0 is still 0.
+We notice that $ 0 $ in turn can be expressed as $ (1-1) $. Furthermore, any power of 0 is still 0.
 Thus we rewrite again to get
 \begin{equation}
 \underset{i=0}{\overset{m}{\sum}}\binom{m}{i}(-1)^{i} = (1-1)^{m}
 \end{equation}
 
-This now looks a lot like the binomial theorem, doesn't it? Just one component is missing. We have
-our $ q $ from eq. \ref{binomTheorem} which is $ -1 $ in this case. We still need to account for 
+This looks a lot like the binomial theorem, doesn't it? Just one component is missing. We have
+our $ q $ from Equation~\eqref{binomTheorem} which is $ -1 $ in this case. We still need to account for 
 $ p $, though. Luckily, setting $ p=1 $ and taking powers does not change anything. Thus we can safely write
 \begin{equation}
 \underset{i=0}{\overset{m}{\sum}}\binom{m}{i}(-1)^{i}1^{m-i} = (1-1)^{m}
 \end{equation} 
 
-This equality is now true by the binomial theorem (eq. \ref{binomTheorem}) which it is an instantiation of.
+This equality is true by the binomial theorem (Equation~\eqref{binomTheorem}) which it is an instantiation of.
 We have thus succeeded in proofing the Inclusion-Exclusion principle. If the proof is not entirely
 clear to you, please go over it again.
 
 At this point we have done our fair share of math and found out how to calculate the probability of a union
-of events. Now we should ask ourselves, what the probability of a union of events even tells us. Observe that an event 
+of events. We should ask ourselves, what the probability of a union of events even tells us. Observe that an event 
 occurs whenever we draw an outcome from our sample space that is contained in that event. By taking the union
 of events $ E_{1}, \ldots, E_{n} $ we form a new event $ E $ that (possibly) contains more outcomes than each 
 of the original events. Thus, the probability of the $ E $ will be higher than (or the same as) the 
@@ -311,7 +315,7 @@ E_{1} \cap E_{2} = \Omega \backslash ((\Omega \backslash E_{1}) \cup (\Omega \ba
 \textbf{[REMARK PHILIP: Should we maybe put this into chapter one when we introduce event spaces?]}
 
 All the operations on the right hand side are defined for events spaces. We have thus solved our problem.
-To convince yourself that this is correct, you may want to consult fig. \ref{Venn2}. We also do not claim
+To convince yourself that this is correct, you may want to consult Figure~\ref{Venn2}. We also do not claim
 that this is the only valid ``paraphrase''. Feel free to find others, if you like!
 
 At this point we are capable to do most probabilistic computations that we will encounter in this course.
@@ -356,7 +360,7 @@ Show that in general $$ \mathbb{P}(E_{1}\backslash (E_{1}\cap E_{2}))
 \end{Exercise}
 
 \section{Conditional probability and independence}
-After we have seen how to measure the probability of events, we are now going to introduce another
+After we have seen how to measure the probability of events, we are going to introduce another
 tremendously important concept, that of \textbf{conditional probability} measures.
 
 \begin{Definition}{}
@@ -368,7 +372,7 @@ The function $ \mathbb{P}(\cdot|E_{j}) $ is often referred to as conditional pro
 
 Before we get into the math of conditional probabilities, let us try to understand what this concept event
 signifies. When we are computing the conditional probability of an event $ E_{i} $, we scale it to the 
-probability of the conditioning event $ E_{j} $. Now if $ E_{j} \not = \Omega $, $ \mathbb{P}(E_{j}) $
+probability of the conditioning event $ E_{j} $. If $ E_{j} \not = \Omega $, $ \mathbb{P}(E_{j}) $
 might be smaller than 1. Thus, this rescaling assumes \textit{that $ E_{j} $ has already occurred}. In other
 words, we are excluding all outcomes that are not in $ E_{j} $ from further consideration (event though they
 may be in $ E_{i} $). The interpretation of conditional probabilities that is that they are the probabilities
@@ -379,7 +383,7 @@ in a new probability space, where $ \Omega_{new} = E_{2} $, i.e. our sample spac
 Notice that this also means that our probability measure will change. In particular it will become the
 measure from def. \ref{condProb}.
 
-Now here comes the cool part: although we have introduced a new concept, all the properties of probability
+Here comes the cool part: although we have introduced a new concept, all the properties of probability
 measures that we know by now will seamlessly carry over to conditional probabilities if we can prove
 that the conditional probability measure is a probability measure according to our axioms.
 
@@ -419,7 +423,7 @@ this assumption may not be true, it will allow us to formulate much simpler prob
 
 \section{A Remark on the interpretation \\ of probabilities$^{*}$}
 
-This concludes our introduction of axiomatic probability theory. We now know that a probability is
+This concludes our introduction of axiomatic probability theory. We know that a probability is
 a real number in $ [0,1] $. For all that we are going to do in this course (and in most follow-up courses)
 this is fully sufficient. However, some of you may wonder what a ``natural'' interpretation of probabilities
 would be. There are two dominating views on that. One postulates that we were to take A LOT (read: almost
@@ -439,7 +443,7 @@ friends).
 
 
 \section{The binomial theorem$^{*}$}
-The binomial theorem from eq. \ref{binomTheorem} is actually not that hard to prove. We will do so by
+The binomial theorem from Equation~\eqref{binomTheorem} is actually not that hard to prove. We will do so by
 induction. As a base case we choose $ m = 0 $. Then the equality is easy to see.
 \begin{equation}
 (p + q)^{0} = 1 = \binom{0}{0}p^{0}q^{0}
