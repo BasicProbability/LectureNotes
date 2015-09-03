@@ -1,6 +1,6 @@
 \documentclass[a4paper,11pt,leqno]{report}
 
-\usepackage{amsmath, amssymb, mdframed, caption, subcaption}
+\usepackage{amsmath, amsthm, amssymb, mdframed, caption, subcaption}
 % for Python code
 \usepackage[procnames]{listings} 
 \definecolor{keywords}{RGB}{255,0,90}
@@ -9,7 +9,7 @@
 \definecolor{green}{RGB}{0,150,0}
  
 \lstset{language=Python, 
-        basicstyle=\ttfamily\small, 
+        basicstyle=\tt\small, 
         keywordstyle=\color{keywords},
         commentstyle=\color{comments},
         stringstyle=\color{red},
@@ -25,6 +25,11 @@
 \newmdtheoremenv{Exercise}{Exercise}[chapter]
 \newmdtheoremenv{Theorem}{Theorem}[chapter]
 
+\newcommand{\philip}[1]{ \textcolor{red}{\textbf{Philip:} #1}}
+\newcommand{\chris}[1]{ \textcolor{blue}{\textbf{Chris:} #1}}
+
+
+
 \title{Basic Probability}
 \date{}
 
@@ -33,21 +38,20 @@
 \setcounter{chapter}{1}
 \chapter{Axiomatic Probability Theory}
 
-\section{Axioms of probability}
-In the previous chapter, we have introduced sample spaces and event spaces. Now we would like to be able
+\section{Axioms of Probability}
+In the previous chapter, we have introduced sample spaces and event spaces. We would like to be able
 to express that certain events are more (or less) likely than others. 
 Therefore, we are going to measure the probability of events in a mathematically precise sense. 
 
 \begin{Definition}\label{axioms}
-A finite measure is a function $ \mu: \mathcal{S} \rightarrow \mathbb{R} : S \mapsto \mu (S) $ 
+A \emph{finite measure} is a function $ \mu: \mathcal{S} \rightarrow \mathbb{R} : S \mapsto \mu (S) $ 
 that maps elements
 from a set of sets $ \mathcal{S} $ (formally a \href{http://en.wikipedia.org/wiki/Sigma-algebra}
 {$ \sigma $-algebra}) to real numbers. Such a measure has the following properties:
 \begin{enumerate}
 \item $ \mu(S) \in \mathbb{R} $ for $ S \in \mathcal{S} \, ,$
 \item $ \mu\left( \underset{i = 1}{\overset{\infty}{\bigcup}} S_{i} \right)
-= \underset{i = 1}{\overset{\infty}{\sum}} \mu \left( S_{i} \right) $ if $ S_{i}\cap S_{j} = \emptyset $ 
-for $ i \not = j $. \label{countableAdditivty}
+= \underset{i = 1}{\overset{\infty}{\sum}} \mu \left( S_{i} \right) $ for disjoint sets $S_1, S_2, \ldots$ \, . \label{countableAdditivty}
 \end{enumerate}
 \end{Definition}
 
@@ -85,14 +89,14 @@ $ a $. Then its Dirac measure $ \delta_{a}(S) = 1 $ iff $ a \in S $ and 0 otherw
 Apart from these examples, there is one measure, however, that is going to be the star of the rest of this 
 script, namely the \textbf{probability measure}.
 
-\begin{Definition}
+\begin{Definition} \label{def:probmeasure}
 A probability measure $ \mathbb{P}: \mathcal{A} \rightarrow \mathbb{R} : A \mapsto \mathbb{P}(A) $
 on an event space $ \mathcal{A} $ associated with a sample space $ \Omega $ has the
 following properties:
 \begin{enumerate}
 \item $ \mathbb{P}(A) \geq 0 $ for all $ A \in \mathcal{A} \,$,
 \item $ \mathbb{P}\left( \underset{i = 1}{\overset{\infty}{\bigcup}} A_{i} \right)
-= \underset{i = 1}{\overset{\infty}{\sum}} \mathbb{P} \left( A_{i} \right) \,$, \label{union}
+= \underset{i = 1}{\overset{\infty}{\sum}} \mathbb{P} \left( A_{i} \right) \,$ for disjoint events $A_1,A_2,\ldots$ \, , \label{union}
 \item $ \mathbb{P}(\Omega) = 1 \,$. \label{unity}
 \end{enumerate}
 \end{Definition}
@@ -104,7 +108,7 @@ or \emph{Kolmogorov axioms} after their inventor \href{https://en.wikipedia.org/
 Kolmogorov}.
 
 We have already discussed uniform probabilities in the previous chapter. We can now formally explain
-what we meant by that. The uniform probability measure is the measure $ \mathbb{P} $ such that
+what we meant by that. The uniform probability measure $ \mathbb{P} $ has the property that
 $ \mathbb{P}(\{\omega\}) = \frac{1}{|\Omega|} $ for all $ \omega \in \Omega $. At this point, the
 distinction between sample and event spaces becomes important. We cannot measure the elements of a
 sample space, only the elements of an event space! Recall our convention that we will always assume
@@ -114,11 +118,11 @@ $ \Omega $. Using this assumption, the uniform probability measure is indeed wel
 value $ \frac{1}{|\Omega|} $ to which this measure uniformly evaluates.
 
 In order to create a tight relationship between a sample space, an event space and a probability measure,
-we introduce the concept of a \textbf{probability space}. Probability spaces are also known as 
-(probabilistic) \textbf{experiments}.
+we introduce the concept of a probability space. Probability spaces are also known as 
+(probabilistic) \textbf{(probabilistic) experiments}.
 
 \begin{Definition} \label{def:ProbabilitySpace}
-A probability space is a triple $ (\Omega, \mathcal{A}, \mathbb{P}) $, consisting of a sample space $ \Omega $,
+A \textbf{probability space} is a triple $ (\Omega, \mathcal{A}, \mathbb{P}) $, consisting of a sample space $ \Omega $,
 an event space $ \mathcal{A} $ and a probability measure $ \mathbb{P} $.
 \end{Definition}
 
@@ -134,7 +138,7 @@ probability is given by
 \end{equation}
 
 Notice that this calculation is rather cumbersome. After all, we might just have evaluated 
-$ \mathbb{P}(\{2,4,6)\}) $ directly. However, the above calculation points to an interesting fact. In order
+$ \mathbb{P}(\{2,4,6)\}) $ directly\chris{how?}. However, the above calculation points to an interesting fact. In order
 to fully specify a probability measure, is suffices to specify the measure on the singleton sets of the
 event space. By countable additivity, this assignment already specifies the measure on the entire event space, as we can
 construct any event as a countable union of singletons.
@@ -143,7 +147,7 @@ It is important to point out that we just chose the uniform probability measure 
 a die roll. However, nobody is forcing us to do so. In fact, Definition~\ref{def:ProbabilitySpace} allows us to impose arbitrary probability measures.
 
 \begin{Exercise}
-Let us consider a rigged die. Take $ (\Omega, \mathcal{A}, \mathbb{P}) $ with $ \Omega $ and $ \mathcal{A} $ as in the uniform die-roll example before, but now use the 
+Let us consider a rigged die. Take $ (\Omega, \mathcal{A}, \mathbb{P}) $ with $ \Omega $ and $ \mathcal{A}=\mathcal{P}(\Omega) $ as in the uniform die-roll example before, but use the 
 probability measure \\ $ \mathbb{P} = \{(\{1\},0), (\{2\}, \frac{1}{12}), (\{3\}, \frac{1}{6}), (\{4\}, \frac{1}{6}), (\{5\}, \frac{1}{3}),
 (\{6\},\frac{1}{4}) \} $.
 \begin{enumerate}
@@ -152,6 +156,7 @@ probability measure \\ $ \mathbb{P} = \{(\{1\},0), (\{2\}, \frac{1}{12}), (\{3\}
 \end{enumerate}
 \end{Exercise}
 
+\section{Probability of Arbitrary Unions of Events}
 \begin{figure}
 \center
 \begin{subfigure}{.4\textwidth}
@@ -179,21 +184,20 @@ $ E_{1} \cap E_{2}, E_{1} \cap E_{3}, E_{2} \cap E_{3} $ in order to prevent dou
 we add in $ E_{1} \cap E_{2} \cap E_{3} $. Deductions and additions are indicated by pluses and minuses.}
 \end{figure}
 
-\section{Probability of Unions of Events}
 We have seen how to compute probabilities of events if they can be formed as unions of \textit{disjoint}
 events. The natural question to ask is what to do if we want to compute the probability of the \emph{union
 of non-disjoint events}. In order to reason about this problem, we first take a step back and think about the
-outcomes of our probability space. We know that each relevant event contains at least one outcome (since
-$ \mathbb{P}(\emptyset) = 0 $, we can safely ignore it). Now let us assume that we take the union of events
+outcomes of our probability space. We know that each event with non-zero probability contains at least one outcome (since
+$ \mathbb{P}(\emptyset) = 0 $, we can safely ignore the empty event). Let us assume that we take the union of events
 $ E_{1} $ and $ E_{2} $ with $ E_{1} \cap E_{2} = E_{3} \not = \emptyset $. This means that the outcomes
-in $ E_{3} $ are contained in both $ E_{1} $ and $ E_{2} $. This situation is illustrated in fig. 
-\ref{Venn2}. Now if we apply the rule that we have for disjoint events, we get 
+in $ E_{3} $ are contained in both $ E_{1} $ and $ E_{2} $. This situation is illustrated in Figure~\ref{Venn2}. If we apply the rule that we have for disjoint events, we get 
 \begin{align} \label{InExFalse}
 \mathbb{P}(E_{1} \cup E_{2}) =& \mathbb{P}(E_{1}) + \mathbb{P}(E_{2})
 = \mathbb{P}(((E_{1}\backslash E_{3}) \cup E_{3}) \cup ((E_{2}\backslash E_{3}) \cup E_{3})) \\
 =& \mathbb{P}(E_{1}\backslash E_{3}) + \mathbb{P}(E_{3}) + \mathbb{P}(E_{2}\backslash E_{3}) \nonumber
 + \mathbb{P}(E_{3})
 \end{align}
+\chris{I don't find it good to write down anything that is not correct}
 
 \begin{Exercise}
 Try to justify each of the above equalities using your knowledge about sets, event spaces and the 
@@ -214,75 +218,91 @@ union of events. This calculation technique is know as the \textbf{Inclusion-Exc
 
 \begin{Theorem}[Inclusion-Exclusion principle]
 The probability of any (countable) union of events $ E_{1}, \ldots, E_{n} $ can be computed as \\
-$$ \mathbb{P} \left( \underset{i=1}{\overset{n}{\bigcup}} E_{i} \right) 
+\begin{equation}\label{eq:incexc} \mathbb{P} \left( \underset{i=1}{\overset{n}{\bigcup}} E_{i} \right) 
 = \underset{i=1}{\overset{n}{\sum}} (-1)^{i+1} \left( \underset{j_{1}<\ldots<j_{i}}{\sum} 
-\mathbb{P} \left(E_{j_{1}} \cap \ldots \cap E_{j_{i}} \right) \right)  $$
+\mathbb{P} \left(E_{j_{1}} \cap \ldots \cap E_{j_{i}} \right) \right)
+\end{equation}
 \end{Theorem}
 
-We are now going to proceed with a combinatorial proof of the Inclusion-Exclusion principle. It is
-very elegant but invokes the \href{https://en.wikipedia.org/wiki/Binomial_theorem}{binomial theorem}
-which we do not expect you to know. For completeness sake we will prove the binomial theorem
+\begin{proof}
+We are going to proceed with a combinatorial proof of the Inclusion-Exclusion principle. It is
+very elegant and invokes the \href{https://en.wikipedia.org/wiki/Binomial_theorem}{binomial theorem}. 
+For completeness sake we will prove the binomial theorem
 at the end of this chapter. For now, just trust us that it exists and is correct.
 
-We are going to focus on a particular outcome $ \omega $ that is contained in $ m $ events 
-$ E_{1}, \ldots, E_{m} $. Notice that we can safely neglect all events which do not contain
+We are going to focus on a particular outcome $ \omega $ that is contained in exactly $ m $ events which we call without loss of generality  $ E_{1}, \ldots, E_{m} $ for some $m\leq n$. Notice that we can safely neglect all events which do not contain
 $ \omega $, since $ \omega $ is not going to contribute to their probability. 
 
 For all the $ E_{i} $, $ 1 \leq i \leq m $ in which $ \omega $ is contained, it is certainly true
-that $ \omega $ is also contained in their intersections. Now the Inclusion-Exclusion-principle
+that $ \omega $ is also contained in their intersections. The Inclusion-Exclusion-principle
 adds up the probabilities of intersections of a given size. Notice that any intersection of more
 than $ m $ events will not contain $ \omega $ as we intersect with at least one event that does not
 contain $ \omega $. Thus, we only need to consider intersections of our $ \omega $-containing $ m $
 sets.
 
-The first intersection is trivial, as it just consists of one event. How many ways are there to pick
+When $i=1$, the intersection is trivial, as it just consists of one event. How many ways are there to pick
 one out of $ m $ events? The answer is $ \binom{m}{1} $. This is the number of times that $ \omega $
 contributes to the overall probability. At this point we have an overestimate of that probability 
-(compare this to eq. \ref{InExFalse}). Next we subtract the probabilities of the mutual intersections.
+(compare this to Equation~\eqref{InExFalse}). Next we subtract the probabilities of the mutual intersections ($i=2$).
 By the same reasoning as before, the contribution of $ \omega $ is deducted $ \binom{m}{2} $ times
 which gives us an underestimate since $ \binom{m}{1} \leq \binom{m}{2} $ for $ m \geq 3 $.
 
-What we want is that in total we only count $ \omega $'s contribution to the overall probability once.
-That is we want that
+What we want to prove is that the right-hand side of~\eqref{eq:incexc} counts $ \omega $'s contribution to the overall probability exactly once (because that is what happens on the left-hand side of~\eqref{eq:incexc}.
+That is, we have to prove that
 \begin{equation} \label{InExProofStep1}
 1 = \underset{i=1}{\overset{m}{\sum}}(-1)^{i-1}\binom{m}{i}
 \end{equation}
 
-And now we are right on our way towards exploiting the binomial theorem. Let us first state it.
+We are right on our way towards exploiting the binomial theorem. Let us first state it.
 \begin{equation} \label{binomTheorem}
 (p + q)^{m} = \underset{i=0}{\overset{m}{\sum}} \binom{m}{i} p^{i}q^{n-i} 
 \end{equation}
 
+\chris{
+Setting $p=(-1)$ and $q=1$, and multiplying both sides with $(-1)$, we obtain
+\[
+-(-1+1)^m = - \sum_{i=0}^n \binom{m}{i} (-1)^{i}
+\]
+which can be rewritten as
+\begin{equation} \label{eq:rewrite}
+0 = -1 + \sum_{i=1}^n \binom{m}{i} (-1)^{i+1} \, ,
+\end{equation}
+because $\binom{m}{0} = 1$. Equation~\eqref{eq:rewrite} implies \eqref{InExProofStep1} which we needed to prove.
+\qed
+}
+
 It may not be entirely obvious how to use the theorem in our situation, but hold on. First observe
-that the sum in eq. \ref{binomTheorem} actually starts counting at 0 whereas in eq. \ref{InExProofStep1}
+that the sum in Equation~\eqref{binomTheorem} actually starts counting at 0 whereas in \eqref{InExProofStep1}
 it starts counting from 1. However, we already know that $ \binom{m}{0} = 1 $. Thus we can replace the
-the left hand side in eq. \ref{InExProofStep1} with this binomial coefficient and then subtract 1 from the
-right hand side. This gives us \ref{InExProofStep2}. This is the equality that we are going to proof
-in what follows. Since we derived it from eq. \ref{InExProofStep1}, it implies that if \ref{InExProofStep2}
+the left hand side in \eqref{InExProofStep1} with this binomial coefficient and then subtract 1 from the
+right hand side. This gives us \ref{InExProofStep2}. This is the equality that we are going to prove
+in what follows. Since we derived it from Equation~\eqref{InExProofStep1}, it implies that if \ref{InExProofStep2}
 holds, so does \ref{InExProofStep1}.
 \begin{equation} \label{InExProofStep2}
 \underset{i=0}{\overset{m}{\sum}}(-1)^{i}\binom{m}{i} = 0
 \end{equation} 
 
-Now we notice that $ 0 $ in turn can be expressed as $ (1-1) $. Furthermore, any power of 0 is still 0.
+We notice that $ 0 $ in turn can be expressed as $ (1-1) $. Furthermore, any power of 0 is still 0.
 Thus we rewrite again to get
 \begin{equation}
 \underset{i=0}{\overset{m}{\sum}}\binom{m}{i}(-1)^{i} = (1-1)^{m}
 \end{equation}
 
-This now looks a lot like the binomial theorem, doesn't it? Just one component is missing. We have
-our $ q $ from eq. \ref{binomTheorem} which is $ -1 $ in this case. We still need to account for 
+This looks a lot like the binomial theorem, doesn't it? Just one component is missing. We have
+our $ q $ from Equation~\eqref{binomTheorem} which is $ -1 $ in this case. We still need to account for 
 $ p $, though. Luckily, setting $ p=1 $ and taking powers does not change anything. Thus we can safely write
 \begin{equation}
 \underset{i=0}{\overset{m}{\sum}}\binom{m}{i}(-1)^{i}1^{m-i} = (1-1)^{m}
 \end{equation} 
 
-This equality is now true by the binomial theorem (eq. \ref{binomTheorem}) which it is an instantiation of.
+This equality is true by the binomial theorem (Equation~\eqref{binomTheorem}) which it is an instantiation of.
 We have thus succeeded in proofing the Inclusion-Exclusion principle. If the proof is not entirely
 clear to you, please go over it again.
+\end{proof}
 
+\section{Joint Probability of Events}
 At this point we have done our fair share of math and found out how to calculate the probability of a union
-of events. Now we should ask ourselves, what the probability of a union of events even tells us. Observe that an event 
+of events. We should ask ourselves, what the probability of a union of events even tells us. Observe that an event 
 occurs whenever we draw an outcome from our sample space that is contained in that event. By taking the union
 of events $ E_{1}, \ldots, E_{n} $ we form a new event $ E $ that (possibly) contains more outcomes than each 
 of the original events. Thus, the probability of the $ E $ will be higher than (or the same as) the 
@@ -299,7 +319,7 @@ The joint probability of a (countable) set of events \\ $ \{E_{1}, \ldots, E_{n}
 $$ \mathbb{P}(E_{1}, \ldots, E_{n}) = \mathbb{P}(E_{1} \cap \ldots \cap E_{n}) $$
 \end{Definition}
 
-Wow, that was simple! We don't event need to prove another rule for calculating the joint probability.
+Wow, that was simple! We do not event need to prove another rule for calculating the joint probability.
 After all, we already know how to take the intersection of sets. Annoyingly, one problem remains: our
 definition of event spaces does not guarantee that they contain the intersections of their members. Or does 
 it? Well, let us see whether we can ``paraphrase'' what an intersection is.
@@ -309,11 +329,13 @@ E_{1} \cap E_{2} = \Omega \backslash ((\Omega \backslash E_{1}) \cup (\Omega \ba
 \end{align}
 
 \textbf{[REMARK PHILIP: Should we maybe put this into chapter one when we introduce event spaces?]}
+\chris{too late by now, I guess}
 
 All the operations on the right hand side are defined for events spaces. We have thus solved our problem.
-To convince yourself that this is correct, you may want to consult fig. \ref{Venn2}. We also do not claim
+To convince yourself that this is correct, you may want to consult Figure~\ref{Venn2}. We also do not claim
 that this is the only valid ``paraphrase''. Feel free to find others, if you like!
 
+\section{Probability of Complements of Events}
 At this point we are capable to do most probabilistic computations that we will encounter in this course.
 From here on, it is all about making our lives easier. For example, how would you solve the following 
 problem.
@@ -355,82 +377,79 @@ Show that in general $$ \mathbb{P}(E_{1}\backslash (E_{1}\cap E_{2}))
 = \mathbb{P}(E_{1}) - \mathbb{P}(E_{1}\cap E_{2}) $$
 \end{Exercise}
 
-\section{Conditional probability and independence}
-After we have seen how to measure the probability of events, we are now going to introduce another
-tremendously important concept, that of \textbf{conditional probability} measures.
+\section{Conditional Probability and Independence}
+After we have seen how to measure the probability of events, we are going to introduce another
+tremendously important concept, that of conditional probability measures.
 
 \begin{Definition}{}
-The probability of an event $ E_{i} $ conditioned on another event $ E_{j} $ is defined as
-$$ \mathbb{P}(E_{i}|E_{j}) = \dfrac{\mathbb{P}(E_{i} \cap E_{j})}{\mathbb{P}(E_{j})} $$
-The function $ \mathbb{P}(\cdot|E_{j}) $ is often referred to as conditional probability measure.
+The probability of an event $ E_{i} $ conditioned on another event $ E_{j} $ with $\mathbb{P}(E_j) > 0$ is defined as
+$$ \mathbb{P}(E_{i}|E_{j}) := \dfrac{\mathbb{P}(E_{i} \cap E_{j})}{\mathbb{P}(E_{j})} $$
+The function $ \mathbb{P}(\cdot|E_{j}) $ is often referred to as \textbf{conditional probability} measure.
 \label{condProb}
 \end{Definition}
 
-Before we get into the math of conditional probabilities, let us try to understand what this concept event
-signifies. When we are computing the conditional probability of an event $ E_{i} $, we scale it to the 
-probability of the conditioning event $ E_{j} $. Now if $ E_{j} \not = \Omega $, $ \mathbb{P}(E_{j}) $
+Before we get into the math of conditional probabilities, let us try to understand the meaning of this concept. When we are computing the conditional probability of an event $ E_{i} $, we re-scale it with the 
+probability of the conditioning event $ E_{j} $. If $ E_{j} \not = \Omega $, $ \mathbb{P}(E_{j}) $
 might be smaller than 1. Thus, this rescaling assumes \textit{that $ E_{j} $ has already occurred}. In other
-words, we are excluding all outcomes that are not in $ E_{j} $ from further consideration (event though they
-may be in $ E_{i} $). The interpretation of conditional probabilities that is that they are the probabilities
+words, we are excluding all outcomes that are not in $ E_{j} $ from further consideration (even though they
+may be in $ E_{i} $). The interpretation of conditional probabilities is that they are the probabilities
 of events assuming that another event has already occurred.
 
 Another interpretation is that when working with a conditional probability measure, we are in fact working
-in a new probability space, where $ \Omega_{new} = E_{2} $, i.e. our sample space is the conditioning event.
-Notice that this also means that our probability measure will change. In particular it will become the
-measure from def. \ref{condProb}.
+in a new probability space, where $ \Omega_{new} = E_{2} $, i.e.\ our new sample space is the conditioning event.
+Notice that this also means that our probability measure will change and become the
+measure from Definition~\ref{condProb}.
 
-Now here comes the cool part: although we have introduced a new concept, all the properties of probability
-measures that we know by now will seamlessly carry over to conditional probabilities if we can prove
+Here comes the cool part: although we have introduced a new concept, all the properties of probability
+measures that we know by now will seamlessly carry over to conditional probabilities, if we can prove
 that the conditional probability measure is a probability measure according to our axioms.
 
 \begin{Exercise}
-Use the axioms from def. \ref{axioms} to prove that $ \mathbb{P}(\cdot|E_{j}) $ is a probability measure.
+Use the axioms from Definition~\ref{def:probmeasure} to prove that $ \mathbb{P}(\cdot|E_{j}) $ is a probability measure.
 \end{Exercise} 
 
 We will make use of conditional probabilities quite a lot in this course. We will later see a way in which
 they help us to decompose joint probability distributions. For now, we are going to focus on the fact that
-they are also related to the idea of \textbf{independence} between events.
+they are also related to the idea of independence of events.
 
 \begin{Definition}
-Two events $ E_{1}, E_{2} $ are said to be independent if 
+Two events $ E_{1}, E_{2} $ are said to be \textbf{independent} if 
 $$ \mathbb{P}(E_{1}, E_{2}) = \mathbb{P}(E_{1}) \times \mathbb{P}(E_{2}) $$
-Independence between events is denoted as $ E_{1} \bot E_{2} $.
+Independence of two events is denoted as $ E_{1} \bot E_{2} $.
 \end{Definition}
 
 This definition relates to conditional probabilities in the following way: assume that $ E_{1} \bot E_{2} $.
-The we get
+Then we get
 \begin{equation}
 \mathbb{P}(E_{1}|E_{2}) = \dfrac{\mathbb{P}(E_{1} \cap E_{2})}{\mathbb{P}(E_{2})}
 = \dfrac{\mathbb{P}(E_{1}) \times \mathbb{P}(E_{2})}{\mathbb{P}(E_{2})} = \mathbb{P}(E_{1})
 \end{equation}
-
-Notice however, that
-$ E_{1} \bot E_{2} \Rightarrow \mathbb{P}(E_{1}|E_{2}) = \mathbb{P}(E_{1}) $ but not the other way around.
+Hence, independence of two events $ E_{1} \bot E_{2}$ is equivalent with 
+$\mathbb{P}(E_{1}|E_{2}) = \mathbb{P}(E_{1}) $.
 
 \begin{Exercise}
-Find a probability space with at least three events such that $ \mathbb{P}(E_{1}|E_{2}) = \mathbb{P}(E_{1)} $
-but $ \mathbb{P}(E_{1}, E_{2}) \not = \mathbb{P}(E_{1}) \times \mathbb{P}(E_{2}) $.
+Prove that $E_1 \bot E_2$ is also equivalent with $\mathbb{P}(E_{2}|E_{1}) = \mathbb{P}(E_{2}) $.
 \end{Exercise}
 
 Independence will prove to be a useful concept in later chapters. More precisely, we will often
 just \textit{assume} that two events (or random variable -- see the next chapter) are independent. Although
-this assumption may not be true, it will allow us to formulate much simpler probabilistic models.
+such an independence might not always hold in practice, it will allow us to formulate much simpler probabilistic models.
 
 
-\section{A Remark on the interpretation \\ of probabilities$^{*}$}
+\section{A Remark on the Interpretation \\ of Probabilities$^{*}$}
 
-This concludes our introduction of axiomatic probability theory. We now know that a probability is
+This concludes our introduction of axiomatic probability theory. We know that a probability is
 a real number in $ [0,1] $. For all that we are going to do in this course (and in most follow-up courses)
 this is fully sufficient. However, some of you may wonder what a ``natural'' interpretation of probabilities
 would be. There are two dominating views on that. One postulates that we were to take A LOT (read: almost
 infinitely many) samples from a sample space, the probability of an event is its frequency amongst these
-samples divided by the total number of samples taken. For those of you who know limits, this can be
-formalized as $ \mathbb{P}(E) = \underset{n \rightarrow \infty}{lim} \dfrac{\#E}{n} $. This view
-is known as the frequentist view.
+samples divided by the total number of samples taken. For those of you who know limits, this principle can be
+formalized as $ \mathbb{P}(E) = \underset{n \rightarrow \infty}{\lim} \dfrac{\#E}{n} $. This view
+is known as the \emph{frequentist view}.
 
 The second view postulates that probabilities are an expression for degrees of belief. Basically, 
 if you assign $ \mathbb{P}(E) $ to an event $ E $, then $ \mathbb{P}(E) $ is the strength your personal belief that
-$ E $ will occur. This latter view is know as the Bayesian view.
+$ E $ will occur. This latter view is known as the \emph{Bayesian view}.
 
 Which conception of probability you choose is a philosophical matter and does not really impact the math.
 That is why we will not care about this issue in this course. However, it is useful to at least be aware
@@ -438,8 +457,8 @@ of these two views (if only to appear knowledgeable in a conversation you may ha
 friends).
 
 
-\section{The binomial theorem$^{*}$}
-The binomial theorem from eq. \ref{binomTheorem} is actually not that hard to prove. We will do so by
+\section{The Binomial Theorem}
+The binomial theorem from Equation~\eqref{binomTheorem} is actually not that hard to prove. We will do so by
 induction. As a base case we choose $ m = 0 $. Then the equality is easy to see.
 \begin{equation}
 (p + q)^{0} = 1 = \binom{0}{0}p^{0}q^{0}
@@ -455,7 +474,9 @@ $ m = n + 1 $. We achieve this by algebraic manipulation.
 &= \underset{i=0}{\overset{n}{\sum}} \binom{n}{i} p^{i+1}q^{n-i} + \underset{i=0}{\overset{n}{\sum}} \binom{n}{i} p^{i}q^{n+1-i} \\
 &= \underset{j=1}{\overset{n+1}{\sum}} \binom{n}{j-1} p^{j}q^{n+1-j} + \underset{i=0}{\overset{n}{\sum}} \binom{n}{i} p^{i}q^{n+1-i} \label{variableSwitch} \\
 &= \binom{n}{n} p^{n+1}q^{(n+1)-(n+1)} + \underset{k=1}{\overset{n}{\sum}} \binom{n}{k-1} p^{k}q^{n+1-k} \label{pullOut} \\
-&+ \binom{n}{0} p^{0}q^{n+1} + \underset{k=1}{\overset{n}{\sum}} \binom{n}{k} p^{k}q^{n+1-k} \nonumber \label{collapseSums} \\
+&+ \binom{n}{0} p^{0}q^{n+1} + \underset{k=1}{\overset{n}{\sum}} \binom{n}{k} p^{k}q^{n+1-k} \nonumber \label{collapseSums}
+\end{align}
+\begin{align}
 &= q^{n+1} + p^{n+1} + \underset{k=1}{\overset{n}{\sum}} \left(\binom{n}{k} + \binom{n}{k-1}\right) p^{i}q^{n+1-k} \\
 &= q^{n+1} + p^{n+1} + \underset{k=1}{\overset{n}{\sum}} \left(\dfrac{n!}{k!(n-k)!} + \dfrac{n!}{(k-1)!(n-k+1)!}\right) p^{i}q^{n+1-k} \\
 &= q^{n+1} + p^{n+1} + \underset{k=1}{\overset{n}{\sum}} \left(\dfrac{n!(n+1-k)}{k!(n+1-k)!} + \dfrac{n!k}{k!(n-k+1)!}\right) p^{k}q^{n+1-k} \\
@@ -464,7 +485,7 @@ $ m = n + 1 $. We achieve this by algebraic manipulation.
 &= \underset{i=0}{\overset{n+1}{\sum}} \binom{n}{k} p^{k}q^{n-k}
 \end{align}
 
-Let us clarify some parts of the proof. In line \ref{variableSwitch}, we switch the variable $ i $ in the first summand to $ j = i+1 $. The
+Let us clarify some parts of the proof. In Line~\ref{variableSwitch}, we switch the variable $ i $ in the first summand to $ j = i+1 $. The
 reason why we do this is because we want to achieve congruence with the exponents of the second summand. In the following line we 
 uniformly name the variables $ k $. Since $ k $ has to run over a common range, we chop off the ends of both sums that stick out. In the first
 sum of line \ref{variableSwitch} that is the summand that corresponds to $ j=n+1 $ and in the second sum it is the summand that corresponds
@@ -473,7 +494,7 @@ are basically just an exercise in manipulation fractions. The jump from the seco
 $$ q^{n+1} = \binom{n+1}{0}p^{0}q^{n+1-0} $$ and $$ p^{n+1} = \binom{n+1}{n+1}p^{n+1}q^{(n+1)-(n+1)} $$
 which are exactly the quantities that we need to add to make our sum reach from $ 0 $ to $ n+1 $. This completes the proof.
 
-\section*{Further reading}
+\section*{Further Reading}
 A very quick and dirty introduction to measure theory is provided by Maya Gupta and can be found 
 \href{https://www.ee.washington.edu/techsite/papers/documents/UWEETR-2006-0008.pdf}{here}. If you are
 looking for something more extensive that also motivates event spaces and the like you may want to 
