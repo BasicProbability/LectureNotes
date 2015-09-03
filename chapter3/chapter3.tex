@@ -10,6 +10,10 @@
 \newmdtheoremenv{Exercise}{Exercise}[chapter]
 \newmdtheoremenv{Theorem}{Theorem}[chapter]
 
+\newcommand{\philip}[1]{ \textcolor{red}{\textbf{Philip:} #1}}
+\newcommand{\chris}[1]{ \textcolor{blue}{\textbf{Chris:} #1}}
+
+
 \title{Basic Probability}
 \date{}
 
@@ -17,9 +21,9 @@
 
 \setcounter{chapter}{2}
 
-\chapter{Random variables and their properties}
+\chapter{Random Variables and Their Properties}
 
-\section{What is a random variable?}
+\section{What is a Random Variable?}
 \textbf{Random variables} are a tremendously useful concept in probability theory. In most situations of
 science and general life we are not really interested in the actual outcome of a random experiment. Instead,
 we care about particular properties of that outcome.
@@ -39,7 +43,7 @@ whether the temperature $ t $ is $ t < 10 $ or $ 10 \leq t \leq 20 $ or $ t > 20
 is a way of transforming outcomes from the temperature scale into judgements of perceived temperature.
 
 Another example is the lottery. Let us again consider the Dutch lottery where you have to correctly 
-predict 6 out of 49 numbers and one out of 6 colours all which are drawn \textit{independently} 
+predict 6 out of 49 numbers and one out of 6 colours all of which are drawn \textit{independently} 
 and \textit{uniformly at random} (you should be able to understand the first term by now; after reading
 this chapter, you will also understand the second). You get the main prize if you predict all these items
 correctly. However, pay-outs start from three correctly predicted numbers and increase for each additional
@@ -50,55 +54,53 @@ the numbers you got right.
 Observe that one possible way of modelling the sample space for the lottery situation is the following:
 
 \begin{align}
-\Omega = \{(b_{1}, \ldots, b_{7}, c_{1}, \ldots, c_{7})| b_{1}, \ldots, b_{6} \in \{1,\ldots, 49\}; \\
-i \not = j \Rightarrow b_{i} \not = b_{j};
-b_{7} \in \{50, \ldots, 55\}; c_{1}, \ldots, c_{7} \in \{0,1\} \} \nonumber
+\Omega = \{(b_{1}, \ldots, b_{7}, c_{1}, \ldots, c_{7}) \mid &1 \leq b_{1} < b_2 < \ldots < b_{6} \leq 49;\\
+&b_{7} \in \{50, \ldots, 55\}; c_{1}, \ldots, c_{7} \in \{0,1\} \} \nonumber
 \end{align}
 
-This rather cumbersome expression states that we draw 6 balls from an urn of 49 balls without replacement,
-then draw one ball from an urn of six balls (which we numbered higher than the balls from the first
-urn for better discrimination). We also add indicators of whether we predicted each ball drawn correctly.
-So again the question arises of how we can transform outcomes from this sample space into
+This rather cumbersome expression states that we draw 6 balls from an urn of 49 balls without replacement (and then sort them), then draw one ball from an urn of six balls (which we numbered higher than the balls from the first
+urn for better discrimination). We also add indicators of whether we predicted each ball drawn correctly. Note that we did not model what exactly our prediction was, but only if we predicted a number correctly. So again the question arises of how we can transform outcomes from this sample space into
 the events that we actually care about (namely how many balls we predicted correctly)?
 
-After this little motivating section, let us now formally define what a random variable is.
+\medskip
+After this little motivating section, let us formally define what a random variable is.
 
 \begin{Definition} 
-A (real) random variable (RV) is a function
-$$ X: (\Omega, \mathcal{A}, \mathbb{P}) \rightarrow \mathbb{R} $$
-We additionally require that each set $ A = \{\omega| X(\omega \leq r\} $ be in $ \mathcal{A} $ for
-all $ r \in \mathbb{R} $.
+A (real) random variable (RV) $X$ on a probability space $(\Omega, \mathcal{A}, \mathbb{P})$ is a function
+$$ X: \Omega \rightarrow \mathbb{R} $$
+where we require that for
+all $ r \in \mathbb{R} $, the set $ A = \{\omega| X(\omega) \leq r\} $ is in the event space $ \mathcal{A}$.
 \end{Definition}
 
-Notice that the naming of the random variable is arbitrary but by convention we will often use the letters
-$ X,Y,Z $. Also, as you can see, RVs operate on an entire probability space. The reason is that
+Notice that the naming of the random variable is arbitrary but by convention we will often use the capital letters
+$ X,Y,Z $. Also, as you can see, RVs are defined on an entire probability space. The reason is that
 we want to have a probability measure associated with our sample space. 
-In fact, this probability measure is the reason why random variables are assuming their values
-in a random way. Moreover, since we can only measure events from our events space, the condition on RVs
-ensures that we can in fact measure the probability of each real value that we may map an outcome to.
+In fact, this probability measure is the reason why we can see random variables as taking on their values
+in a random way. Moreover, since we can only measure events from our event space, the condition on RVs
+ensures that we can in fact measure the probability of each real value which a RV may map an outcome to.
 In technical terms, we are thus making sure that the image of the RV is \textit{measurable}.
 
 Let us define a random variable for the weather situation. 
 \begin{equation} \label{weatherRV}
 X(t) = 
 \begin{cases}
-1 & t < 10 \\
-2 & 10 \leq t \leq 20 \\
-3 & t > 2
+1 & t < 10 \, , \\
+2 & 10 \leq t \leq 20 \, ,\\
+3 & t > 2 \, .
 \end{cases}
 \end{equation}
 
-In principle we can now easily determine the probability of each of the values of this RV. However, we did
+In principle we can easily determine the probability of each of the values of this RV. However, we did
 not bother to define a sample space and associated probability measure, mostly because we would have to
 restrict the possible temperatures to those that we think are reasonable. Nevertheless, this is something
 that you can do yourself.
 
 \begin{Exercise}
 Define an upper and lower bound for temperature values (make sure you can actually get all three perceived
-degrees of warmth). This will give you a discrete sample space since we postulated
+degrees of warmth). These bounds will lead you to a discrete sample space since we postulated
 that the website we consult only reports temperatures up to one decimal place after the comma. Then impose
 any probability measure on the associated event space. Finally, compute the probability of each of the
-values of the RV $ X $ from eq. \ref{weatherRV}.
+values of the RV $ X $ from Equation~\eqref{weatherRV}.
 \end{Exercise}
 
 We can do the same for the lottery. Our random variable would then look as follows:
@@ -106,30 +108,30 @@ We can do the same for the lottery. Our random variable would then look as follo
 X(\omega) = \overset{7}{\underset{i=1}{\sum}} c_{i}
 \end{equation}
 
-Whenever a RV assumes a particular value, we write $ X=x $. Thus, if $ X $ in eq. \ref{lotteryRV} assumes the
-value $ 4 $, i.e. we guessed for balls correctly, we would write $ X=4 $. And here comes the function
-that will officially compute the probability that this happens for us.
+Whenever a RV assumes a particular value, we write $ X=x $. Thus, if $ X $ in Equation~\eqref{lotteryRV} assumes the
+value $ 4 $, i.e.\ we guessed four balls correctly, we would write $ X=4 $. And here comes the function
+that computes the probability that this event happens.
 
 \begin{Definition}
 The discrete probability distribution of a RV $ X $ is the function
-$$ P_{X}(X=x) := \mathbb{P}(\{\omega|X(\omega)=x\}) $$
+$$ P(X=x) := \mathbb{P}( \, \{\omega \mid X(\omega)=x\} \, ) $$
 \end{Definition}
 
-Now what is $ P_{X}(X=4) $ for the lottery example? Recall that there are 
-$ a = \binom{49}{6} \times 6 $ sequences of balls that we can draw. Now in the above scenario we also have to take
+What is $ P(X=4) $ for the lottery example? Recall that there are 
+$ a = \binom{49}{6} \times 6 $ sequences of balls that we can draw. In our modeling of the scenario, we also have to take
 into account whether or not we correctly predicted each ball, leaving us with a total of $ 2^{a} $
-outcomes. At the same time there are $ b = \binom{45}{2} \times 6 + \binom{46}{3} \times 5 $ outcomes in which we have made 
-exactly 4 correct predictions. Thus we get $ P_{X}(X=4) = \nicefrac{2^{b}}{2^{a}} $.
+outcomes\chris{this is not correct}. At the same time there are $ b = \binom{45}{2} \times 6 + \binom{46}{3} \times 5 $ outcomes in which we have made 
+exactly 4 correct predictions.\chris{also incorrect, I think. It should be something like $\binom{6}{4} \binom{43}{2} 5$ for 4 correct balls and color wrong, plus $\binom{6}{3}\binom{43}{3}$ for 3 correct balls and color right, check \url{https://en.wikipedia.org/wiki/Lottery_mathematics}, I think it's quite tricky. The $\binom{6}{x}$-part is the number of possibilities to pick $x$ (winning) ones in the $c$-part of the sample space. For the other positions, we can choose among the remaining numbers.} Thus we get $ P_{X}(X=4) = \nicefrac{2^{b}}{2^{a}} $ \chris{I don't think so.}.
 
 We can of course also make statements
 like $ X < x $ and $ X \geq x $. This is a way of expressing that a RV assumes a value above or below a certain
-threshold. The way to get the probability that this would happen is through the \textbf{cumulative distribution
-function}.
+threshold. The way to get the probability that this would happen is through the cumulative distribution
+function.
 
 \newpage
 \begin{Definition}
-The cumulative distribution function (cdf) of a random variable $ X $ is given as
-$$ F_{X}(a) := P_{X}(X \leq a) = {\underset{x \leq a}{\sum}}P(X=x) $$
+The \textbf{cumulative distribution function (cdf)} of a random variable $ X $ is given by
+$$ F_{X}(a) := P(X \leq a) = {\underset{x \leq a}{\sum}}P(X=x) $$
 \end{Definition}
 
 The cumulative distribution function is helpful in two ways. First of all, it allows us to get the probability that
@@ -167,7 +169,7 @@ P_{Z}(Z > 5) =& P_{Z}(Z=6) + P_{Z}(Z=7) + P_{Z}(Z=8) \\
 =& 0.04 + 0.02 + 0.01 = 0.07 \nonumber
 \end{align} 
 
-Now it is straightforward to compute $ P_{Z}(2 < Z \leq 5) $. If we again look at fig. \ref{binomplot} we see that this is
+It is straightforward to compute $ P_{Z}(2 < Z \leq 5) $. If we again look at fig. \ref{binomplot} we see that this is
 the area delimited by the red lines. Thus, $ P_{Z}(Z \leq 5) $ will be an overestimate of this probability. The amount by
 which it is an overestimate is exactly $ P_{Z}(Z \leq 2) $. Thus we get $ P_{Z}(2 < Z \leq 5) = P_{Z}(Z \leq 5) - P_{Z}(Z \leq 2) $.
 
@@ -264,7 +266,7 @@ values in the support and the expectation. However, since values of $ X $ can be
 sum will be 0. Therefore we square it, leaving us only with positive values. In sum, the variance is the expectation
 of the squared differences between the expectation and the values in the support of $ X $.
 
-Computing the variance as an expectation can be cumbersome. We will now show how it can be done more efficiently.
+Computing the variance as an expectation can be cumbersome. We will show how it can be done more efficiently.
 \begin{align}
 var(X) &= E_{P_{X}}[(E_{P_{X}}[X] - X)^{2}] \\
 &= \underset{i = 1}{\overset{|X|}{\sum}} P_{X}(X=x_{i}) (E_{P_{X}}[X] - X)^{2} \\
@@ -295,7 +297,7 @@ What we see here is that the variance is not affected by constant additions to t
 the expectation. However, the relation of each individual value to the expectation is not affected by that. On the other hand,
 when we multiply each value of the RV by a constant, the variance is scaled by the square of that constant. Again, this is not surprising.
 Remember that we used squaring in our definition of the variance to turn all distances from the expectation into positive numbers.
-Now if we multiply an RV by a constant $ a $ its spread will increase in both directions by a factor of $ a $. 
+If we multiply an RV by a constant $ a $ its spread will increase in both directions by a factor of $ a $. 
 And since we again want only positive differences,
 we better square that increased spread. This intuitively justifies the above equalities.
 
@@ -322,18 +324,18 @@ having to bother what that space looks like.
 
 Joint distributions are of particular interest because they make it possible to recover the probability distribution of each individual
 RV as well as of smaller joint distributions. The process by which this can be accomplished is known as \textbf{marginalization}. Say
-we are given a joint distribution $ P_{XY} $. Now how can we determine the probability that $ X=x $? Our sample space is carved
+we are given a joint distribution $ P_{XY} $. How can we determine the probability that $ X=x $? Our sample space is carved
 up by the values that $ X $ and $ Y $ can take on. We are interested in the probability of the subset $ E = \{\omega|X(\omega)=x\} $.
 Assuming that $ Y $ can take on $ n $ values, let us define $ E_{i} = \{\omega| Y(\omega) = y_{i}\} $ for $ 1 \leq i \leq n $.
 Some (possibly all) of the $ E_{i} $ will overlap with $ E $. Thus we can partition $ E $ into $ E\cap E_{1}, \ldots, E \cap E_{n} $.
-Now by countable additivity we simply need to sum up the probabilities of these intersections. Observe that those probabilities
+By countable additivity we simply need to sum up the probabilities of these intersections. Observe that those probabilities
 correspond exactly to $ P_{XY}(X=x,Y=y_{1}), \ldots, P_{XY}(X=x,Y=y_{1}) $. Hence, we get to the following equality:
 
 \begin{equation} \label{simpleMarginal}
 P_{X}(X=x) = \overset{n}{\underset{i=1}{\sum}} P_{XY}(X=x,Y=y_{i}) 
 \end{equation}
 
-Now if we set $ X = (Z_{1}, \ldots, Z_{m}) $, we can recover $ P_{Z_{1}^{m}} $ from $ P_{YZ_{1}^{m}} $ in the same way. Likewise,
+If we set $ X = (Z_{1}, \ldots, Z_{m}) $, we can recover $ P_{Z_{1}^{m}} $ from $ P_{YZ_{1}^{m}} $ in the same way. Likewise,
 if we set $ Y = (Z_{1}, \ldots, Z_{m}) $ we get the generalization of \ref{simpleMarginal}. We will assume that each $ Z_{j} $
 can assume $ n_{j} $ values.
 
@@ -429,16 +431,16 @@ to land on heads is $ 0.3 $ the probability to land on tails has to be $ 0.7 $. 
 landing on heads. As we would expect, $ X = 1 $ will return the $ 0.3 $ probability and $ X = 0 $ will return the probability of $ 0.7 $.
 
 This leads to a general formulation where we do not specify the parameter $ \theta $ but leave it to be filled in. 
-The resulting distribution, known as \textbf{Bernoulli distribution} (with parameter $ \theta $), is shown in eq. \ref{Bernoulli}.
+The resulting distribution, known as \textbf{Bernoulli distribution} (with parameter $ \theta $), is shown in Equation~\eqref{Bernoulli}.
 \begin{equation}\label{Bernoulli}
 P_{X}(X=x) = \theta^{x} \times (1 - \theta)^{1-x}
 \end{equation}
 
 The Bernoulli is defined for one coin flip, or more generally for the drawing of a coloured ball from an urn containing balls
-of exactly two colours. Now what if we draw balls repeatedly with replacement? We will get a sequence of coloured balls. 
+of exactly two colours. What if we draw balls repeatedly with replacement? We will get a sequence of coloured balls. 
 Say we draw $ n $ balls and repeat this procedure five times. Chances are that the five sequences will look rather different.
 Thus, we can define a probability distribution over sequences of coloured balls of length $ n $. This can be achieved in a simple generalization
-of the Bernoulli. Whereas in the Bernoulli we made one draw we now make $ n $ draws.
+of the Bernoulli. Whereas in the Bernoulli we made one draw we make $ n $ draws.
 \begin{equation}\label{Multinoulli}
 P_{X}(X=x) = \theta^{x} \times (1 - \theta)^{n-x}
 \end{equation}
@@ -457,7 +459,7 @@ over are generally referred to as success and failure where the success is usual
 (although nothing hinges on that). 
 
 \begin{Exercise}
-Use the distribution in eq. \ref{Multinoulli} with $ n = 10 $ and $ \theta = 0.8 $ to determine the probability of the sequence (0,0,1,1,0,1,1,1,0,1).
+Use the distribution in Equation~\eqref{Multinoulli} with $ n = 10 $ and $ \theta = 0.8 $ to determine the probability of the sequence (0,0,1,1,0,1,1,1,0,1).
 \end{Exercise}
 
 Another interesting observation is that, since the value at each position in the sequence is independent of all others, all sequences with the same
@@ -468,7 +470,7 @@ successes. But how many such sequences are there? If you recall chapter 1, there
 out of $ n $. This is exactly the problem we are facing here. We want to know how many ways there are to choose $ x $ out of $ n $ positions
 that we interpret as successes. This counting is done for us by the binomial co-efficient $ \binom{n}{x} $.
 
-We can now generalize the distribution from eq. \ref{Multinoulli} to a distribution that gives the probability of obtaining any sequence
+We can generalize the distribution from Equation~\eqref{Multinoulli} to a distribution that gives the probability of obtaining any sequence
 with $ x $ successes. This distribution is known as the \textbf{binomial distribution} (with parameters $ n $ and $ \theta $).
 \begin{equation}
 P_{X}(X=x) = \binom{n}{x} \theta^{x} (1-\theta)^{n-x}
