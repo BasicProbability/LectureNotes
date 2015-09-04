@@ -306,7 +306,8 @@ there is a distribution over tuples of values, each from a different RV.
 \begin{Definition}
 Random variables $ X_{1}, \ldots, X_{n} $ (\textbf{abbreviated as $ X^{n}_{1} $}) 
 are said to be \textbf{jointly distributed} with probability distribution $ P_{X_{1}^{n}} $ if
-$$ P(X_{1}=x_{1}, \ldots, X_{n}=x_{n}) = \mathbb{P}(\, \{\omega \mid X_{1}(\omega) = x_{1}, \ldots, X_{n}(\omega)=x_{n}\}\, ) $$
+$$ P(X_{1}=x_{1}, \ldots, X_{n}=x_{n}) = \mathbb{P}(\, \{\omega \mid
+X_{1}(\omega) = x_{1}, \ldots, X_{n}(\omega)=x_{n}\}\, ) \, . $$ 
 \end{Definition}
 
 From the above definition, we see that the random variables need to
@@ -364,25 +365,26 @@ Find the marginal distributions $ P_X $ and $ P_{Y} $ in table \ref{jointTable}.
 \end{Exercise}
 
 We have already seen how the joint probability of random variables links back the the probability space that underlies them.
-This makes it easy for us to import certain concepts that we have gotten to know in previous chapters. In particular, we can
-define \textbf{conditional probability distributions}.
+This link makes it easy for us to import certain concepts that we have
+gotten to know in previous chapters. In particular, we can define \textbf{conditional probability distributions}.
 
 \begin{Definition}
-The probability of $ X = x $ conditioned on $ Y=y $ is given as
-$$ P(X=x|Y=y) = \dfrac{P(X=x, Y=y)}{P(Y=y)} $$
+The probability of $ X = x $ conditioned on $ Y=y $ is given by
+$$ P(X=x|Y=y) := \dfrac{P(X=x, Y=y)}{P(Y=y)} $$
 \end{Definition} 
 
 \begin{Exercise}
-Compute the conditional probability distributions $ P_{X|Y=2} $ and $ P_{Y|X=1} $ from table \ref{jointTable}.
+Compute the conditional probability distributions $ P_{X|Y=2} $ and $ P_{Y|X=1} $ from Table~\ref{jointTable}.
 \end{Exercise}
 
-Likewise, we can carry over the concept of independence.
+Likewise, the concept of independence carries over to distributions.
 
 \begin{Definition}
-Two random variables $ X,Y $ are independent (write: $ X \bot Y $) if $ P(X=x, Y=y) = P(X=x)P(Y=y) $.
+Two random variables $ X,Y $ are independent (denoted by $ X \bot Y $) if $ P(X=x, Y=y) = P(X=x)P(Y=y) $.
 \end{Definition}
 
-As with events, independence also implies that $ P_{X|Y} = P_{X} $. Moreover, independence makes it much easier for us
+As with events, independence is equivalent to $ P_{X|Y} = P_{X} $ (and
+to $P_{Y|X}=P_Y$). Moreover, independence makes it much easier for us
 to calculate the expectation and variance of jointly distributed random variables. We have to be careful, though. We
 cannot just compute the expectation of the joint random variables themselves as it is unclear what this would even be.
 What we can do is to compute the expectation of functions of them. The standard choice in the case of expectation
