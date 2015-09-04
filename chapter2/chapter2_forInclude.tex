@@ -51,7 +51,7 @@ Apart from these examples, there is one measure, however, that is going to be th
 script, namely the \textbf{probability measure}.
 
 \begin{Definition}[Probability measure]\label{def:probmeasure}
-A probability measure \\ $ \mathbb{P}: \mathcal{A} \rightarrow \mathbb{R} : A \mapsto \mathbb{P}(A) $
+A probability measure \\ $ \mathbb{P}: \mathcal{A} \rightarrow \mathbb{R}, A \mapsto \mathbb{P}(A) $
 on an event space $ \mathcal{A} $ associated with a sample space $ \Omega $ has the
 following properties:
 \begin{enumerate}
@@ -388,8 +388,14 @@ This definition relates to conditional probabilities in the following way: assum
 Then we get
 \begin{equation}
 \mathbb{P}(E_{1}|E_{2}) = \dfrac{\mathbb{P}(E_{1} \cap E_{2})}{\mathbb{P}(E_{2})}
-= \dfrac{\mathbb{P}(E_{1}) \times \mathbb{P}(E_{2})}{\mathbb{P}(E_{2})} = \mathbb{P}(E_{1})
+= \dfrac{\mathbb{P}(E_{1}) \times
+  \mathbb{P}(E_{2})}{\mathbb{P}(E_{2})} = \mathbb{P}(E_{1}) \, .
 \end{equation}
+Hence, independence of two events $ E_{1} \bot E_{2}$ is equivalent with $\mathbb{P}(E_{1}|E_{2}) = \mathbb{P}(E_{1}) $.
+
+\begin{Exercise}
+ Prove that $E_1 \bot E_2$ is also equivalent with $\mathbb{P}(E_{2}|E_{1}) = \mathbb{P}(E_{2}) $. 
+\end{Exercise}
 
 Independence will prove to be a useful concept in later chapters. More precisely, we will often
 just \textit{assume} that two events (or random variables -- see the next chapter) are independent. Although
@@ -460,4 +466,13 @@ A very quick and dirty introduction to measure theory is provided by Maya Gupta 
 \href{https://www.ee.washington.edu/techsite/papers/documents/UWEETR-2006-0008.pdf}{here}. If you are
 looking for something more extensive that also motivates event spaces and the like you may want to 
 take a look at \href{http://www.stat.ncsu.edu/people/fuentes/courses/st778/lectures/ross}{this script}
-by Ross Leadbatter and Stamatis Cambanis (which has also been published as a book).
+by Ross Leadbatter and Stamatis Cambanis (which has also been
+published as a book).
+
+
+
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "chapter2"
+%%% End:
