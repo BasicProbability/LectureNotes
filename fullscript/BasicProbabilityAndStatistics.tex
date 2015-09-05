@@ -1,11 +1,29 @@
 \documentclass[11pt,leqno,a4paper]{report}
 
-\usepackage{amssymb, amsmath, mdframed}
+\usepackage{amssymb, amsmath, mdframed, caption, subcaption}
 \usepackage{hyperref}
 \hypersetup{colorlinks=true, urlcolor=blue, breaklinks=true}
+% for Python code
+\usepackage[procnames]{listings} 
+\definecolor{keywords}{RGB}{255,0,90}
+\definecolor{comments}{RGB}{0,0,113}
+\definecolor{red}{RGB}{160,0,0}
+\definecolor{green}{RGB}{0,150,0}
+ 
+\lstset{language=Python, 
+        basicstyle=\tt\small, 
+        keywordstyle=\color{keywords},
+        commentstyle=\color{comments},
+        stringstyle=\color{red},
+        showstringspaces=false,
+        identifierstyle=\color{green},
+        procnamekeys={def,class}}
+%
+\usepackage{venndiagram}
 
 \newmdtheoremenv{Definition}{Definition}[chapter]
 \newmdtheoremenv{Exercise}{Exercise}[chapter]
+\newmdtheoremenv{Theorem}{Theorem}[chapter]
 
 \author{Philip Schulz \\ Christian Schaffner}
 \title{Basic probability and statistics}
@@ -17,8 +35,12 @@
 \maketitle
 \end{titlepage}
 
+\tableofcontents
+
 % insert preface
 
 \input{../chapter1/chapter1_forInclude}
+\input{../chapter2/chapter2_forInclude}
+
 
 \end{document}
