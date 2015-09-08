@@ -68,7 +68,7 @@ the events that we actually care about (namely how many balls we predicted corre
 \medskip
 After this little motivating section, let us formally define what a random variable is.
 
-\begin{Definition} 
+\begin{Definition}[Real random variable]
 A (real) random variable (RV) $X$ on a probability space $(\Omega, \mathcal{A}, \mathbb{P})$ is a function
 $$ X: \Omega \rightarrow \mathbb{R} $$
 where we require that for
@@ -115,7 +115,7 @@ Whenever a RV assumes a particular value, we write $ X=x $. Thus, if $ X $ in Eq
 value $ 4 $, i.e.\ we guessed four balls correctly, we would write $ X=4 $. And here comes the function
 that computes the probability that this event happens.
 
-\begin{Definition}
+\begin{Definition}[Probability distribution]
 The discrete probability distribution of a RV $ X $ is the function
 $$ P(X=x) := \mathbb{P}( \, \{\omega \mid X(\omega)=x\} \, ) $$
 \end{Definition}
@@ -131,7 +131,7 @@ like $ X < x $ and $ X \geq x $. This is a way of expressing that a RV assumes a
 threshold. The way to get the probability of this event is through the cumulative distribution function.
 
 \newpage
-\begin{Definition}
+\begin{Definition}[Cumulative distribution function]
 The \textbf{cumulative distribution function (cdf)} of a random variable $ X $ is given by
 $$ F_{X}(a) := P(X \leq a) = {\underset{x \leq a}{\sum}}P(X=x) $$
 \end{Definition}
@@ -173,7 +173,7 @@ you get?
 
 In the case of discrete random variables, i.e.\ the ones that we are dealing with here, there is another function that is of great interest, namely the probability mass function.
 
-\begin{Definition}
+\begin{Definition}[Probability mass function]
 The \textbf{probability mass function (pmf)} of a random variable $ X $ is given by
 $$ p(x) := P(X = x) $$
 \end{Definition}
@@ -200,7 +200,7 @@ of the probabilities as weights, then the center of mass is the point at which y
 plank from underneath such that the plank maintains perfect balance. In Figure~\ref{binomplot} this so-called expectation
 is indicated by the blue line. \chris{the spike could be drawn like in~\url{http://www.math.uah.edu/stat/expect/DiscreteCenterMass.png}}
 
-\begin{Definition}
+\begin{Definition}[Expectation]
 The \textbf{expectation} of a random variable $ X $ with respect to the distribution $ P $ is defined as
 $$ \E[X] := \sum_{x \in \supp(X)} x P(X=x) $$ \, .
 \end{Definition}
@@ -249,7 +249,7 @@ After we have discussed the centre of mass, it is also interesting to look at ho
 The spread of $ Y $ is obviously going to be greater, although both have the same expectation. The quantity usually used to assess
 the spread of a RV is the variance.
 
-\begin{Definition}
+\begin{Definition}[Variance]
 The \textbf{variance} of a RV $ X $ with distribution $ P $ is given by
 $$ var(X) := \E[\, (X - \E[X])^{2} \, ] $$
 \end{Definition}
@@ -303,7 +303,7 @@ we better square that increased spread. This intuitively justifies the above equ
 Up to now, we have only looked at cases that could be treated with one random variable. Most interesting problems involve several RVs, however. We introduce the concept of jointly distributed random variables. What this means is that
 there is a distribution over tuples of values, each from a different RV.
 
-\begin{Definition}
+\begin{Definition}[Joint probability distribution]
 Random variables $ X_{1}, \ldots, X_{n} $ (\textbf{abbreviated as $ X^{n}_{1} $}) 
 are said to be \textbf{jointly distributed} with probability distribution $ P_{X_{1}^{n}} $ if
 $$ P(X_{1}=x_{1}, \ldots, X_{n}=x_{n}) = \mathbb{P}(\, \{\omega \mid
@@ -368,7 +368,7 @@ We have already seen how the joint probability of random variables links back th
 This link makes it easy to import certain concepts that we have
 gotten to know in previous chapters. In particular, we can define \textbf{conditional probability distributions}.
 
-\begin{Definition}
+\begin{Definition}[Conditional probability distribution]
 The probability of $ X = x $ conditioned on $ Y=y $ is given by
 $$ P(X=x|Y=y) := \dfrac{P(X=x, Y=y)}{P(Y=y)} $$
 \end{Definition} 
@@ -379,7 +379,7 @@ Compute the conditional probability distributions $ P_{X|Y=2} $ and $ P_{Y|X=1} 
 
 Likewise, the concept of independence carries over to distributions.
 
-\begin{Definition}
+\begin{Definition}[Independence of random variables]
 Two random variables $ X,Y $ are independent (denoted by $ X \bot Y $) if $ P(X=x, Y=y) = P(X=x)P(Y=y) $.
 \end{Definition}
 
