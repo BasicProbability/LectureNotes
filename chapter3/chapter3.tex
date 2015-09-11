@@ -45,8 +45,8 @@ above 20 degrees. So what you are really interested in, at least as far as cloth
 whether the temperature $ t $ is $ t < 10 $ or $ 10 \leq t \leq 20 $ or $ t > 20 $. What we are looking for
 is a way of transforming outcomes from the temperature scale into judgements of perceived temperature.
 
-Another example is the lottery. Let us again consider the Dutch lottery where you have to correctly 
-predict 6 out of 49 numbers and one out of 6 colours all of which are drawn \textit{independently} 
+Another example is the lottery. Let us again consider the German lottery where you have to correctly 
+predict 6 out of 49 numbers all of which are drawn \textit{independently} 
 and \textit{uniformly at random} (you should be able to understand the first term by now; after reading
 this chapter, you will also understand the second). You get the main prize if you predict all these items
 correctly. However, pay-outs start from three correctly predicted numbers and increase for each additional
@@ -57,12 +57,11 @@ the numbers you got right.
 Observe that one possible way of modelling the sample space for the lottery situation is the following:
 
 \begin{align}
-\Omega = \{(b_{1}, \ldots, b_{7}, c_{1}, \ldots, c_{7}) \mid &1 \leq b_{1} < b_2 < \ldots < b_{6} \leq 49;\\
-&b_{7} \in \{50, \ldots, 55\}; c_{1}, \ldots, c_{7} \in \{0,1\} \} \nonumber
+\Omega = \{(b_{1}, \ldots, b_{6}, c_{1}, \ldots, c_{6}) \mid &1 \leq b_{1} < b_2 < \ldots < b_{6} \leq 49;\\
+& c_{1}, \ldots, c_{6} \in \{0,1\} \} \nonumber
 \end{align}
 
-This rather cumbersome expression states that we draw 6 balls from an urn of 49 balls without replacement (and then sort them), then draw one ball from an urn of six balls (which we numbered higher than the balls from the first
-urn for better discrimination). We also add indicators of whether we predicted each ball drawn correctly. Note that we did not model what exactly our prediction was, but only if we predicted a number correctly. So again the question arises of how we can transform outcomes from this sample space into
+This rather cumbersome expression states that we draw 6 balls from an urn of 49 balls without replacement (and then sort them). We also add indicators of whether we predicted each ball drawn correctly. Note that we did not model what exactly our prediction was, but only if we predicted a number correctly. So again the question arises of how we can transform outcomes from this sample space into
 the events that we actually care about (namely how many balls we predicted correctly)?
 
 \medskip
@@ -108,7 +107,7 @@ values of the RV $ X $ from Equation~\eqref{weatherRV}.
 
 We can do the same for the lottery. Our random variable would then look as follows:
 \begin{equation}\label{lotteryRV}
-X(\omega) = \overset{7}{\underset{i=1}{\sum}} c_{i}
+X(\omega) = \overset{6}{\underset{i=1}{\sum}} c_{i}
 \end{equation}
 
 Whenever a RV assumes a particular value, we write $ X=x $. Thus, if $ X $ in Equation~\eqref{lotteryRV} assumes the
@@ -121,10 +120,10 @@ $$ P(X=x) := \mathbb{P}( \, \{\omega \mid X(\omega)=x\} \, ) $$
 \end{Definition}
 
 What is $ P(X=4) $ for the lottery example? Recall that there are 
-$ a = \binom{49}{6} \times 6 $ sequences of balls that we can draw (6 out of 49 numbered and 1 out of 6 coloured balls).
+$ a = \binom{49}{6} $ sequences of balls that we can draw (6 out of 49 balls).
 In our modelling of the scenario, we also have to take
 into account whether or not we correctly predicted each ball. Notice that the indicator $ c_{i} $ is a function of our predictions. 
-If our prediction $ v_{1}, \ldots, v_{7} $ are ordered in ascending fashion, then
+If our prediction $ v_{1}, \ldots, v_{6} $ are ordered in ascending fashion, then
 \begin{equation*}
 c_{i} = 
 \begin{cases}
@@ -133,18 +132,18 @@ c_{i} =
 \end{cases}
 \end{equation*}
 
-The unfairness of the lottery comes from the fact that the lottery gets to draw one out of $ \binom{49}{6} \times 6 $ possible sequences \textit{at random} whereas the
-player has to decide on only one sequence ahead of time. 
-There are $ \binom{6}{4}\binom{43}{2}\times 5 $ ways in which your predictions can get exactly 4 numbers right and the coloured ball wrong in any given lottery draw. 
+The unfairness of the lottery comes from the fact that the player has to pick out of a large number of sequences only very few of which will have more than three
+numbers in common with the sequence that ends up being drawn. Let us apply this intuition to our example.
+There are $ \binom{6}{4}\binom{43}{2}$ ways in which your predictions can get exactly 4 numbers right.
 This is because there are $ \binom{6}{4} $ to guess 4 out of 6 numbers correctly and $ \binom{43}{2} $ ways to choose any two out of the 43 numbers that were not 
-drawn. Moreover, you can choose any of the $ 5 $ coloured balls that were not drawn. By the same reasoning, there are $ \binom{6}{3}\binom{44}{3}$ ways in which you get 3 
-numbered balls and the coloured ball correct. In total there are 
+drawn. In total there are 
 \begin{equation}
-\binom{6}{4}\binom{43}{2}\times 5 + \binom{6}{3}\binom{44}{3} = 314545
+\binom{6}{4}\binom{43}{2} = 13545
 \end{equation}
-ways to agree on four balls with a single lottery draw. 
+ways to agree on four balls with a single lottery draw. This might seem like a lot. However, if we divide this by the total number of possible sequences, we
+find that $ P(X=4) = 0.000969 $ which is very little.   
 
-We can of course also make statements
+We have just seen examples, were the RV would take on a specific value. We can of course also make statements
 like $ X < x $ and $ X \geq x $. This is a way of expressing that a RV assumes a value above or below a certain
 threshold. The way to get the probability of this event is through the cumulative distribution function.
 
