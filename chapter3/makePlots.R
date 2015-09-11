@@ -1,4 +1,4 @@
-# R script for creating plot of distributions in chapter 2
+# R script for creating plots in chapter 3
 # Run as "Rsript makeplots.R"
 # Author: Philip Schulz
 
@@ -29,7 +29,7 @@ z = cumsum(y)
 png("cdf.png", width=8, height=8, units="in", res=300)
 
 # plot z against x
-plot(x,z,ylab="cdf(z)",xlab="Z")
+plot(x,z,ylab="F(z)",xlab="Z")
 # add vertical strokes
 for (i in (1:length(x)-1)) { lines(c(x[i],x[i]+1),c(z[i],z[i])) }
 # close stream and save to file
