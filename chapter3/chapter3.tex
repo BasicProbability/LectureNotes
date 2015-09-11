@@ -134,13 +134,28 @@ $$ F_{X}(a) := P_{X}(X \leq a) = {\underset{x \leq a}{\sum}}P(X=x) $$
 
 The cumulative distribution function is helpful in two ways. First of all, it allows us to get the probability that
 $ X $ takes on a value in a certain range. Second, it has applications in sampling algorithms, some of which we might
-see during the programming part of the course.
+see during the programming part of the course. A plot of the cdf of $ Z $ is given in Figure~\ref{cdfPlot}. We can recognize that it is the cdf of a discrete
+distribution because it is discontinuous. If the underlying probability distribution was continuous, so would be its cdf.
 
 \begin{figure}
 \center
+<<<<<<< Updated upstream
 \includegraphics[scale=.3]{histogram.png}
 \caption{Probability distribution of a random variable with $ 8 $ possible values.}
+=======
+\includegraphics[scale=.4]{distribution.png}
+\caption{\chris{It should rather be a bar plot instead of a histogram, like~\url{http://www.math.uah.edu/stat/expect/DiscreteCenterMass.png}, because the mass is concentrated in discrete points.} Probability distribution of a random variable $Z$ with $ 8 $ possible values, given by $ P(Z = 1) = 0.09,  P(Z = 2) = 0.21, P(Z = 3) = 0.28, P(Z = 4) = 0.23, P(Z = 5) = 0.12, P(Z = 6) = 0.04, P(Z = 7) = 0.02$, and $ P(Z = 8) = 0.01$. The arrow indicates the expectation. This is a visualisation of 
+the spike that we can plug underneath the centre of mass.}
+>>>>>>> Stashed changes
 \label{binomplot}
+\end{figure}
+
+\begin{figure}
+\center
+\includegraphics[scale=.4]{cdf.png}
+\caption{Cumulative probability distribution of $ Z $. Observe that it stays constant in values that $ Z $ cannot take on. This cdf being discontinuous is an indicator
+that the underlying probability distribution is discrete.}
+\label{cdfPlot}
 \end{figure}
 
 To better understand how we can compute the probability that $ a \leq X \leq b $ for some real values $ a,b $ let us take a 
@@ -200,10 +215,16 @@ of the probabilities as weights, then the center of mass is the point at which y
 plank from underneath such that the plank maintains perfect balance. In fig. \ref{binomplot} this so-called \textbf{expectation}
 is indicated by the blue line.
 
+<<<<<<< Updated upstream
 \begin{Definition}
 The expectation of a random variable $ X $ with respect to the distribution $ P_{X} $ is defined as
 $$ E_{P_{X}}[X] := \underset{i = 1}{\overset{|X|}{\sum}} x_{i}P_{X}(x_{i}) $$
 where $ |X| $ is the size of the support of $ X $ and $ x_{i} $ are the members of that support.
+=======
+\begin{Definition}[Expectation]
+The \textbf{expectation} of a random variable $ X $ with respect to the distribution $ P $ is defined as
+$$ \E[X] := \sum_{x \in \supp(X)} x P(X=x) $$ \, . \philip{Are you sure you want to have this dot here? It seems to unnecessarily inflate the box.}
+>>>>>>> Stashed changes
 \end{Definition}
 
 \begin{Exercise}
@@ -279,7 +300,11 @@ For most intents and purposes we will use \ref{variance} to compute the variance
 subscript indicating the distribution of the the expectation in order to save ourselves some writing.
 
 \begin{Exercise}
+<<<<<<< Updated upstream
 Compute the variance of the lottery RV from the previous section.
+=======
+Compute the variance of the RV Z from the previous section.
+>>>>>>> Stashed changes
 \end{Exercise}
 
 Although variance is not linear, we can still try to figure out what happens when we multiply a RV by a constant or add a constant to it.
@@ -404,7 +429,11 @@ Show that $ var(X + Y) = var(X) + var(Y) $.
 
 
 
+<<<<<<< Updated upstream
 \section{Two important distributions}
+=======
+\section{Three Important Distributions}
+>>>>>>> Stashed changes
 
 We will finish this chapter by introducing two extremely useful discrete distributions. They are very often used in
 computer science to model the probability of bit strings and linguistics and natural language processing to model
@@ -437,10 +466,19 @@ P_{X}(X=x) = \theta^{x} \times (1 - \theta)^{1-x}
 The Bernoulli is defined for one coin flip, or more generally for the drawing of a coloured ball from an urn containing balls
 of exactly two colours. Now what if we draw balls repeatedly with replacement? We will get a sequence of coloured balls. 
 Say we draw $ n $ balls and repeat this procedure five times. Chances are that the five sequences will look rather different.
+<<<<<<< Updated upstream
 Thus, we can define a probability distribution over sequences of coloured balls of length $ n $. This can be achieved in a simple generalization
 of the Bernoulli. Whereas in the Bernoulli we made one draw we now make $ n $ draws.
 \begin{equation}\label{Multinoulli}
 P_{X}(X=x) = \theta^{x} \times (1 - \theta)^{n-x}
+=======
+Thus, we can define a probability distribution over sequences of
+coloured balls of length $ n $. This procedure can be described as a simple generalization
+of the Bernoulli. Whereas in the Bernoulli we made one draw we make $
+n $ draws. This yields a sequence $ x $ in which each position $ x_{i}, 1 \leq i \leq n $ is either $ 0 $ or $ 1 $.
+\begin{equation}\label{Multinoulli}
+P(X=x) = \theta^{\sum_i x_i} \times (1 - \theta)^{n-\sum_i x_i}
+>>>>>>> Stashed changes
 \end{equation}
 
 The adjustment is slight. We basically only introduce an extra parameter, namely the number of draws $ n $. 
@@ -449,12 +487,20 @@ the repeated Bernoulli draws are assumed to be independent. That is, for each dr
 have drawn so far and which ones you are still going to draw. More formally, if we encode each draw in the sequence as a random
 variable we postulate that these random variables are independent of each other. 
 
+<<<<<<< Updated upstream
 The second point is that we cannot assign a probability to any sequence that contains more ball of one colour than there are balls in total.
 This is to say that we require that $ 0 \leq x \leq n $ which is a reasonable restriction. 
 
 It is also worth mentioning that in general the two values that the distributions in \ref{Bernoulli} and \ref{Multinoulli} range
 over are generally referred to as success and failure where the success is usually encoded as $ 1 $ and the failure as $ 0 $
 (although nothing hinges on that). 
+=======
+The second point is that we cannot assign a probability to any sequence that contains more balls of one colour than there are balls in total.
+This is to say that we require that $ 0 \leq \underset{i=1}{\overset{n}{\sum}}x_{i} \leq n $ which is a reasonable restriction. 
+
+It is also worth mentioning that in general the two values that the distributions in \eqref{Bernoulli} and \eqref{Multinoulli} range
+over are generally referred to as success and failure where the success is usually encoded as $ 1 $ and the failure as $ 0 $. 
+>>>>>>> Stashed changes
 
 \begin{Exercise}
 Use the distribution in eq. \ref{Multinoulli} with $ n = 10 $ and $ \theta = 0.8 $ to determine the probability of the sequence (0,0,1,1,0,1,1,1,0,1).
@@ -479,7 +525,11 @@ Other applications include the assessment of failure rates. Say you run a compan
 has a certain probability to break down while working on one item of your product, you surely are interested to know what the probability
 of failure is when you need to produce $ n $ items in order to meet the demand of your customers.
 
+<<<<<<< Updated upstream
 The second important distribution that we get to know today is the \textbf{multinomial distribution}. It is basically a generalization
+=======
+The third important distribution that we get to know today is the \textbf{multinomial distribution}. It is basically a generalization
+>>>>>>> Stashed changes
 of the binomial. A RV that is distributed according to the multinomial distribution can take on finitely many values. Let us say that
 there are $ m $ such values. Furthermore let us assume that each value occurs $ c_{i} $ times in a sequence of length $ n $ where
 $ 1 \leq i \leq n $ and $ \underset{i=1}{\overset{m}{\sum}}c_{i} = n $. Then the multinomial with parameters $ n $ and 
