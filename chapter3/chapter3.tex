@@ -398,7 +398,7 @@ Likewise, the concept of independence carries over to distributions.
 
 \begin{Definition}
 Two random variables $ X,Y $ are independent (denoted by $ X \bot Y $)
-if $P_{XY} = P_X P_Y$, i.e.\ $\forall x \in \supp(X), \forall y \in supp(Y): P(X=x, Y=y) = P(X=x)P(Y=y) $.
+if $P_{XY} = P_X P_Y$, i.e.\ $\forall x \in \supp(X), \forall y \in \supp(Y): P(X=x, Y=y) = P(X=x)P(Y=y) $.
 \end{Definition}
 
 As with events, independence is equivalent to $ P_{X|Y} = P_{X} $ (and
@@ -476,6 +476,8 @@ n $ draws. \chris{what is $x$ in the following formula? how can we
 \begin{equation}\label{Multinoulli}
 P(X=x) = \theta^{x} \times (1 - \theta)^{n-x}
 \end{equation}
+\chris{Shouldn't we introduce the important term ``iid'' for \emph{independent
+    and identically distributed} variables somewhere around here?}
 
 The adjustment is rather small. We basically only introduce an extra parameter, namely the number of draws $ n $. 
 However, there are two conditions for this distribution that we have not mentioned yet. First and foremost,
