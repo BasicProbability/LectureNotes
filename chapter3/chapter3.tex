@@ -81,7 +81,7 @@ we want to have a probability measure associated with our sample space.
 In fact, this probability measure is the reason why we can see random variables as taking on their values
 in a random way. Moreover, since we can only measure events from our event space, the condition on RVs
 ensures that we can in fact measure the probability of each real value which a RV may map an outcome to.
-In technical terms, we are thus making sure that the image of the RV is \textit{measurable}.
+In technical terms, we are thus making sure that the pre-image of the RV is \textit{measurable}.
 
 Let us define a random variable for the weather situation. 
 \begin{equation} \label{weatherRV}
@@ -116,8 +116,11 @@ value $ 4 $, i.e.\ we guessed four balls correctly, we would write $ X=4 $. And 
 that computes the probability that this event happens.
 
 \begin{Definition}
-The discrete probability distribution of a RV $ X $ is the function
-$$ P(X=x) := \mathbb{P}( \, \{\omega \mid X(\omega)=x\} \, ) $$
+The discrete probability distribution of a RV $ X $ is denoted by
+$P_X$ and is defined as the function
+$$ P_X(X=x) := \mathbb{P}( \, \{\omega \mid X(\omega)=x\} \, ) $$
+In the literature, often one of the two mentionings of $X$ is dropped from the
+notation, resulting in $P(X=x)$ or $P_X(x)$.
 \end{Definition}
 
 What is $ P(X=4) $ for the lottery example? Recall that there are 
@@ -250,8 +253,8 @@ The spread of $ Y $ is obviously going to be greater, although both have the sam
 the spread of a RV is the variance.
 
 \begin{Definition}
-The \textbf{variance} of a RV $ X $ with distribution $ P $ is given by
-$$ var(X) := \E[\, (X - \E[X])^{2} \, ] $$
+The \textbf{variance} of a RV $ X $ is given by
+$$ var(X) := \E[\, (X - \E[X])^{2} \, ] \, .$$
 \end{Definition}
 
 The expression for $ var(X) $ is rather scary-looking but let us try to make sense of it. The inner part is the difference between
@@ -281,12 +284,24 @@ Compute the variance of the lottery RV\chris{which one?} from the previous secti
 
 Although variance is not linear, we can still try to figure out what happens when we multiply a RV by a constant or add a constant to it.
 \begin{align}
-var(aX+b) &= \E[(aX+b)^{2}] - (\E[aX+b])^{2} \\
-&= \E[(aX+b)^{2}] - (a\E[X]+b)^{2} \\
-&= \E[a^{2}X^{2} + 2abX + b^{2}] - a^{2}\E[X]^{2} - 2ab\E[X] - b^{2} \\
-&= a^{2}\E[X^{2}] + 2ab\E[X] + b^{2} - a^{2}\E[X]^{2} - 2ab\E[X] - b^{2} \\
-&= a^{2}\E[X^{2}] - a^{2}\E[X]^{2} = a^{2}var(X) \
+var(aX+b) &= \E[ (aX+b - \E[aX+b])^2 ] \\
+&=\E[ (aX+b - a\E[X] - b)^2 ] \\
+&=\E[ a^2 (X-\E[X])^2 ] \\
+&= a^2 var(X)
 \end{align}
+
+\begin{Exercise}
+Give an alternative proof of $var(aX+b) = a^2 var(X)$ by using $var(X)
+= \E[X^{2}] - \E[X]^{2}$.
+\end{Exercise}
+
+% \begin{align}
+% \E[(aX+b)^{2}] - (\E[aX+b])^{2} \\
+% &= \E[(aX+b)^{2}] - (a\E[X]+b)^{2} \\
+% &= \E[a^{2}X^{2} + 2abX + b^{2}] - a^{2}\E[X]^{2} - 2ab\E[X] - b^{2} \\
+% &= a^{2}\E[X^{2}] + 2ab\E[X] + b^{2} - a^{2}\E[X]^{2} - 2ab\E[X] - b^{2} \\
+% &= a^{2}\E[X^{2}] - a^{2}\E[X]^{2} = a^{2}var(X) \
+% \end{align}
 
 What we see that the variance is not affected by adding a constant to the RV. This makes sense, as constant additions just shift
 the expectation. However, the relation of each individual value to the expectation is not affected by that operation. On the other hand,
@@ -369,8 +384,10 @@ This link makes it easy to import certain concepts that we have
 gotten to know in previous chapters. In particular, we can define \textbf{conditional probability distributions}.
 
 \begin{Definition}
-The probability of $ X = x $ conditioned on $ Y=y $ is given by
-$$ P(X=x|Y=y) := \dfrac{P(X=x, Y=y)}{P(Y=y)} $$
+Let $X,Y$ be random variables with joint distribution $P_{XY}$. Let
+$y$ be such that $P(Y=y)>0$. The probability of $ X = x $ conditioned on $ Y=y $ is given by
+$$ P(X=x|Y=y) := \dfrac{P(X=x, Y=y)}{P(Y=y)} \, . $$
+The conditional distribution of $X$ given $Y=y$ is denoted by $P_{X|Y=y}$. 
 \end{Definition} 
 
 \begin{Exercise}
@@ -380,7 +397,8 @@ Compute the conditional probability distributions $ P_{X|Y=2} $ and $ P_{Y|X=1} 
 Likewise, the concept of independence carries over to distributions.
 
 \begin{Definition}
-Two random variables $ X,Y $ are independent (denoted by $ X \bot Y $) if $ P(X=x, Y=y) = P(X=x)P(Y=y) $.
+Two random variables $ X,Y $ are independent (denoted by $ X \bot Y $)
+if $P_{XY} = P_X P_Y$, i.e.\ $\forall x \in \supp(X), \forall y \in \supp(Y): P(X=x, Y=y) = P(X=x)P(Y=y) $.
 \end{Definition}
 
 As with events, independence is equivalent to $ P_{X|Y} = P_{X} $ (and
@@ -458,6 +476,8 @@ n $ draws. \chris{what is $x$ in the following formula? how can we
 \begin{equation}\label{Multinoulli}
 P(X=x) = \theta^{x} \times (1 - \theta)^{n-x}
 \end{equation}
+\chris{Shouldn't we introduce the important term ``iid'' for \emph{independent
+    and identically distributed} variables somewhere around here?}
 
 The adjustment is rather small. We basically only introduce an extra parameter, namely the number of draws $ n $. 
 However, there are two conditions for this distribution that we have not mentioned yet. First and foremost,
