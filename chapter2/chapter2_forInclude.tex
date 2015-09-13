@@ -51,7 +51,7 @@ Apart from these examples, there is one measure, however, that is going to be th
 script, namely the \textbf{probability measure}.
 
 \begin{Definition}[Probability measure]\label{def:probmeasure}
-A probability measure \\ $ \mathbb{P}: \mathcal{A} \rightarrow \mathbb{R} : A \mapsto \mathbb{P}(A) $
+A probability measure \\ $ \mathbb{P}: \mathcal{A} \rightarrow \mathbb{R}, A \mapsto \mathbb{P}(A) $
 on an event space $ \mathcal{A} $ associated with a sample space $ \Omega $ has the
 following properties:
 \begin{enumerate}
@@ -154,23 +154,10 @@ of non-disjoint events}. In order to reason about this problem, we first take a 
 outcomes of our probability space. We know that each event with non-zero probability contains at least one outcome (since
 $ \mathbb{P}(\emptyset) = 0 $, we can safely ignore the empty event). Let us assume that we take the union of events
 $ E_{1} $ and $ E_{2} $ with $ E_{1} \cap E_{2} = E_{3} \not = \emptyset $. This means that the outcomes
-in $ E_{3} $ are contained in both $ E_{1} $ and $ E_{2} $. This situation is illustrated in Figure~\ref{Venn2}. 
-If we apply the rule that we have for disjoint events, we get 
-\begin{align} \label{InExFalse}
-\mathbb{P}(E_{1} \cup E_{2})
-=& \mathbb{P}(((E_{1}\backslash E_{3}) \cup E_{3}) \cup ((E_{2}\backslash E_{3}) \cup E_{3})) \\
-=& \mathbb{P}(E_{1}\backslash E_{3}) + \mathbb{P}(E_{3}) + \mathbb{P}(E_{2}\backslash E_{3}) \nonumber
-+ \mathbb{P}(E_{3})
-\end{align}
-
-\begin{Exercise}
-Try to justify each of the above equalities using your knowledge about sets, event spaces and the 
-probability measure. In doing so, you will realize that one of the above equalities does not hold.
-Which one? 
-\end{Exercise}
-
-What happens here is that we count $ E_{3} $, the outcomes that are in both events of interest, twice.
-Thus, we will need to subtract $ E_{3} $ one time. This leads us to the following formulation:
+in $ E_{3} $ are contained in both $ E_{1} $ and $ E_{2} $. This situation is illustrated in Figure~\ref{Venn2}. If we were to simply add up the probabilities of $ E_{1} $ and $ E_{2} $, we 
+would effectively count the contribution of the outcomes in $ E_{3} $ twice. We would hence
+get an overestimate of the actual value of $ \mathbb{P}(E_{1} \cup E_{2}) $.
+In order to avoid this we will need to subtract the probability of $ E_{3} $ one time. This leads us to the following formulation:
 \begin{equation}
 \mathbb{P}(E_{1} \cup E_{2}) = \mathbb{P}(E_{1}) + \mathbb{P}(E_{2}) - \mathbb{P}(E_{1} \cap E_{2})
 \end{equation}
@@ -180,6 +167,7 @@ case, their intersection would be empty. We can generalize this principle to the
 an arbitrary number of events. This will give us a principled way of calculating the probability of any
 union of events. This calculation technique is know as the \textbf{Inclusion-Exclusion principle}.
 
+\newpage
 \begin{Theorem}[Inclusion-Exclusion principle]
 The probability of any (countable) union of events $ E_{1}, \ldots, E_{n} $ can be computed as
 \begin{equation}\label{eq:incexc}
@@ -206,10 +194,11 @@ than $ m $ events will not contain $ \omega $ as we intersect with at least one 
 contain $ \omega $. Thus, we only need to consider intersections of our $ m $ $ \omega $-containing
 sets.
 
-When $ i = 1 $ intersection is trivial, as it just consists of one event. How many ways are there to pick
+When $ i = 1 $ the intersection is trivial, as it just consists of one event. How many ways are there to pick
 one out of $ m $ events? The answer is $ \binom{m}{1} $. This is the number of times that $ \omega $
 contributes to the overall probability. At this point we have an overestimate of that probability 
-(compare this to Equation \eqref{InExFalse}). Next we subtract the probabilities of the mutual intersections ($ i = 2 $).
+(compare this to Figure~\ref{Venn2}). 
+Next we subtract the probabilities of the mutual intersections ($ i = 2 $).
 By the same reasoning as before, the contribution of $ \omega $ is deducted $ \binom{m}{2} $ times
 which gives us an underestimate since $ \binom{m}{1} \leq \binom{m}{2} $ for $ m \geq 3 $. Since we
 are adding and subtracting in alternation, we will now keep flip-flopping between under- and over
@@ -217,7 +206,7 @@ estimates. After considering all intersections of up to $ m $ sets, we should ge
 however.
 
 What we want to prove is that the right-hand side of \eqref{eq:incexc} counts $ \omega $'s contribution 
-to the overall probability exactly once (because this is what happens on the left hand-side of \eqref{eq:incexc}.
+to the overall probability exactly once (because this is what happens on the left hand-side of \eqref{eq:incexc}).
 That is, we have to prove that
 \begin{equation} \label{InExProofStep1}
 1 = \underset{i=1}{\overset{m}{\sum}}(-1)^{i-1}\binom{m}{i}
@@ -282,6 +271,8 @@ What we are missing is a way to express the probability that a given number of e
 \begin{Definition}[Joint probability]
 The joint probability of a (countable) set of events $ \{E_{1}, \ldots, E_{n}\} $ is defined as
 $$ \mathbb{P}(E_{1} \cap \ldots \cap E_{n}) $$
+Sometimes one also finds the alternative notation 
+$$ \mathbb{P}(E_{1}, \ldots, E_{n}) $$
 \end{Definition}
 
 Wow, that was simple! We don not event need to prove another rule for calculating the joint probability.
@@ -296,8 +287,10 @@ E_{1} \cap E_{2} = \Omega \backslash ((\Omega \backslash E_{1}) \cup (\Omega \ba
 All the operations on the right hand side are defined for events spaces. We have thus solved our problem since
 we have shown that we can indeed do intersection in event spaces.
 To convince yourself that this is correct, you may want to consult Figure~\ref{Venn2}. Alternatively, you
-may also just realise that this is an instance of DeMorgan's laws which you should know from set theory.
-Notice that we do not claim that this is the only valid ``paraphrase''. Feel free to find others, if you like!
+may also just realise that this is an instance of \href{https://en.wikipedia.org/wiki/De_Morgan's_laws}
+{DeMorgan's laws} which you should know from set theory. Notice that we do not claim that this is the only 
+valid ``paraphrase''. Feel free to find others, if you like!
+
 
 
 
@@ -388,8 +381,14 @@ This definition relates to conditional probabilities in the following way: assum
 Then we get
 \begin{equation}
 \mathbb{P}(E_{1}|E_{2}) = \dfrac{\mathbb{P}(E_{1} \cap E_{2})}{\mathbb{P}(E_{2})}
-= \dfrac{\mathbb{P}(E_{1}) \times \mathbb{P}(E_{2})}{\mathbb{P}(E_{2})} = \mathbb{P}(E_{1})
+= \dfrac{\mathbb{P}(E_{1}) \times
+  \mathbb{P}(E_{2})}{\mathbb{P}(E_{2})} = \mathbb{P}(E_{1}) \, .
 \end{equation}
+Hence, independence of two events $ E_{1} \bot E_{2}$ is equivalent with $\mathbb{P}(E_{1}|E_{2}) = \mathbb{P}(E_{1}) $.
+
+\begin{Exercise}
+ Prove that $E_1 \bot E_2$ is also equivalent with $\mathbb{P}(E_{2}|E_{1}) = \mathbb{P}(E_{2}) $. 
+\end{Exercise}
 
 Independence will prove to be a useful concept in later chapters. More precisely, we will often
 just \textit{assume} that two events (or random variables -- see the next chapter) are independent. Although
@@ -460,4 +459,13 @@ A very quick and dirty introduction to measure theory is provided by Maya Gupta 
 \href{https://www.ee.washington.edu/techsite/papers/documents/UWEETR-2006-0008.pdf}{here}. If you are
 looking for something more extensive that also motivates event spaces and the like you may want to 
 take a look at \href{http://www.stat.ncsu.edu/people/fuentes/courses/st778/lectures/ross}{this script}
-by Ross Leadbatter and Stamatis Cambanis (which has also been published as a book).
+by Ross Leadbatter and Stamatis Cambanis (which has also been
+published as a book).
+
+
+
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "chapter2"
+%%% End:
