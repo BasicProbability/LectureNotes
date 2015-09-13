@@ -15,8 +15,8 @@ plot(x,y,yaxp=c(0,0.35,7),xlab="Z",ylab="P(Z=z)", cex=1.5)
 # connect points and x-axis
 segments(x0=x, y0=rep(0,8), y1=y, lwd=5)
 # insert red lines
-abline(v=2,col="red")
-abline(v=5,col="red")
+abline(v=2,col="red",lwd=2)
+abline(v=5,col="red",lwd=2)
 # put arrow underneath x-axis to indicate mean
 arrows(mu,-0.03,mu,-.001,xpd=T)
 # close stream and save to file
