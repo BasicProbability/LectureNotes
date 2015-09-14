@@ -1,6 +1,8 @@
 \documentclass[11pt,leqno,a4paper]{report}
 
 \usepackage{amssymb, amsmath, mdframed, caption, subcaption}
+\usepackage{nicefrac}
+\usepackage{graphicx}
 \usepackage{hyperref}
 \hypersetup{colorlinks=true, urlcolor=blue, breaklinks=true}
 % for Python code
@@ -25,8 +27,12 @@
 \newmdtheoremenv{Exercise}{Exercise}[chapter]
 \newmdtheoremenv{Theorem}{Theorem}[chapter]
 
+\newcommand{\supp}{\operatorname{supp}} 
+\newcommand{\E}{\mathbb{E}}
+
+
 \author{Philip Schulz \\ Christian Schaffner}
-\title{Basic probability and statistics}
+\title{Basic Probability and Statistics}
 \date{last modified: \today}
 
 \begin{document}
@@ -36,11 +42,13 @@
 \end{titlepage}
 
 \tableofcontents
+\graphicspath{{../chapter3/}}
 
 % insert preface
 \input{../contributors/contributors}
 \input{../chapter1/chapter1_forInclude}
 \input{../chapter2/chapter2_forInclude}
+\input{../chapter3/chapter3_forInclude}
 
 
 \end{document}

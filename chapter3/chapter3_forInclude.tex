@@ -1,29 +1,4 @@
-\documentclass[a4paper,11pt,leqno]{report}
-
-\usepackage{amsmath, amssymb, mdframed, caption, subcaption}
-\usepackage{nicefrac}
-\usepackage{graphicx}
-\usepackage{hyperref}
-\hypersetup{colorlinks=true, urlcolor=blue, breaklinks=true}
-
-\newmdtheoremenv{Definition}{Definition}[chapter]
-\newmdtheoremenv{Exercise}{Exercise}[chapter]
-\newmdtheoremenv{Theorem}{Theorem}[chapter]
-
-\newcommand{\philip}[1]{ \textcolor{red}{\textbf{Philip:} #1}}
-\newcommand{\chris}[1]{ \textcolor{blue}{\textbf{Chris:} #1}}
-
-% \DeclareMathOperator{\supp}{supp}
-\newcommand{\supp}{\operatorname{supp}} 
-\newcommand{\E}{\mathbb{E}}
-
-\title{Basic Probability}
-\date{}
-
-\begin{document}
-
-\setcounter{chapter}{2}
-
+\graphicspath{{../chapter3/}}
 \chapter{Random Variables and Their Properties}
 
 \section{What is a Random Variable?}
@@ -138,7 +113,7 @@ c_{i} =
 The unfairness of the lottery comes from the fact that the player has to pick out of a large number of sequences only very few of which will have more than three
 numbers in common with the sequence that ends up being drawn. Let us apply this intuition to our example.
 There are $ \binom{6}{4}\binom{43}{2}$ ways in which your predictions can get exactly 4 numbers right.
-This is because there are $ \binom{6}{4} $ to guess 4 out of 6 numbers correctly and $ \binom{43}{2} $ ways to choose any two out of the 43 numbers that were not 
+This is because there are $ \binom{6}{4} $ ways to guess 4 out of 6 numbers correctly and $ \binom{43}{2} $ ways to choose any two out of the 43 numbers that were not 
 drawn. In total there are 
 \begin{equation}
 \binom{6}{4}\binom{43}{2} = 13545
@@ -146,7 +121,7 @@ drawn. In total there are
 ways to agree on four balls with some lottery draw. This might seem like a lot. However, if we divide this by the total number of possible lottery draws, we
 find that $ P(X=4) = 0.000969 $ which is very little.   
 
-We have just seen examples, were the RV would take on a specific value. We can of course also make statements
+We have just seen examples where the RV takes on a specific value. We can of course also make statements
 like $ X < x $ and $ X \geq x $. This is a way of expressing that a RV assumes a value above or below a certain
 threshold. The way to get the probability of this event is through the cumulative distribution function.
 
@@ -161,7 +136,7 @@ $ X $ takes on a value in a certain range. Second, it has applications in sampli
 see during the programming part of the course. A plot of the cdf of $ Z $ is given in Figure~\ref{cdfPlot}. We can recognize that it is the cdf of a discrete
 distribution because it is discontinuous. If the underlying probability distribution was continuous, so would be its cdf.
 
-\begin{figure}
+\begin{figure}[t]
 \center
 \includegraphics[scale=.4]{distribution.png}
 \caption{Probability distribution of a random variable $Z$ with $ 8 $ possible values, given by $ P(Z = 1) = 0.09,  P(Z = 2) = 0.21, P(Z = 3) = 0.28, P(Z = 4) = 0.23, P(Z = 5) = 0.12, P(Z = 6) = 0.04, P(Z = 7) = 0.02$, and $ P(Z = 8) = 0.01$. The arrow indicates the expectation. This is a visualisation of 
@@ -231,7 +206,7 @@ is indicated by an arrow that can be interpreted as visualising the spike that w
 
 \begin{Definition}[Expectation]
 The \textbf{expectation} of a random variable $ X $ with respect to the distribution $ P $ is defined as
-$$ \E[X] := \sum_{x \in \supp(X)} x P(X=x) $$ \, . \philip{Are you sure you want to have this dot here? It seems to unnecessarily inflate the box.}
+$$ \E[X] := \sum_{x \in \supp(X)} x P(X=x) \, . $$
 \end{Definition}
 
 \begin{Exercise}
@@ -355,10 +330,10 @@ share an underlying sample space. This also gives us more insight into
 the real power of RVs: in applications, we usually do not care at all
 about the underlying sample space but only about quantities
 captured by the RVs. Therefore, we define a probability distribution over the
-random variables of interest. Since by definition the distribution has to fulfil conditions that allows us to interpret it
-as a probability measure on a probability space, we can use it without worrying
-about the underlying sample space. \chris{hmmm, not sure about this statement}\philip{I tried to formulate this a bit
-more carefully. What do you think?}
+random variables of interest. Since by definition the distribution has
+to fulfil conditions that allow us to interpret the distribution
+as a probability measure on a probability space, we can use the distribution without worrying
+about the underlying sample space.
 
 Joint distributions are of particular interest because they make it possible to recover the probability distribution of each individual
 RV as well as of smaller joint distributions. The process by which this recovery can be accomplished is known as \textbf{marginalization}. Say
@@ -372,7 +347,7 @@ By countable additivity, we simply need to sum up the probabilities of these int
 P(X=x) = \overset{n}{\underset{i=1}{\sum}} P(X=x,Y=y_{i}) 
 \end{equation}
 
-If we set $ X = (Z_{1}, \ldots, Z_{m}) $, we can recover $ P_{Z_{1}^{m}} $ from $ P_{Z_{1}^{m}Y} $ in the same way.\chris{so?}\philip{Sorry, I do not understand your comment here.} Likewise,
+If we set $ X = (Z_{1}, \ldots, Z_{m}) $, we can recover $ P_{Z_{1}^{m}} $ from $ P_{Z_{1}^{m}Y} $ in the same way. Likewise,
 if we set $ Y = (Z_{1}, \ldots, Z_{m}) $ we get the generalization of \eqref{simpleMarginal}. We will assume that each $ Z_{j} $
 can assume $ n_{j} $ values.
 
@@ -425,9 +400,7 @@ if $P_{XY} = P_X P_Y$, i.e.\ $\forall x \in \supp(X), \forall y \in \supp(Y): P(
 \end{Definition}
 
 As with events, independence is equivalent to $ P_{X|Y} = P_{X} $ (and
-to $P_{Y|X}=P_Y$). Moreover, independence makes it much easier to calculate the expectation and variance of jointly distributed random variables. We have to be careful, though. Jointly distributed random variables do not take on a joint value. Rather, each of the joint RVs still takes on its own value.\chris{what do you mean?}
-This is why in the joint case we have to compute the expectation of functions of the joint RVs.\philip{Is this better?} The standard choice in the case of expectation
-is to simply multiply the RVs. For independent $X$ and $Y$, we have
+to $P_{Y|X}=P_Y$). Moreover, independence makes it much easier to calculate the expectation and variance of functions of jointly distributed random variables\footnote{Notice that the joint random variable $(X,Y)$ is not a \emph{real-valued} random variable anymore. Hence $\E[X,Y]$ and $var(X,Y$) are not defined. Rather, we can define a new (real-valued) random variable as $f(X,Y)$ for a function $f: \mathbb{R} \times \mathbb{R} \rightarrow \mathbb{R}$. and compute $\E[f(X,Y)]$ and $var(f(X,Y))$.}. For independent $X$ and $Y$, we have
 \begin{align}
 \E[XY] &= \sum_{x \in \supp(X)} \sum_{y \in \supp(Y)} P(X=x,Y=y) x y \\
 &= \sum_{x \in \supp(X)} \sum_{y \in \supp(Y)} P(X=x)P(Y=y) x y \\
@@ -532,9 +505,8 @@ The binomial is of crucial importance in many fields. For example in computer sc
 Other applications include the assessment of failure rates. Say you run a company and a customer asks you to supply $ k $ items within a week.
 The capacity of your company allows you to produce at most $ n > k $ items during that week. At the same time you know that each item that you 
 produce has a probability of being faulty. Obviously, you cannot sell faulty items to your customer. The Binomial distribution allows you to
-compute that probability that you will be able to meet the customer's demand. Based on this you can evaluate whether or not it is reasonable to
-accept the customer's order.\chris{I don't understand the example,
-  Bernoulli would be about \emph{counting} the number of failures.}\philip{Is this one better?}
+compute the probability that you will be able to meet the customer's demand. Based on this calculation, you can evaluate whether or not it is reasonable to
+accept the customer's order.
 
 The third important distribution that we get to know today is the \textbf{multinomial distribution}. It is basically a generalization
 of the binomial. A RV that is distributed according to the multinomial distribution can take on finitely many values. Let us say that
@@ -571,7 +543,7 @@ how many trials it will take until we have observed $ k > 0 $ successes. To answ
 can be interpreted as the probability that we will take $ t $ trials until we have obtained the desired number of successes. Notice that for each $ t $, we can infer
 the number of failures as $ f = t - k $.
 
-To approach this problem, let us start out from the simplest case, were we are only waiting for one success. This means that our sequence of trials ends in a success,
+To approach this problem, let us start out from the simplest case where we are only waiting for one success. In that case, our sequence of trials ends in a success,
 which is also the only success in the sequence. Thus the sequence contains $ f = t-1 $ failures. The success probability of a Bernoulli trial is $ \theta $, as usual.
 Then the associated probability distribution for $ T $ with parameters $ \theta $ and $ k=1 $ is
 \begin{equation} \label{negBernoulli}
@@ -597,4 +569,9 @@ where $ t \in \mathbb{N}, t > k $.
 
 Many authors use the notation $ X \sim nbinom(\theta, k) $ to state that the RV $ X $ is distributed according to a negative Binomial distribution.
 
-\end{document}
+
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "chapter3"
+%%% End:
