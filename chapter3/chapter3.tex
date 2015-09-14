@@ -1,0 +1,47 @@
+\documentclass[a4paper,11pt,leqno]{report}
+
+\usepackage{amsmath, amssymb, mdframed, caption, subcaption}
+\usepackage{nicefrac}
+\usepackage{graphicx}
+% for Python code
+\usepackage[procnames]{listings} 
+\definecolor{keywords}{RGB}{255,0,90}
+\definecolor{comments}{RGB}{0,0,113}
+\definecolor{red}{RGB}{160,0,0}
+\definecolor{green}{RGB}{0,150,0}
+ 
+\lstset{language=Python, 
+        basicstyle=\tt\small, 
+        keywordstyle=\color{keywords},
+        commentstyle=\color{comments},
+        stringstyle=\color{red},
+        showstringspaces=false,
+        identifierstyle=\color{green},
+        procnamekeys={def,class}}
+%
+\usepackage{venndiagram}
+\usepackage{hyperref}
+\hypersetup{colorlinks=true, urlcolor=blue, breaklinks=true}
+
+\newcommand{\philip}[1]{ \textcolor{red}{\textbf{Philip:} #1}}
+\newcommand{\chris}[1]{ \textcolor{blue}{\textbf{Chris:} #1}}
+
+\newmdtheoremenv{Definition}{Definition}[chapter]
+\newmdtheoremenv{Exercise}{Exercise}[chapter]
+\newmdtheoremenv{Theorem}{Theorem}[chapter]
+
+
+% \DeclareMathOperator{\supp}{supp}
+\newcommand{\supp}{\operatorname{supp}} 
+\newcommand{\E}{\mathbb{E}}
+
+
+\title{Basic Probability}
+\date{}
+
+\begin{document}
+
+\setcounter{chapter}{2}
+\include{chapter3_forInclude}
+
+\end{document}
