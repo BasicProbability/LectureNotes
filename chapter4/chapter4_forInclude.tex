@@ -10,30 +10,28 @@ the probability distribution of a RV $ X $ conditioned on a RV $ Y $ but it may 
 conditioned on $ X $. In this chapter we are essentially trying to find simpler expressions for distributions that may be hard to
 compute.
 
-The first general method for simplifying a joint distribution is know as the \textbf{chain rule}. We could actually have introduced
+The first general method for simplifying a joint distribution is known as the \textbf{chain rule}. \chris{skip? We could actually have introduced
 the chain rule much earlier, when talking about the probability of events. However, we chose not to do so as it would have 
-cluttered the presentation. Moreover, we only need the chain rule now. For completeness' sake we are first going to formulate
-the chain rule for events and then for random variables.
+cluttered the presentation. Moreover, we only need the chain rule now.} For completeness' sake, we are going to formulate the chain rule first for events and then for random variables.
 
 \begin{Theorem}{\textbf{(Chain rule)}} \label{thm:chain}
 The joint probability of events $ E_{1}, \ldots, E_{n} $ can be factorised as
 $$ \mathbb{P}(E_{1}, \ldots, E_{n}) = \mathbb{P}(E_{1}) \times \mathbb{P}(E_{2}|E_{1}) \times \ldots \times \mathbb{P}(E_{n}|E_{1}, \ldots, E_{n-1}) $$
 \end{Theorem} 
-
-There are a couple of things to note here. First of all, the numbering of the events is arbitrary. That means that it does not matter in which
+Recall from Definition~\ref{def:jointprob} the notation $\mathbb{P}(E_1,E_2) = \mathbb{P}(E_1 \cap E_2)$ for denoting the probability that both $E_1$ and $E_2$ occur. There are a couple of things to note about the chain rule. First of all, the numbering of the events is arbitrary. That means that it does not matter in which
 order we decompose the joint probability. We could just as well start with any $ E_{i} $ for $ 1 \leq i \leq n $. Second we used the 
 word \textit{factorise}. This simply means that we decompose any expression (in this case a joint probability) into a product. Products are
-nice in that we can arrange them in any order that we like (i.e. they commute). Moreover, products make a lot of calculations easier, as we will
+nice in that we can arrange them in any order that we like (i.e.\ they commute). Moreover, products make a lot of calculations easier, as we will
 see later.
 
-But now let us go ahead and actually prove the chain rule. 
-\paragraph{Proof of Theorem~\ref{thm:chain}} We are going to do so inductively and chose $ \mathbb{P}(E_{1}, E_{2}) $ as our
+Let us go ahead and actually prove the chain rule. 
+\paragraph{Proof of Theorem~\ref{thm:chain}} We are going to do so inductively and choose $ \mathbb{P}(E_{1}, E_{2}) $ as our
 base case. Then we simply employ the definition of conditional probability to get
 \begin{equation}
 \mathbb{P}(E_{1}, E_{2}) = \mathbb{P}(E_{1}) \times \dfrac{\mathbb{P}(E_{1}, E_{2})}{\mathbb{P}(E_{1})} = \mathbb{P}(E_{1}) \times \mathbb{P}(E_{2}|E_{1})
 \end{equation}
 
-Now let us assume that the chain rule holds for events $ E_{1}, \ldots, E_{n-1} $. We will abbreviate them as $ E_{1}^{n-1} $. Then we get
+Let us assume that the chain rule holds for events $ E_{1}, \ldots, E_{n-1} $. We will abbreviate them as $ E_{1}^{n-1} $. Then we get
 \begin{equation}
 \mathbb{P}(E_{1}^{n-1}, E_{n}) = \mathbb{P}(E_{1}^{n-1}) \times \dfrac{\mathbb{P}(E_{1}^{n-1}, E_{n})}{\mathbb{P}(E_{1}^{n-1})} 
 = \mathbb{P}(E_{1}^{n-1}) \times \mathbb{P}(E_{n}|E_{1}^{n-1})
@@ -51,7 +49,7 @@ the first equality follows from the chain rule and the second equality follows f
 &= \mathbb{P}(E_{1}) \times \mathbb{P}(E_{2}) \times \mathbb{P}(E_{3}|E_{1},E_{2}) \nonumber
 \end{align}
 
-We are now in a position to state the chain rule for random variables. There are two ways you can go about proving it. Either you 
+We are in a position to state the chain rule for random variables. There are two ways you can go about proving it. Either you 
 calculate the probability of a specific setting of the variables or you just do the proof based on the distributions of the RVs.
 So in the first case you'd have to prove that 
 \begin{align*}
@@ -76,8 +74,8 @@ Prove the chain rule for random variables. The proof is totally analogous to the
 
 In this section we are going to prove \textbf{Bayes' rule}. In order to prove it we will actually employ the chain rule.
 However, the proof is stupidly simple and thus of no great interest in and by itself. The consequences of Bayes' rule
-are huge however. It will basically allow us to invert a conditional probability distribution. Now you may rightfully
-aks: what's the deal? Well, as we said in the beginning, it may be hard to compute a conditional distribution in one
+are huge however. It will basically allow us to invert a conditional probability distribution. You may rightfully
+ask: what's the deal? Well, as we said in the beginning, it may be hard to compute a conditional distribution in one
 direction but much easier to compute it in the other direction.
 
 On top of that Bayes' rule opens up a whole range of new possibilities. We will discuss those as we proceed in this
@@ -116,7 +114,7 @@ In addition to that, the chain rule allows us to factorise the joint probability
 P(Y=y) = \underset{i=1}{\overset{n}{\sum}}P(Y=y|X=x_{i}) \times P(X=x_{i})
 \end{equation}
 
-Now if you think that this looks an awful lot like the enumerator of Bayes' rule then you are exactly on the right track.
+If you think that this looks an awful lot like the enumerator of Bayes' rule then you are exactly on the right track.
 Essentially, we are just summing over all possible denominators (with respect to $ X $). Let us make this more
 concrete with an example. Assume that we are given two coins. One of them is fair, meaning that it is equally probable
 to come up heads or tails. The other coin is biased towards tails and we happen to know that its probability to come up
@@ -124,7 +122,7 @@ heads is only $ 0.3 $. Which coin is flipped is captured by a random variable $ 
 fair coin is used and the value 1 if the biased coin is used. We have no idea which coin is going to be tossed, it could
 be either one. Therefore we set our prior as $ P(X=0) = P(X=1) = 0.5 $.
 
-Now we flip the chosen coin 10 times and obtain 8 heads. The number of heads obtained during the 10 tosses is going
+We flip the chosen coin 10 times and obtain 8 heads. The number of heads obtained during the 10 tosses is going
 to be encoded by $ Y $. Since all tosses are independent each other, $ Y $ will
 follow a binomial distribution. For each of the two coins we also know the parameter of the binomial distribution.
 For the fair coin it is $ \theta = 0.5 $ and for the biased coin it is $ \theta = 0.3 $. Let us compute each of the
@@ -137,7 +135,7 @@ P(Y=8|X=1) \times P(X=1) = 0.0014 \times 0.5 = 0.0007 \label{bayes2}
 We calculated the likelihood values with the help of a computer. You can do that yourself if you remember that
 $ Y ~ binom(10,\theta) $ and that $ \theta=0.5 $ if $ X=0 $ and $ \theta=0.3 $ if $ X=1 $. 
 
-All that is left do now is to compute the marginal likelihood of $ Y $. Luckily for us, $ X $ only assumes two
+All that is left do is to compute the marginal likelihood of $ Y $. Luckily for us, $ X $ only assumes two
 values, so we only need to add up \ref{bayes1} and \ref{bayes2}.
 \begin{align}
 P(Y=8) = &P(Y=8|X=0) \times P(X=0) + \\
@@ -160,7 +158,7 @@ $ \nicefrac{0.969}{0.031} \approx 31 $. We can conclude that the fair coin is 31
 the ration of the likelihoods is the same! That is $ \nicefrac{0.0439}{0.0014} \approx 31 $.
 
 We started out by assuming that both coins were equally likely to be used. However, we then observed a sequence of 10 tosses, 8 of 
-which were heads and that made it 31 times more likely that the fair coin was used. Now what if the priors had not been equal?
+which were heads and that made it 31 times more likely that the fair coin was used. What if the priors had not been equal?
 There actually is a more general story to this. While calculating the actual probabilities involves a lot of number juggling, just
 telling whether or not an observation will make one or the other event more likely is not too hard.
 \begin{align}
@@ -245,7 +243,7 @@ P(Y=y|X_{1}^{n}=x_{1}^{n}) &\propto \\
 &\times P(X_{n}=x_{n}|Y=y,X_{1}^{n-1}) \times P(Y=y) \nonumber
 \end{align}
 
-So far everything is ok and mathematically correct. Now we are going to introduce the aforementioned crudeness into the model.
+So far everything is ok and mathematically correct. We are going to introduce the aforementioned crudeness into the model.
 We are just going to assume that all $ X_{i}, 1 \leq i \leq n  $ are conditionally independent given $ Y $. Notice that
 this is just an assumption that we are making without justification. In fact, it is very likely wrong. However, it makes our
 live much easier because we will only have to deal with very simple terms of the form $ P(X_{i}=x_{i}|Y=y) $. Because of the
