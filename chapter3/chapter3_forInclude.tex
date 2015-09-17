@@ -310,6 +310,19 @@ If we multiply an RV by a constant $ a $, its spread will increase in both direc
 Since we again want only positive differences,
 we better square that increased spread. This intuitively justifies the above equalities.
 
+\begin{figure}
+\center
+\includegraphics[scale=.4]{scaledRV.png}
+\caption{Plot of RVs $ Z $ and $ X = 2Z+3 $. The arrows indicate the expectation of each distribution.}
+\label{scaledRV}
+\end{figure}
+
+To gain a visual understanding of what happens when a RV gets scaled and a constant gets added to it, take a look at Figure~\ref{scaledRV}. The random variable 
+$ Z $ is the same as in Figure~\ref{binomplot} and its probability distribution is plotted in blue. Figure~\ref{scaledRV} also shows the probability distribution
+of another RV $ X = 2Z + 3 $ in red. As predicted by our calculations above, the expectation (indicated by the red arrow) shifts by two times its original value plus
+three. Furthermore, note that the addition of three does not have any influence on the variance of $ X $. The relative distance between the elements in the support
+of $ X $ is the same as the relative distance between the elements in the support of $ Z $. However, the distance between the smallest and largest value in the support
+has doubled, hence increasing the variance by a factor of $ 2^{2} = 4 $.
 
 
 \section{Joint and conditional distributions}
