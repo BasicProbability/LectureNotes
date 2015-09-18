@@ -1,0 +1,25 @@
+\documentclass[a4paper,11pt,leqno]{report}
+
+\usepackage{amsmath, amssymb, mdframed, caption, subcaption}
+\usepackage{nicefrac}
+
+\usepackage{hyperref}
+\hypersetup{colorlinks=true, urlcolor=blue, breaklinks=true}
+
+\newmdtheoremenv{Definition}{Definition}[chapter]
+\newmdtheoremenv{Exercise}{Exercise}[chapter]
+\newmdtheoremenv{Theorem}{Theorem}[chapter]
+\newmdtheoremenv{Lemma}{Lemma}[chapter]
+
+\newcommand{\philip}[1]{ \textcolor{red}{\textbf{Philip:} #1}}
+\newcommand{\chris}[1]{ \textcolor{blue}{\textbf{Chris:} #1}}
+
+\title{Basic Probability}
+\date{}
+
+\begin{document}
+
+\setcounter{chapter}{4}
+\input{chapter5_forInclude}
+
+\end{document}
