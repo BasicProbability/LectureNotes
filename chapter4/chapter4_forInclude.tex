@@ -10,9 +10,7 @@ the probability distribution of a RV $ X $ conditioned on a RV $ Y $ but it may 
 conditioned on $ X $. In this chapter we are essentially trying to find simpler expressions for distributions that may be hard to
 compute.
 
-The first general method for simplifying a joint distribution is known as the \textbf{chain rule}. \chris{skip? We could actually have introduced
-the chain rule much earlier, when talking about the probability of events. However, we chose not to do so as it would have 
-cluttered the presentation. Moreover, we only need the chain rule now.} For completeness' sake, we are going to formulate the chain rule first for events and then for random variables.
+The first general method for simplifying a joint distribution is known as the \textbf{chain rule}. For completeness' sake, we are going to formulate the chain rule first for events and then for random variables.
 
 \begin{Theorem}{\textbf{(Chain rule)}} \label{thm:chain}
 The joint probability of events $ E_{1}, \ldots, E_{n} $ can be factorised as
@@ -98,8 +96,9 @@ $$ \mathit{posterior} = \dfrac{\mathit{likelihood} \times \mathit{prior}}{\mathi
 
 The posterior is what we get after we have completed the computation. However, its name is related to the prior.
 The prior is just the probability that we would place on $ P(X=x) $ \textit{a priori}. Therefore $ P_{X} $
-is also known as the prior distribution. When we multiply the prior by the likelihood we get a new distribution
-over $ X $ that is conditioned on $ Y $ \chris{after multiplication, we get the joint distribution of X and Y??}. This is the distribution that we place on $ X $ \textit{a posteriori}, i.e.
+is also known as the prior distribution. When we divide the product of likelihood and prior by the 
+marginal likelihood we get a new distribution
+over $ X $ that is conditioned on $ Y $. This is the distribution that we place on $ X $ \textit{a posteriori}, i.e.
 after having taken into account information about $ X $ that we may get from knowing the value of $ Y $. The marginal
 likelihood of $ Y $ is simply needed to normalize the expression to a probability distribution (i.e. to make sure that
 it sums to one). Why is it called marginal likelihood? The reason for this is how you can compute it. Recall that when
@@ -166,7 +165,7 @@ Actually, there is a more general story: While calculating the actual probabilit
 From the above equalities, we see that the ratio of the posterior probabilities is determined by the ratio of the likelihood times the
 prior. In our coin example, the priors were the same so it was only the likelihood that mattered. If the ratio of any of the above
 terms is greater than 1, the posterior will change in favour of $ X=x_{1} $. If the ratio is smaller than 1 the posterior changes
-in favour of $ X=x_{2} $. If the ratio is exactly 1, nothing happens\chris{what do you mean by ``nothing happens''???}. 
+in favour of $ X=x_{2} $. If the ratio is exactly 1, the posterior stays unchanged. 
 
 Notice that in general, although our observations may shift the posterior in favour of $ X=x_{2} $, say, this shift does not necessarily imply that 
 $ P(X=x_{2}|Y=y) $ will be greater than $ P(X=x_{1}|Y=y) $. The condition that $ P(X=x_{2}|Y=y) $ is bigger than  $ P(X=x_{1}|Y=y) $ can be rewritten as follows
@@ -213,7 +212,8 @@ P(X=x|Y=y) \propto P(Y=y|X=x)P(X=x)
 \end{equation}
 
 This equation reads as ``the posterior is proportional to the product of the likelihood and the prior''. In general, if we have two quantities
-$ a $ and $ b $, then by $ a \propto b $ we mean that there is some constant $ C \in \mathbb{R} $ such that $ a = cB $. Notice
+$ a $ and $ b $, then by $ a \propto b $ we mean that there is some constant 
+$ C \in \mathbb{R} \setminus \{0\} $ such that $ a = Cb $. Notice
 that the probability distribution is a function and hence we require $ C $ to be the same across the domain of that function (that
 is $ C $ should be the same for all values of $ X $).
 
@@ -259,19 +259,53 @@ write a computer program that does the classification for you, you will not need
 
 \begin{Exercise}
 A collection of text (or any other kind of data for that matter) is often called a \textbf{corpus}. Here we are going to
-use a toy corpus. The corpus just consists of two sentences and we assume that each sentence is its own document.
-Your task is to classify these two documents correctly and report the posterior probability for the correct label. 
+use a toy corpus. The corpus just consists of two sentences and we assume that each sentence constitutes
+a document.
 The categories that you can label the documents with are
 finance (0), medicine (1) or law (2). You can find the corpus (the pmfs of the distributions) below. For simplicity, we are not going to distinguish between lower and upper case words (this is actually common practice). For better 
 readability, we are also using the actual words instead of their numerical encodings as values for the random 
-variables. Just remind yourselves that those words are real numbers in reality.
+variables. Just remind yourselves that those words are real numbers in reality. To shorten notation, we
+will use pmfs. If the probability of a word given a category is not specified, take it to be 0.
+
+
+Your task is to classify these two documents correctly using a Na\"ive Bayes Model that conditions each
+word's probability on the document class. Please also report the posterior probability for the correct label. 
 \end{Exercise}
 
+\newpage
 \textbf{The corpus:}
 \begin{itemize}
-\item evidence ruled irrelevant or inadmissible shall not be considered by the chamber.
-\item that is probably what investors who poured \$90 billion in european equity funds this year are hoping for.
+\item a fact has been revealed
+\item the doctor's judgement has not been reliable
 \end{itemize}
+
+\textbf{The document category pmfs:}
+\begin{itemize}
+\item $ p(0) = 0.3 $
+\item $ p(1) = 0.2 $
+\item $ p(2) = 0.5 $
+\end{itemize}
+
+\textbf{The lexical distribution for document category finance (0):}
+\begin{align*}
+&p(a|0) = 0.19~~p(fact|0)= 0.14~~p(has|0)=0.13~~p(been|0)=0.12 \\
+&p(revealed|0)=0.04~~p(the|0)=0.21~~p(doctor's|0)=0.03 \\
+&p(judgement|0)=0~~p(not|0)=0.11~~p(reliable|0)=0.03
+\end{align*}
+
+\textbf{The lexical distribution for document category medicine (1):}
+\begin{align*}
+&p(a|1) = 0.02~~p(fact|1)= 0.08~~p(has|1)=0.13~~p(been|1)=0.13 \\
+&p(revealed|1)=0.01~~p(the|1)=0.18~~p(doctor's|1)=0.06 \\
+&p(judgement|1)=0.14~~p(not|1)=0.20~~p(reliable|1)=0.05
+\end{align*}
+
+\textbf{The lexical distribution for document category law (2):}
+\begin{align*}
+&p(a|2) = 0.18~~p(fact|2)= 0.03~~p(has|2)=0.05~~p(been|2)=0.13 \\
+&p(revealed|2)=0.10~~p(the|2)=0.14~~p(doctor's|2)=0.06 \\
+&p(judgement|2)=0.07~~p(not|2)=0.08~~p(reliable|2)=0.16
+\end{align*}
 
 \section*{Further Reading}
 Here, we have only scratched the surface of what Bayes' rule allows us to do. To get a wider outlook on what else is possible,
