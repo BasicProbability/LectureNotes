@@ -6,9 +6,9 @@
 \usepackage{hyperref}
 \hypersetup{colorlinks=true, urlcolor=blue, breaklinks=true}
 
-\newmdtheoremenv{Definition}{Definition}[chapter]
-\newmdtheoremenv{Exercise}{Exercise}[chapter]
 \newmdtheoremenv{Theorem}{Theorem}[chapter]
+\newmdtheoremenv{Definition}[Theorem]{Definition}
+\newmdtheoremenv{Exercise}[Theorem]{Exercise}
 
 \newcommand{\philip}[1]{ \textcolor{red}{\textbf{Philip:} #1}}
 \newcommand{\chris}[1]{ \textcolor{blue}{\textbf{Chris:} #1}}

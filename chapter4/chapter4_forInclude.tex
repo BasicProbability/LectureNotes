@@ -16,7 +16,11 @@ The first general method for simplifying a joint distribution is known as the \t
 The joint probability of events $ E_{1}, \ldots, E_{n} $ can be factorised as
 $$ \mathbb{P}(E_{1}, \ldots, E_{n}) = \mathbb{P}(E_{1}) \times \mathbb{P}(E_{2}|E_{1}) \times \ldots \times \mathbb{P}(E_{n}|E_{1}, \ldots, E_{n-1}) $$
 \end{Theorem} 
-Recall from Definition~\ref{def:jointprob} the notation $\mathbb{P}(E_1,E_2) = \mathbb{P}(E_1 \cap E_2)$ for denoting the probability that both events $E_1$ and $E_2$ occur. There are a couple of things to note about the chain rule: First of all, the numbering of the events is arbitrary. That means that it does not matter in which
+Recall from Definition~\ref{def:jointprob} the notation
+$\mathbb{P}(E_1,E_2) = \mathbb{P}(E_1 \cap E_2)$ for denoting the
+probability that both events $E_1$ and $E_2$ occur. Also remember that
+we use the abbreviation $E_1^n := E_1, \ldots, E_n$; so for the case
+of events, we have $\mathbb{P}(E_1^n) = \mathbb{P}(\bigcap_{i=1}^n E_i)$. There are a couple of things to note about the chain rule: First of all, the numbering of the events is arbitrary. That means that it does not matter in which
 order we decompose the joint probability. We could just as well start with any $ E_{i} $ for $ 1 \leq i \leq n $. Second we used the 
 word \textit{factorise}. This simply means that we decompose any expression (in this case a joint probability) into a product. Products are
 nice in that we can arrange them in any order that we like (i.e.\ they commute). Moreover, products make a lot of calculations easier, as we will
@@ -264,7 +268,7 @@ a document.
 The categories that you can label the documents with are
 finance (0), medicine (1) or law (2). You can find the corpus (the pmfs of the distributions) below. For simplicity, we are not going to distinguish between lower and upper case words (this is actually common practice). For better 
 readability, we are also using the actual words instead of their numerical encodings as values for the random 
-variables. Just remind yourselves that those words are real numbers in reality. To shorten notation, we
+variables. Just remember that those words could also be represented as real random variables. To shorten notation, we
 will use pmfs. If the probability of a word given a category is not specified, take it to be 0.
 
 
@@ -288,23 +292,23 @@ word's probability on the document class. Please also report the posterior proba
 
 \textbf{The lexical distribution for document category finance (0):}
 \begin{align*}
-&p(a|0) = 0.19~~p(fact|0)= 0.14~~p(has|0)=0.13~~p(been|0)=0.12 \\
-&p(revealed|0)=0.04~~p(the|0)=0.21~~p(doctor's|0)=0.03 \\
-&p(judgement|0)=0~~p(not|0)=0.11~~p(reliable|0)=0.03
+&p(\mathit{a}|0) = 0.19~~p(\mathit{fact}|0)= 0.14~~p(\mathit{has}|0)=0.13~~p(\mathit{been}|0)=0.12 \\
+&p(\mathit{revealed}|0)=0.04~~p(\mathit{the}|0)=0.21~~p(\mathit{doctor's}|0)=0.03 \\
+&p(\mathit{judgement}|0)=0~~p(\mathit{not}|0)=0.11~~p(\mathit{reliable}|0)=0.03
 \end{align*}
 
 \textbf{The lexical distribution for document category medicine (1):}
 \begin{align*}
-&p(a|1) = 0.02~~p(fact|1)= 0.08~~p(has|1)=0.13~~p(been|1)=0.13 \\
-&p(revealed|1)=0.01~~p(the|1)=0.18~~p(doctor's|1)=0.06 \\
-&p(judgement|1)=0.14~~p(not|1)=0.20~~p(reliable|1)=0.05
+&p(\mathit{a}|1) = 0.02~~p(\mathit{fact}|1)= 0.08~~p(\mathit{has}|1)=0.13~~p(\mathit{been}|1)=0.13 \\
+&p(\mathit{revealed}|1)=0.01~~p(\mathit{the}|1)=0.18~~p(\mathit{doctor's}|1)=0.06 \\
+&p(\mathit{judgement}|1)=0.14~~p(\mathit{not}|1)=0.20~~p(\mathit{reliable}|1)=0.05
 \end{align*}
 
 \textbf{The lexical distribution for document category law (2):}
 \begin{align*}
-&p(a|2) = 0.18~~p(fact|2)= 0.03~~p(has|2)=0.05~~p(been|2)=0.13 \\
-&p(revealed|2)=0.10~~p(the|2)=0.14~~p(doctor's|2)=0.06 \\
-&p(judgement|2)=0.07~~p(not|2)=0.08~~p(reliable|2)=0.16
+&p(\mathit{a}|2) = 0.18~~p(\mathit{fact}|2)= 0.03~~p(\mathit{has}|2)=0.05~~p(\mathit{been}|2)=0.13 \\
+&p(\mathit{revealed}|2)=0.10~~p(\mathit{the}|2)=0.14~~p(\mathit{doctor's}|2)=0.06 \\
+&p(\mathit{judgement}|2)=0.07~~p(\mathit{not}|2)=0.08~~p(\mathit{reliable}|2)=0.16
 \end{align*}
 
 \section*{Further Reading}
