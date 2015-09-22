@@ -1,0 +1,9 @@
+# Script for creating the plots of chapter 6
+# Author: Philip Schulz
+
+x = seq(0,1,0.001)
+entropy = -log2(x)*x-log2(1-x)*(1-x)
+
+png("binaryEntropy.png", width=8, height=8, units="in", res=300)
+plot(x,entropy,type="l", xlab=expression("Theta"), ylab = "H(X)")
+dev.off()
