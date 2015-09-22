@@ -210,57 +210,63 @@ probability theory. For example, if you go on to take any computational linguist
 
 \begin{Lemma}[Chebyshev's inequality]\label{Chebyshev}
 Let $ X $ be a RV with expectation $ \mathbb{E}[X] $ and variance $ var(X) = \sigma^{2} $. Furthermore, let $ \epsilon > 0 $. Then
-$$ Pr(|\mathbb{E}[X] - X| > \epsilon) \leq \dfrac{\sigma}{\epsilon} \ . $$ 
+$$ P(|\mathbb{E}[X] - X| > \epsilon) \leq \dfrac{\sigma^{2}}{\epsilon^{2}} \ . $$ 
 \end{Lemma}
 
 \paragraph{Proof of Lemma~\ref{Chebyshev}} 
-First we note that $ Z = |\mathbb{E}[X] - X | $ is itself a random variable. Furthermore, we easily see $ \sigma = \mathbb{E}[Z] $.
-So if we plug in $ \mathbb{E}[Z] $ for $ \sigma $, Lemma~\ref{Chebyshev} is proven by Markov's inequality. $ \square $ \bigskip
+By Markov's inequality we have that
+\begin{equation}
+P((\mathbb{E}[X] - X)^{2} > \epsilon^{2}) \leq \dfrac{\sigma^{2}}{\epsilon^{2}} \ .
+\end{equation}  
+which is of course equivalent what Lemma~\ref{Chebyshev} states.$ \square $ \bigskip
 
 The final step in proofing the weak law of large numbers is to apply Chebyshev's Inequality in the case where the random variable of interest is
 the sample mean.
 
-\paragraph{Proof of Theorem~\ref{weakLaw}} We assume i.i.d. RVs $ X_{1}^{n} $ with expectation $ \mathbb{E}[X] $, and sample mean 
-$ \overline{\mu} = \frac{1}{n} \underset{i=1}{\overset{n}{\sum}} X_{i} $, and sample variance 
-$ \overline{\sigma}^{2} = \frac{1}{n} \underset{i=1}{\overset{n}{\sum}} \left(\mathbb{E}[X] - X_{i}\right)^{2} $. We note that 
+\paragraph{Proof of Theorem~\ref{weakLaw}} We assume i.i.d. RVs $ X_{1}^{n} $ with sample mean $ \overline{\mu} = \frac{1}{n} \underset{i=1}{\overset{n}{\sum}} X_{i} $. 
+This means that $ |\mathbb{E}[X] - \overline{\mu}| $  is a RV depending on $ X_{1}^{n} $ whose variance is
 \begin{align}
-\mathbb{E}\left[|\mathbb{E}[X] - \overline{\mu}|\right] 
-&= \mathbb{E} \left[|\mathbb{E}[X] - \frac{1}{n} \underset{i=1}{\overset{n}{\sum}} X_{i}|\right] \\
-&= \dfrac{1}{n} \mathbb{E} \left[|\underset{i=1}{\overset{n}{\sum}}(\mathbb{E}[X] -  X_{i})| \right]
-= \dfrac{\overline{\sigma}}{\sqrt{n}} \ .
+var(|\mathbb{E}[X] - \overline{\mu}|) &= var(\overline{\mu}) \\ 
+&= var(\frac{1}{n} \underset{i=1}{\overset{n}{\sum}} X_{i}) \\
+&= \frac{1}{n^{2}}var(\underset{i=1}{\overset{n}{\sum}} X) \\
+&= \frac{1}{n^{2}}~n~var(X) = \dfrac{var(X)}{n} \ .
 \end{align}
-For the probability $ P(|\mathbb{E}[X] - \overline{\mu}| < \epsilon) $ this mean by Lemma~\ref{Chebyshev} that
+Lemma~\ref{Chebyshev} then implies that 
 \begin{equation}
-P(|\mathbb{E}[X] - \overline{\mu}| < \epsilon) < \dfrac{\overline{\sigma}}{\sqrt{n}\epsilon} \ .
+\underset{n \rightarrow 0}{\lim}P(|\mathbb{E}[X] - \overline{\mu}| < \epsilon) \leq \frac{\sigma^{2}}{n\epsilon^{2}} \ .
 \end{equation}
+
 If we fix $ \mathbb{E}[X] $ and $ \epsilon > 0 $ and increase the number of i.i.d. samples, this probability will go to 0.
 More formally, choose $ \delta > 0 $. One way to show $ P(|\mathbb{E}[X] - \overline{\mu}| < \epsilon) $ to be smaller than $ \delta $, is to show 
-$ \frac{\overline{\sigma}}{\sqrt{n}\epsilon} < \delta $. This implies that $ \left( \frac{\overline{\sigma}}{\delta\epsilon} \right)^{2} < n $. Thus, if we sample
-more than $  \left( \frac{\overline{\sigma}}{\delta\epsilon} \right)^{2} $ data points, we can ensure that $ P(|\mathbb{E}[X] - \overline{\mu}| < \epsilon) < \delta $.
+$ \frac{\sigma^{2}}{n\epsilon^{2}} < \delta $. This implies that $ \frac{\sigma^{2}}{\delta\epsilon^{2}} < n $. Thus, if we sample
+more than $ \frac{\sigma^{2}}{\delta\epsilon^{2}} $ data points, we can ensure that $ P(|\mathbb{E}[X] - \overline{\mu}| < \epsilon) < \delta $.
 Since $ \delta $ is arbitrary, this shows that $ \underset{n \rightarrow \infty}{\lim}~P(|\mathbb{E}[X] - \overline{\mu}| < \epsilon) = 0 $, 
 which is exactly what the weak law of large numbers states. $ \square $ \bigskip
 
-The proof of the weak law of large numbers also sheds some new light on the importance of the sample variance. We want our sample variance to be as small as possible
-since we will then need fewer samples in order to estimate a close approximation to the true mean of the data-generating distribution. However, the sample variance
-is a random variable and hence we can apply the weak law of large numbers to its mean. This means that the more samples we take, the smaller the probability that the
-sample variance deviates from the variance of the data-generating distribution by a large margin. Thus, it is helpful if the variance of the 
+The proof of the weak law of large numbers also sheds some new light on the importance of the variance of the underlying distribution. 
+We want that variance to be as small as possible
+since we will then need fewer samples in order to estimate a close approximation to the true mean of the data-generating distribution. 
+Thus, it is helpful if the variance of the 
 data-generating distribution be small. Otherwise we will need a lot of samples.
 
-Notice also the relationship between sample variance $ \overline{\sigma}^{2} $ and the number of samples $ n $ in the above proof. For a fixed sample variance, the
-probability $ P(|\mathbb{E}[X] - \overline{\mu}| < \epsilon) $ reduces by a factor that is proportional to the square of $ n $. This is to say, that we need to take
+Notice also the relationship between the variance $ \sigma^{2} $ and the number of samples $ n $ in the above proof. For a fixed variance, the
+probability $ P(|\mathbb{E}[X] - \overline{\mu}| < \epsilon) $ reduces by a factor that is proportional to $ n $. This is to say, that we need to take
 more and more samples as we want to decrease the probability that the sample mean deviates from the actual mean by more than $ \epsilon $. 
 
-A more common and more practical interpretation of the relationship between $ \overline{\sigma}^{2} $ and $ n $ is the following: suppose we have collected $ n $ data
-points where $ n $ is fixed, meaning we have no quick and cheap way to obtain more data points. Then the lower the sample variance, the more confident we can be
+A more common and more practical interpretation of the relationship between $ \sigma^{2} $ and $ n $ is the following: suppose we have collected $ n $ data
+points where $ n $ is fixed, meaning we have no quick and cheap way to obtain more data points. Then the lower the variance of the data-generating distribution, 
+the more confident we can be
 that $ \overline{\mu} $ is a reasonably good approximation to the true mean of the data-generating distribution. This insight also establishes a relationship to
 the expectation of sample means (see Equations~\eqref{eq:sampleMeanBegin}-\eqref{eq:sampleMeanEnd}). If the distribution of sample means has low variance, even 
 a sample mean with low probability still has good chances of being reasonable close to the true mean.
 
-To visualise the effect of sample size on sample variance, let us take a look at Figure~\ref{fig:likelihood_plots}. The plot on the top shows the same function applied
-to different data samples, all of which are of relatively small size. The function plots therefore show large spread as witnessed by the width of the curves. The 
+To visualise the effect of the sample size for a fixed variance, 
+let us take a look at Figure~\ref{fig:likelihood_plots}. The plot on the top shows the same function applied
+to different data samples from the same distribution, all of which are of relatively small size. 
+The plots therefore show large spread as witnessed by the width of the curves. The 
 plot at the bottom shows the same function applied to a larger data set. One clearly sees that the spread is much smaller.
 
-\section{Parameter Estimation}
+\section{Parameter Estimation}\label{parameterEstimation}
 
 It is time for us to meet \href{https://en.wikipedia.org/wiki/Ronald_Fisher}{Sir Ronald Fisher}, 
 one of the founding fathers of statistics. Many of the methods that Fisher introduced
@@ -332,8 +338,6 @@ are going to present one classic (and still very relevant) answer which is given
 
 
 \section{The Maximum Likelihood Principle}
-
-\philip{Need to establish relationship to the posterior distribution here.}
 
 \begin{figure}
 \center
@@ -449,7 +453,7 @@ probability that a random customer is female.
 L_{x}(\theta) = \binom{n}{k} \theta^{k} \times (1 - \theta)^{n-k} \ .
 \end{equation}
 As a mnemonic that $ \theta $ is unknown we can informally write
-$$ L_{x}(\theta) = \binom{n}{k} ?^{k} \times ?^{n-k} \ . $$
+$$ L_{x}(\theta) = \binom{n}{k} ?^{k} \times (1-?)^{n-k} \ . $$
 
 \textbf{Step 3:} We can now take the logarithm of our likelihood function.
 \begin{align}
@@ -475,7 +479,7 @@ k -k\theta &= n\theta - k\theta &\Leftrightarrow \\
 \theta &= \dfrac{k}{n}
 \end{align}
 
-And done we are. You now know once and for all that the MLE for \emph{any} binomial distribution is $ \frac{n}{k} $!
+And done we are! You now know once and for all that the MLE for \emph{any} binomial distribution is $ \frac{n}{k} $.
 
 \begin{Exercise}
 A coin is getting flipped 1000 times and comes up heads 600 times. According to the MLE, would you say that this coin is fair?
@@ -483,8 +487,11 @@ A coin is getting flipped 1000 times and comes up heads 600 times. According to 
 
 Those of you who are already familiar with calculus may have felt a bit uncomfortable, because we simply state that setting the derivative of the log-likelihood
 to 0 will give us a maximum of that function. In general, this technique will only give us an extremum which might as well be a minimum. How can we be so sure that
-we really got a maximum? We will just do a prove by picture here and let you do the math. Take another look at Figure~\ref{fig:likelihood_plots}. Clearly, we only
-see one maximum and that one is unique in all cases. What you cannot see in the plots is that the likelihood is never 0 for any $ \theta \in (0,1) $. It is just
+we really got a maximum? We will just do a prove by picture here and let you do the math. 
+
+Take another look at Figure~\ref{fig:likelihood_plots}. Clearly, we only
+see one maximum per function and that one is unique in all cases. 
+What you cannot see in the plots is that the likelihood is never 0 for any $ \theta \in (0,1) $. It is just
 really, really small, that's why it looks as if it was 0 in many places in the plot. What actually happens is that the likelihood is constantly decreasing as
 $ \theta $ approaches 0 and 1. This constant decrease implies that the derivative is not equal to $ 0 $ anywhere other than at the maximum.
 
@@ -506,6 +513,71 @@ you will be happy to see that most commonly used distributions are members of th
 You are given some likelihood function $ L_{x} $ for the binomial distribution along with its MLE $ \theta^{*} $. Show rigorously that $ \theta^{*} $ is indeed
 a maximum. That is, show that $ \mathcal{L}_{x}''(\theta^{*}) > 0 $, where $ \mathcal{L}_{x}'' $ is the second derivative of the log-likelihood function.
 \end{Exercise}
+
  
 \section{Maximum a Posteriori Estimation}
 
+Recall that in Section~\ref{parameterEstimation} we set ourselves the goal of finding a good parameter estimate from the posterior distribution over parameters.
+Let us say that the best parameter estimate is the one with the highest posterior probability. Then the question is: do we actually accomplish our goal with the MLE?
+Does the MLE give us the parameter with the highest posterior probability? Unfortunately, the general answer is no. This should be evident from Bayes' rule.
+\begin{equation}
+\underset{\theta}{arg\,max}~P(\Theta = \theta| X=x) = \underset{\theta}{arg\,max}~P(X=x|\Theta=\theta) \times P(\Theta = \theta)
+\end{equation}
+
+The MLE only maximises over the likelihood term but not over the prior! Hence it will in general be different from the \textbf{maximum a posteriori} estimate.
+
+\begin{Definition}[Maximum a posteriori estimate]
+A maximum a posteriori (MAP) estimate for a parameter set $ \Theta $ on a data sample $ x $ 
+is a value $ \theta^{*} $ such that
+$$ \theta^{*} = \underset{\theta}{arg\,max}\, \, P(\Theta = \theta| X=x) \ . $$
+\end{Definition}
+
+The MAP estimate can be derived with exactly the same steps as the MLE. However, parameters are usually real values which means that distributions over them
+are continuous distributions. Since we have not dealt with continuous distributions in this course, we will stop just short of actually imposing
+(non-uniform) prior distributions over parameters and computing MAP estimates.
+
+Notice that up to now, we justified the maximum likelihood principle merely from intuition by postulating that high likelihood should somehow be an indicator for
+good parameter values. We will now justify the maximum likelihood principle more formally, by showing that the MLE is just a special kind of MAP estimate. Since
+this implies that under certain condition the MLE will also have the highest posterior probability, we can safely argue for the MLE based on its posterior probability.
+
+Let us assume that our prior distribution $ P_{\Theta} $ over parameters is uniform. Then we can write the MAP estimator as
+\begin{align}
+\underset{\theta}{arg\,max}\, \, \frac{d}{d\theta} \log &(P(\Theta = \theta| X=x)) \\
+&= \underset{\theta}{arg\,max}\, \, \frac{d}{d\theta}\log (P(X=x|\Theta=\theta) \times P(\Theta = \theta)) \\
+&= \underset{\theta}{arg\,max}\, \, \frac{d}{d\theta}\log (P(X=x|\Theta=\theta)) + log(P(\Theta = \theta)) \label{eq:posteriorDiff} \\
+&= \underset{\theta}{arg\,max}\, \, \frac{d}{d\theta}\log (P(X=x|\Theta=\theta)) \label{eq:MLE=MAP}
+\end{align}
+
+This tells us that if we choose a uniform parameter prior the MLE will be the MAP estimate. Hence, what we are actually assuming whenever we choose the MLE as
+our parameter estimate, is that our prior over parameters is uniform. This is a very strong assumption to make and one may rightfully criticise the maximum likelihood
+principle because of this assumption (actually one should).
+
+To be clear how we got from line \eqref{eq:posteriorDiff} to line \eqref{eq:MLE=MAP} simply notice that $ log(P(\Theta = \theta)) $ is a constant value for all $ \theta $
+by our assumption that the prior distribution is uniform. This means we can neglect it when finding the maximum, because if we add a constant to all likelihood values,
+we the MLE will not change. 
+
+After we have shown you how to correctly derive the MLE from the MAP estimate, let us warn you about a seemingly convincing but faulty argument to show the same thing.
+Assuming that we have a uniform prior, we could have deduced the equivalence of the MLE and MAP estimate much more shortly by stating that
+\begin{equation}
+P(\Theta = \theta| X=x) \propto P(X=x|\Theta=\theta) \label{eq:wrongDerivation}
+\end{equation}
+because $ P(\Theta = \theta)) $ is a constant. This argument is flawed, however. As we said above, $ P_{\Theta} $ is a continuous distribution. All single values of
+$ \Theta $ have probability 0 under any continuous distribution. This means that the constant of proportionality that we are assuming here is 0. However, in the
+previous chapter, we have made it explicit that proportionality only holds if the constant of proportionality is any real number \emph{other than 0}. Thus, 
+Equation~\eqref{eq:wrongDerivation} is not even well-defined.
+
+Let us conclude this section by saying that for the rest of this course we will make the assumption that we are using uniform parameter priors with justification.
+This means that we can safely use the MLE in order to find the parameter value with the highest posterior probability.
+
+
+\section*{Further reading}
+If your calculus is a bit rusty or you have never taken a calculus class before, you should consult 
+\href{https://www.coursera.org/learn/calculus1}{OSU's excellent (and very fun) online course} which allows you to learn at your own pace. The course also comes with
+\href{https://mooculus.osu.edu/handouts}{a lecture script} that contains many insightful examples and exercises. Let us emphasise that doing statistics (including
+machine learning) without a solid understanding of calculus is basically impossible.
+
+If you are looking for a good introduction to
+parameter estimation that covers everything we have discussed here and also goes a considerable stretch further, we refer you to 
+\href{http://www.arbylon.net/publications/text-est.pdf}{Gregor Heinrich's widely cited tutorial}. Heinrich's examples come from text modelling but the techniques he
+describes can be applied anywhere. One of the model he discusses, \href{https://en.wikipedia.org/wiki/Latent_Dirichlet_allocation}{Latent Dirichlet Allocation}, originates
+from text modelling but has found most of its success in gene sequence modelling. 
