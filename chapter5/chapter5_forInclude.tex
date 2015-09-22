@@ -481,6 +481,31 @@ And done we are. You now know once and for all that the MLE for \emph{any} binom
 A coin is getting flipped 1000 times and comes up heads 600 times. According to the MLE, would you say that this coin is fair?
 \end{Exercise}
 
+Those of you who are already familiar with calculus may have felt a bit uncomfortable, because we simply state that setting the derivative of the log-likelihood
+to 0 will give us a maximum of that function. In general, this technique will only give us an extremum which might as well be a minimum. How can we be so sure that
+we really got a maximum? We will just do a prove by picture here and let you do the math. Take another look at Figure~\ref{fig:likelihood_plots}. Clearly, we only
+see one maximum and that one is unique in all cases. What you cannot see in the plots is that the likelihood is never 0 for any $ \theta \in (0,1) $. It is just
+really, really small, that's why it looks as if it was 0 in many places in the plot. What actually happens is that the likelihood is constantly decreasing as
+$ \theta $ approaches 0 and 1. This constant decrease implies that the derivative is not equal to $ 0 $ anywhere other than at the maximum.
 
+Finally, notice that the likelihood is only equal to 0 when $ \theta = 0 $ or $ \theta = 1 $. Thus, the likelihood function does indeed have two minima. However, these 
+occur at the boundary points of the interval $ [0,1] $ and since we just stated that $ L_{x}(\theta) $ is constantly decreasing as $ \theta $ approaches those points,
+we can conclude that $ \frac{d}{d\theta}L_{x}(0) \not = 0 $ and $ \frac{d}{d\theta}L_{x}(1) = 0 $ at these points. This implies that the only point at which the
+derivative of the likelihood function of the binomial distribution is $ 0 $ is at the sole maximum.
+
+We had mentioned above that having only one maximum is a desirable property. This is so because if we want to find the MLE, we have but one choice. If there were
+several maxima, we would have to compute all of them and pick amongst them. If there are two maxima that have equal likelihood values, we have no way of choosing
+between them and thus no way of determining the single best parameter estimate. Moreover, we will encounter situations in the next chapter where it very hard (if not
+impossible) to find the global MLE (i.e. the MLE at the highest maximum).
+
+You may rightfully wonder what distributions have the desirable property of only having one maximum in their likelihood functions. It turns out that those are
+exactly the distributions in the \href{https://en.wikipedia.org/wiki/Exponential_family}{exponential family}. The link includes a list of those distributions and
+you will be happy to see that most commonly used distributions are members of the exponential family and thus only have one maximum.
+
+\begin{Exercise}
+You are given some likelihood function $ L_{x} $ for the binomial distribution along with its MLE $ \theta^{*} $. Show rigorously that $ \theta^{*} $ is indeed
+a maximum. That is, show that $ \mathcal{L}_{x}''(\theta^{*}) > 0 $, where $ \mathcal{L}_{x}'' $ is the second derivative of the log-likelihood function.
+\end{Exercise}
+ 
 \section{Maximum a Posteriori Estimation}
 
