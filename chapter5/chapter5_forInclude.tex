@@ -460,12 +460,27 @@ $$ L_{x}(\theta) = \binom{n}{k} ?^{k} \times ?^{n-k} \ . $$
 \textbf{Step 4:} To find the MLE, we will first differentiate the log-likelihood with respect to $ \theta $.
 \begin{align}
 \frac{\delta}{\delta \theta} \mathcal{L}_{x}(\theta)
-&= \frac{\delta}{\delta \theta} \log \left(\binom{n}{k}\right) + k\log(\theta) + (n-k)\log(1-\theta) \\
-&= \dfrac{k}{\theta} + \dfrac{n-k}{1-\theta}
+&= \frac{\delta}{\delta \theta} \log \left(\binom{n}{k}\right) + k \frac{\delta}{\delta \theta} \log(\theta) + (n-k) \frac{\delta}{\delta \theta} \log(1-\theta) \\
+&= \dfrac{k}{\theta} - \dfrac{n-k}{1-\theta}
 \end{align}
-Next, we set this derivative to 0 in order to find the maximum of $ \mathcal{L}_{x} $.
+
+\textbf{Step 5:} Finally, we set this derivative to 0 in order to find the maximum of $ \mathcal{L}_{x} $.
 \begin{align}
-0 &= \dfrac{k}{\theta} + \dfrac{n-k}{1-\theta} &\Leftrightarrow \\
--k (1 - \theta) &= \theta (n-k) &\Leftrightarrow \\
-\theta k - k &= \theta (n-k) &\Leftrightarrow
+0 &= \dfrac{k}{\theta} - \dfrac{n-k}{1-\theta} &\Leftrightarrow \\
+\dfrac{n-k}{1- \theta} &= \dfrac{k}{\theta} &\Leftrightarrow \\
+(n-k) \theta &= k (1 - \theta) &\Leftrightarrow \\
+k -k\theta &= n\theta - k\theta &\Leftrightarrow \\
+\dfrac{k}{k\theta} - 1 &= \dfrac{n\theta}{k\theta} - 1 &\Leftrightarrow \\ 
+\dfrac{1}{\theta} &= \dfrac{n}{k} &\Leftrightarrow \\
+\theta &= \dfrac{k}{n}
 \end{align}
+
+And done we are. You now know once and for all that the MLE for \emph{any} binomial distribution is $ \frac{n}{k} $!
+
+\begin{Exercise}
+A coin is getting flipped 1000 times and comes up heads 600 times. According to the MLE, would you say that this coin is fair?
+\end{Exercise}
+
+
+\section{Maximum a Posteriori Estimation}
+
