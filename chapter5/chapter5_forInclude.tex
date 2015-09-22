@@ -1,13 +1,13 @@
 \chapter{Statistics: what it is and why it works}
 
 \section{Motivation}
-\philip{Introduce idea of data-generating distribution somewhere here.}
-We have by now learned a whole lot about probability theory. In the last chapter we even learned how to predict the value
-of a random variable given some observations. Moreover, we know how to factor joint distributions and simplify them by making
+
+We have by now learned a whole lot about probability theory. In the previous chapter we have seen
+how to compute a distribution of a RV given another RV. Moreover, we know how to factor joint distributions and simplify them by making
 independence assumptions. In principle, this puts us in a good position to start formulating our
-own probabilistic models. However, our models will be pretty useless if we do not know their component distributions. And as
+own probabilistic models. However, our models will be pretty useless if we do not know their parameters. And as
 it so happens, we virtually never know them in real life. So what we are going to talk about next is how to \textbf{estimate}
-these distributions from data that we observe. The tools we are going to use for estimation come from statistics.
+these parameters from data that we observe. The tools we are going to use for estimation come from statistics.
 
 Statistics is a relatively broad term. There are many ways of doing it and chances are that different people from different
 fields mean different things when they use the term \textit{statistics}. This is mostly so because the goals that people 
@@ -16,10 +16,10 @@ we are going to focus on the basics of statistics that you need to know no matte
 to give you a quick birds-eye view on statistics. 
 
 There are two main goals you can have using statistics (this is grossly oversimplified, but hey, we said it was the birds-eye
-view). On the one hand you can do descriptive statistics. This means that you are gathering information about a phenomenon
+view). On the one hand you can do \textbf{descriptive statistics}. This means that you are gathering information about a phenomenon
 that you are interested in and report that information. So for example, you might be interested in how many faculty members
 at your university are alcoholics. What you do then is you go to each faculty member, check whether they are an alcoholic
-and report that. Crucially, you are not going to draw any conclusions (such as that people working in the humanities are more
+and report the total number of alcoholics at your institute. Crucially, you are not going to draw any conclusions (such as that people working in the humanities are more
 likely to be alcoholics than science faculty).
 
 Another, somewhat milder examples of descriptive statistics are housing advertisements. If you are looking for a flat, you will usually
@@ -28,30 +28,28 @@ can be seen as descriptive statistics. Again, when reviewing these ads, your goa
 with a balcony are more habitable than flats without one". This may be a preconception that you have, but it is nothing that
 you would be trying to get out of your data.
 
-This brings us to the second big part of statistics, which is inferential statistics. Here you are actually interested in drawing
+This brings us to the second big part of statistics, which is \textbf{inferential statistics}. Here you are actually interested in drawing
 conclusions (inferences). So if you do an alcoholism survey amongst faculty at your university you would like to find some
 way of determining the relationship between area of research, say, and the chance that someone is an alcoholic. The rest of the
 course will mostly be about inferential statistics. In particular, our main question will be this: given that we observe some data and
-we know (or assume) that the data is distributed according to some distribution (e.g. a multinomial) what are the parameters
-of that distribution?
+we know (or assume) that the data is distributed according to some distribution (e.g. a multinomial) what are the parameters of that distribution? Hence, we will try to infer the parameters.
 
-Within inferential statistics, there is a further distinction one can make. In statistical analysis people are interested in analysing
+Within inferential statistics, there is a further distinction one can make. In \textbf{statistical (data) analysis} people are interested in analysing
 the properties of a given data set. Say you have obtained surveys from 500 faculty members. Then your goal would be to make
-statements about these 500 surveys. The scope of your study would not extend beyond those 500 and all statements that you make
-will in principle be limited to this data set. Obviously, if you read a research paper this is not how people do it. Researchers
+statements about these 500 surveys. The scope of your study would not extend beyond those 500 data points and all statements that you make
+will in principle be limited to this data set. Obviously, if you read a research paper this is not what people do. Researchers
 often try to generalize the results they obtain on their data set to a bigger population, like all university employees or even
 all of humankind. In the following sections we are going to give some indication for why such generalisations may be justified and
 at the same time warn you that they are often not.
 
-Finally, there is the field of prediction. In prediction you again analyse your data, but this time around what you actually want to
+Finally, there is the field of \textbf{prediction}. In prediction you again analyse your data, but this time around what you actually want to
 do is to predict future data of the same kind. Your current data set is of no actual interest to you except that it allows you
 to gather information that may turn out to be valuable for making your predictions. Again, if you have compiled 500 surveys from 
-faculty, you would like to predict what the rate of alcoholics for the next incoming 100 surveys is. After you have extracted
+faculty, you would like to predict what the rate of alcoholics for the following 100 surveys is. After you have extracted
 the information you need from your original data set, you could even discard it in this setting. In practice, of course, you 
 should NEVER discard your data. Instead, you should make it publicly available, so that other people can reproduce your study.
 This latter field of prediction is nowadays most commonly known as \textbf{machine learning}. However, statistical analysis and 
 prediction are closely intertwined and share a lot of their methodology. It is therefore not always easy to make the distinction.
-
 
 
 \section{Statistics and Sample Means}
@@ -60,22 +58,26 @@ In the previous section we have introduced the word \textbf{statistic} and also 
 observed data is distributed according to some distribution. The way we usually conceptualize data is that each data point is
 an instantiation of a random variable. This means that when you are observing 1000 data points, we conceptualize this as observing
 1000 values of random variables. Importantly, each data point could potentially have taken on a different value and it just 
-so happens that in our specific \textbf{data sample} it took on the value that it did.
+so happens that in our specific \textbf{data sample} it took on the value that it did. 
 
 There is one further assumption that we usually make about our data, namely that it is \textbf{i.i.d.} (identical and independently
-distributed). This just means that we assume that all random variables that generated our data points follow the same distribution and 
+distributed). This just means that we assume that all the random variables that generated our data points follow the same distribution and 
 that they are independent of each other. When we say they follow the same distribution, we do not just mean the same class of
-distributions (e.g. multinomial), but really the same distribution with identical parameters. We have in fact already used the i.i.d.
+distributions (e.g. multinomial), but really the same distribution with identical parameters. We often
+call that distribution the \textbf{data-generating distribution}, but you also find the terms 
+\textit{underlying distribution} or \textit{true distribution} in the literature. 
+We have in fact already used the i.i.d.
 assumption before. When we do repeated Bernoulli trials, the total probability of the resulting sequence is computed as a product
 of independent RVs. We can encode the i.i.d. assumption for $ n $ Bernoulli trials as follows:
 \begin{equation}
 X_{i} \sim Bernoulli(\theta); 1 \leq i \leq n
 \end{equation}
 
-Now all $ X_{i} $ follow the same distribution since the parameter $ \theta $ does not depend on $ i $ but is constant throughout.
+All $ X_{i} $ follow the same distribution since the parameter $ \theta $ does not depend on $ i $ but is constant throughout.
 By the same token, we get independence as the distribution does also not depend on other RVs. Thus, repeated Bernoulli trials,
-such as repeated coin flips, do actually meet the i.i.d. assumption. When working with real data this assumption will often be
-violated but we are going to make it nonetheless for mathematical convenience.
+such as repeated coin flips, do actually invoke the i.i.d. assumption. When working with real data this assumption will often be
+violated but we are going to make it nonetheless for mathematical convenience or if we can motivate
+based on our knowledge of the data set.
 
 After we have described our conception of data, let us move on to defining what a statistic is.
 
@@ -85,11 +87,11 @@ $ X_{1}^{n} $, a statistic is the value of a function $ g $ on those RVs, i.e. $
 \end{Definition}
 
 Arguable the most important statistic in all of statistics is the \textbf{sample mean}. The sample mean is just the average of the
-values of the RVs $ X_{1}^{n} $, i.e. of the data points. It is usually denoted by $ \overline{\mu} $. The mean $ \mu $ is a parameter of some
-distributions. For others, it is identified with the expectation. In both cases, $ \mu $ is a theoretical quantity assumed to be known
-(or at least computable). In statistics, we can never be quite sure which distribution underlies our data and therefore we estimate
-the mean from a sample; hence the name sample mean. To indicate that we are just making a guess at $ \mu $ we put a stroke on top.
-This same indicator (or a similar one) can obviously be used for other quantities, as well.
+values of the RVs $ X_{1}^{n} $, i.e. of the data points. It is usually denoted by $ \overline{\mu} $. The
+sample mean can be seen as guess of the expectation of $ X_{i} $. The expectation is sometimes also
+called mean and $ \overline{\mu} $ estimates it from a data sample; hence the name sample mean. Some distributions even have their
+mean $ \mu $ as a parameter. To indicate that we are just making a guess at $ \mu $ we put a stroke on top.
+This same indicator (or a similar one, like a caret, in which case we would write $ \hat{\mu} $) can obviously be used for other quantities, as well.
 
 \begin{Definition}
 The sample mean of i.i.d. random variables $ X_{1}, \ldots, X_{n} $ is defined as 
@@ -111,12 +113,12 @@ $ P_{X} $. We can do this because all RVs are identically distributed, namely ac
 
 So why is this result so important? Well, it basically says that if you are getting \textit{enough} data samples and take their sample means,
 then the expectation of the sample means will be the true mean underlying your distribution. Since the sample means are distributed according
-to some distribution, if you take many data samples, the samples means should show up in proportion to their probability. Thus, the mean
+to some distribution, each sample mean should show up in proportion to its probability. Thus, the mean
 of sample means will approximate the true mean. Conceptually this may be quite a bit to chew on, but the practical implications are compelling.
 If you are running one experiment (i.e. if you take one data sample) you basically have now clue how probable that sample mean is according
 to the distribution of sample means. It could be very improbable and thus not be representative at all of the population you are investigating.
 So what should you do? The above result tells us that you should just repeat your experiment \textit{enough} times, so that you get
-\textit{enough} sample means. The mean of those will in turn be pretty close to the true mean of the distribution that underlies your population
+\textit{enough} sample means. The mean of those sample means will in turn be pretty close to the true mean of the distribution that underlies your population
 of interest. This is basically the mathematical reason why in science we want our experimental results to be replicable. If I get a result
 and several other people get the same or reasonably close results, we can be fairly sure that we obtained them from a high-probability region
 in the distribution of sample means, i.e. the results are indeed representative for the population under scrutiny.
