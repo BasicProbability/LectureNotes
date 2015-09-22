@@ -101,10 +101,10 @@ $$ \overline{\mu} := \dfrac{1}{n}\underset{i=1}{\overset{n}{\sum}} X_{i} \ . $$
 Notice that since $ \overline{\mu} $ is the average of a collection of random variables, it is itself a random variable. Thus, we can
 compute its expectation.
 \begin{align}
-E_{P_{X}}[\overline{\mu}] &= E_{P_{X}}\left[\dfrac{1}{n} \underset{i=1}{\overset{n}{\sum}} X_{i}\right] \\
+E_{P_{X}}[\overline{\mu}] &= E_{P_{X}}\left[\dfrac{1}{n} \underset{i=1}{\overset{n}{\sum}} X_{i}\right] \label{eq:sampleMeanBegin} \\
 &= \dfrac{1}{n} E_{P_{X}}\left[\underset{i=1}{\overset{n}{\sum}} X_{i}\right] \label{sampleMeanStep1} \\
 &= \dfrac{1}{n} \times n E_{P_{X}}[X] \label{sampleMeanStep2} \\
-&= E_{P_{X}}[X] = \mu
+&= E_{P_{X}}[X] = \mu \label{eq:sampleMeanEnd}
 \end{align}
 
 This result is huge! Before we interpret it, let us be clear about how we computed it. We take the expectation with respect to
@@ -132,7 +132,7 @@ The open question at this point is of course how many repetitions are \textit{en
 
 \section{Limits}
 To help our understanding of the theorem in the next section we are first going to remind ourselves what limits are. For a sequence of numbers
-we can ask ourselves whether the sequence will eventually oscillate a single point or whether it will just keep growing and growing. This
+we can ask ourselves whether the sequence will eventually come close to a single point or whether it will just keep moving through the space of real numbers. This
 question can be formalized with the concept of limits.
 
 \begin{Definition}[Finite Limit of a sequence]\label{def:finiteLimit}
@@ -167,7 +167,7 @@ sequence. Choose any real $ \epsilon > 0 $. Then for $ n > n_{0} $ we want that
 We solve this inequality to get $ n > \nicefrac{1}{\epsilon} $. Thus we set $ n_{0} = \nicefrac{1}{\epsilon} $. Since $ \epsilon $ was chosen arbitrarily we conclude
 that indeed $ \underset{n \rightarrow \infty}{\lim} \frac{1}{n} = 0 $. $ \square $\bigskip
 
-Instead of limits of sequences, we will actually need limits of functions. However, notice that limits of functions are simply the limits sequences of function
+Instead of limits of sequences, we will actually need limits of functions. However, notice that limits of functions are simply the limits of sequences of function
 outputs. 
 
 \begin{Definition}[Limit of a function]
@@ -186,14 +186,14 @@ the weak law of large numbers.
 
 \begin{Theorem}[Weak law of large numbers]\label{weakLaw}
 Take i.i.d. distributed random variables $ X_{1}, \ldots, X_{n}, n \in \mathbb{N} $ with distribution $ P_{X} $ and expectation $ \mathbb{E}[X] $. Further let
-$ X_{1}^{n} $ have estimated mean $ \overline{\mu} = \frac{1}{n} \underset{i=1}{\overset{n}{\sum}X_{i}} $. Then for any real $ \epsilon > 0 $
+$ X_{1}^{n} $ have sample mean $ \overline{\mu} = \frac{1}{n} \underset{i=1}{\overset{n}{\sum}X_{i}} $. Then for any real $ \epsilon > 0 $
 $$ \underset{n \rightarrow 0}{\lim}P(|\mathbb{E}[X] - \overline{\mu}| < \epsilon) = 0 \ . $$
 \end{Theorem}
 
 At this point it may be good to just pause for a moment, stare at the theorem and try to connect it to the verbal explanation from above. The significance of the theorem
-derives from the fact that it basically provides us with the theoretical underpinning that allows us to draw any inferences from observed data in the first place.
+derives from the fact that it basically provides us with the theoretical underpinning that allows us to draw inferences.
 
-In order to prove the weak law of large numbers, we use to auxiliary lemmas. Once we have proven those, Theorem~\ref{weakLaw} will follow easily. 
+In order to prove the weak law of large numbers, we use two auxiliary lemmas. Once we have proven those, Theorem~\ref{weakLaw} will follow easily. 
 
 \begin{Lemma}[Markov's inequality]\label{markovIneq}
 For any random variable $ X $ and any $ a \in \mathbb{R} $ it holds that
@@ -215,7 +215,10 @@ $$ Pr(|\mathbb{E}[X] - X| > \epsilon) \leq \dfrac{\sigma}{\epsilon} \ . $$
 
 \paragraph{Proof of Lemma~\ref{Chebyshev}} 
 First we note that $ Z = |\mathbb{E}[X] - X | $ is itself a random variable. Furthermore, we easily see $ \sigma = \mathbb{E}[Z] $.
-So if we plug in $ \mathbb{E}[Z] $ for $ \sigma $, Lemma~\ref{Chebyshev} is proven by Markov's inequality. $ \square $
+So if we plug in $ \mathbb{E}[Z] $ for $ \sigma $, Lemma~\ref{Chebyshev} is proven by Markov's inequality. $ \square $ \bigskip
+
+The final step in proofing the weak law of large numbers is to apply Chebyshev's Inequality in the case where the random variable of interest is
+the sample mean.
 
 \paragraph{Proof of Theorem~\ref{weakLaw}} We assume i.i.d. RVs $ X_{1}^{n} $ with expectation $ \mathbb{E}[X] $, and sample mean 
 $ \overline{\mu} = \frac{1}{n} \underset{i=1}{\overset{n}{\sum}} X_{i} $, and sample variance 
@@ -239,8 +242,8 @@ which is exactly what the weak law of large numbers states. $ \square $ \bigskip
 
 The proof of the weak law of large numbers also sheds some new light on the importance of the sample variance. We want our sample variance to be as small as possible
 since we will then need fewer samples in order to estimate a close approximation to the true mean of the data-generating distribution. However, the sample variance
-is a random variable and hence we can apply the weak law of large numbers to it. This means that the more samples we take, the smaller the probability that the
-sample variance deviates from the variance of the data-generating distribution by a large margin. Thus, it it of crucial importance that the variance of the 
+is a random variable and hence we can apply the weak law of large numbers to its mean. This means that the more samples we take, the smaller the probability that the
+sample variance deviates from the variance of the data-generating distribution by a large margin. Thus, it is helpful if the variance of the 
 data-generating distribution be small. Otherwise we will need a lot of samples.
 
 Notice also the relationship between sample variance $ \overline{\sigma}^{2} $ and the number of samples $ n $ in the above proof. For a fixed sample variance, the
@@ -249,22 +252,27 @@ more and more samples as we want to decrease the probability that the sample mea
 
 A more common and more practical interpretation of the relationship between $ \overline{\sigma}^{2} $ and $ n $ is the following: suppose we have collected $ n $ data
 points where $ n $ is fixed, meaning we have no quick and cheap way to obtain more data points. Then the lower the sample variance, the more confident we can be
-that $ \overline{\mu} $ is a reasonably good approximation to the true mean of the data-generating distribution.
+that $ \overline{\mu} $ is a reasonably good approximation to the true mean of the data-generating distribution. This insight also establishes a relationship to
+the expectation of sample means (see Equations~\eqref{eq:sampleMeanBegin}-\eqref{eq:sampleMeanEnd}). If the distribution of sample means has low variance, even 
+a sample mean with low probability still has good chances of being reasonable close to the true mean.
 
-\philip{Include reference to likelihood plots as visualisation of sample variance.}
+To visualise the effect of sample size on sample variance, let us take a look at Figure~\ref{fig:likelihood_plots}. The plot on the top shows the same function applied
+to different data samples, all of which are of relatively small size. The function plots therefore show large spread as witnessed by the width of the curves. The 
+plot at the bottom shows the same function applied to a larger data set. One clearly sees that the spread is much smaller.
 
 \section{Parameter Estimation}
 
-It is now time for us to meet \href{https://en.wikipedia.org/wiki/Ronald_Fisher}{Sir Ronald Fisher}, 
+It is time for us to meet \href{https://en.wikipedia.org/wiki/Ronald_Fisher}{Sir Ronald Fisher}, 
 one of the founding fathers of statistics. Many of the methods that Fisher introduced
-for statistical testing and \textbf{parameter estimation} are still in wides-spread use today. One of his biggest achievements was the proposal of the 
+for statistical testing and \textbf{parameter estimation} are still in wide-spread use today. One of his biggest achievements was proposing the 
 \textbf{Maximum Likelihood Principle}. To understand this principle, we first have to introduce likelihood functions.
 
 Recall that we can informally write Bayes' Rule as 
 \begin{center}
 posterior $ \propto $ likelihood $ \times $ prior .
 \end{center}
-Recall further that every distribution that we have seen so $ P_{X} $ depends on a number of parameters. Once these parameters are set, we can compute the probability of 
+Recall further that every distribution $ P_{X} $ that we have seen so far depends on a number of parameters. 
+Once these parameters are set, we can compute the probability of 
 any event that is  captured by a value of the RV $ X $. But what can we do if the parameters are not known? It turns out that we can estimate them. In order to 
 estimate our parameters, we will make the dependence of $ P_{X} $ on its parameters explicit by letting
 \begin{equation}
@@ -283,16 +291,17 @@ family of distributions $ P_{x|\Theta} $ as $$ L_{x}(\theta) := P(X=x|\Theta = \
 There are two crucial things to note about the likelihood function. First, the data set $ x $ is assumed to be fixed. Thus, the only random variable that can take
 on different values is the parameter RV $ \Theta $. This also tells us that the likelihood function is a function of the parameters \emph{and not of the data}! This is the reason that we index it with the
 specific data set $ x $ that we observe and not with a random variable $ X $.
+
 Moreover, the likelihood function is based on conditional probability distributions. If we were to sum over all $ x \in supp(X) $ the result would be one since 
-we would be summing over the support of one single distribution with parameter vector $ \theta $. Instead, however, the likelihood forces us to leave $ x $ fixed and
+we would be summing over the support of a distribution with parameter vector $ \theta $. Instead, however, the likelihood forces us to leave $ x $ fixed and
 only allows us to sum over all values of $ \Theta $. This sum is by no means guaranteed to yield 1 as a result! The important lesson here is that the likelihood 
 function is generally \emph{not a probability distribution}! This is a tough pill to swallow in the beginning and you should maybe take a moment to let this sink in
 and convince yourself that this is indeed so.
 
 With these (important!) remarks in mind, let us quickly elaborate on notation. Since the data set $ x $ is fixed anyway, many authors do not even bother to include
 it as an argument of the likelihood function and just write $ L(\theta) $. Other authors have adopted
-the unfortunate convention to write $ L(x,\theta) $. While this is ok when you know what they are talking
-about, it may also give you the (wrong) impression that $ x $ is an argument of the Likelihood function. 
+the unfortunate convention to write $ L(\theta; x) $. While this is ok when you know what they are talking
+about, it may also give you the wrong impression that $ x $ is an argument of the Likelihood function. 
 
 Furthermore, we have made the choice to represent the dependence of the distribution on its
 parameters as $ P(X=x|\Theta=\theta) $. This is the Bayesian way of writing this. A frequentist statistician would rather write $ P(X=x; \theta) $ which reads as
@@ -309,11 +318,11 @@ P(\Theta = \theta|X =x) \propto P(X=x|\Theta = \theta) \times P(\Theta = \theta)
 \end{equation}
 
 Notice that we do not compute the distribution $ P(\Theta = \theta|X =x) $ itself but rather a quantity that is proportional to it. It turns out that this will be all
-we need in in the remainder of this section. Let us emphasize however that this is what makes Bayes' rule so important: it gives us a principled way to compute a
+we need in in the remainder of this chapter. Let us emphasize however that this is what makes Bayes' rule so important: it gives us a principled way to compute a
 distribution over parameters from data!
 
 With the posterior over parameters at hand, we can now formulate the parameter inference problem. The problem of parameter inference is the problem of picking
-a \emph{good} parameter vector Notice that it is this exact problem that is the referred to as learning
+a \emph{good} parameter vector. Notice that it is this exact problem that is the referred to as learning
 problem when people talk about machine learning. What the machine is trying learn from data are \emph{good} parameters. Where the statistician would talk about
 \textbf{parameter estimation}, the computer scientist talks about parameter learning. Both expressions refer to the same thing, but machine learning just sounds a lot
 sexier, doesn't it?
@@ -351,7 +360,7 @@ at which value of $ \theta $ the likelihoods reach their maximums.}
 
 The maximum likelihood principle simply states that we should try to maximize the likelihood function of
 our data, that is, we should pick the parameter value that achieves this maximisation. This parameter value
-is known as the \textbf{maximum likelihood estimate} (or a maximum likelihood estimate if there are several). 
+is known as the \textbf{maximum likelihood estimate} (or a maximum likelihood estimates if there are several). 
 
 \begin{Definition}[Maximum Likelihood Estimate]
 A maximum likelihood estimate (MLE) for a parameter set $ \Theta $ on a data sample $ x $ 
@@ -365,12 +374,17 @@ $ \theta=0.7 $. The likelihood plots in Figure~\ref{fig:sparse_likelihood} are b
 two samples, that is 20 i.i.d. Bernoulli trials. The plot in Figure~\ref{fig:dense_likelihood} is based on a 
 data set of 50 samples, that is 500 i.i.d. Bernoulli trials. 
 The vertical lines connect the maximum likelihood estimate
-for each data set with it likelihood value. Clearly, there is only one MLE for each of these functions.
-This is a nice property and we will shortly see why.
+for each data set with its likelihood value. Notice the different scales of the two plots. The likelihood value depends on the
+data size. Therefore, it does not make sense to compare likelihood values across data sets. After all, each data set comes with its own
+likelihood function and the likelihood functions of different data sets are indeed different functions. This is also the
+reason why the maximum likelihood principle tells us to only find the parameter value $ \theta $ at which the maximum of the
+likelihood function is achieved. There is no point in even looking at the numerical likelihood value of that maximum.
 
-Let us first explain how to compute the a MLE. By definition the the likelihood function maps the MLE to
+Notice further that in Figure~\ref{fig:likelihood_plots}, there is only one MLE for each of these functions. This is a nice property and we will shortly see why.
+
+Let us now explain how to compute the a MLE. By definition the likelihood function maps the MLE to
 one of its maximums. From calculus we know that the derivative of any differentiable function is 0 at the
-functions maximums\footnote{Technically we also require that the function be defined on a closed 
+function's maximums\footnote{Technically we also require that the function be defined on a closed 
 (as opposed to open) interval. At this stage it is ok to assume that our parameter sets are always closed
 intervals.}. This means that all we need to do in order to find the MLE is to differentiate the likelihood 
 function with respect to $ \theta $ and check where the derivative is 0. 
@@ -382,17 +396,30 @@ basis. We present one such case as an example below. Before we do so, let us not
 convenience, one often uses the logarithm of the likelihood function instead of the likelihood function
 itself. This has two advantages: 1) logarithms turn products into sums and sums are often easier to handle
 and 2) when using a computer, very small values may be rounded down to 0. Logarithms mitigate this problem
-as they turn very small number into negative numbers that have rather large absolute values.
+as they turn very small numbers into negative numbers that have rather large absolute values.
 
 \begin{Definition}[Log-Likelihood]
 For a \emph{fixed} set of data points or observations $ x = x^{1}_{n}, n \in \mathbb{N} $, we define the 
 log-likelihood function of a 
 family of distributions $ P_{x|\Theta} $ as 
 $$ \mathcal{L}_{x}(\theta) := log \left(L_{x}(\theta) \right) \ . $$
-\philip{Explain that log is monotone function.}
 \end{Definition}
 
-\paragraph{Example of finding the MLE} Assume we have to market research for a clothing store in Amsterdam.
+Notice the finding a maximum of any the logarithm of any function $ f $ that only yields positive values is the same as finding
+the a maximum of the original function $ f $. This is so because the logarithm is strictly monotone, meaning that for any
+two possible arguments $ x,y $ of $ f $ we have if $ f(x) > f(y) $ then $ \log(f(x)) > \log(f(y)) $.
+
+In order to make it easier for you to find MLEs of your own, we will give you a procedure that you can apply in most cases and
+show you an example of how to use it.
+\begin{enumerate}
+\item Define a probabilistic model.
+\item Write down the functional form of $ L_{x}(\theta) $ for the parameters of that model.
+\item Write down $ \mathcal{L}_{x}(\theta) $.
+\item Compute $ \frac{\delta}{\delta \theta} \mathcal{L}_{x}(\theta) $.
+\item Solve $ 0 = \frac{\delta}{\delta \theta} \mathcal{L}_{x}(\theta) $ for $ \theta $.
+\end{enumerate}
+
+\paragraph{Example of finding the MLE} Assume we have to do market research for a clothing store in Amsterdam.
 The store wants to expand its size and the manager wonders whether he should use the extra space to 
 exhibit more men's or more women's clothing. To help him with this decision, we are going to count 
 how many male and female customers are coming in on a given day. We treat the gender of each customer
@@ -403,25 +430,34 @@ other customer. This means we can stipulate that $ X_{i} \bot X_{j} $ whenever $
 
 As an aside, notice that these assumptions are not without problems in real applications. 
 The first assumption, that the gender
-distribution is the same for all customers, is probably generally false. Depending on the time of the day
+distribution is the same for all customers, may not always be justifiable. Depending on the time of the day
 it is possible that more men or women will come in. The second assumption, that the gender of one customer
 does not depend on the gender of other customers, may also not always be true. If couples come to shop
 at the store, then the gender of one partner will determine the gender of the other partner (in which
 way the partners in a couple determine each other's genders depends on whether the couple is homo- or
 heterosexual). For the sake of the example we will nevertheless assume that our assumptions hold true.
 
-Now as the day is over, we have observed $ k $ women and $ n-k $ men. According to our model their
+\textbf{Step 1:} Now as the day is over, we have observed $ k $ women and $ n-k $ men. We postulate a model
+according which our model their
 occurrences are distributed according a binomial distribution whose parameter $ n $ we already know: it
 is simply the total number of our observations (a.k.a. the total number of customers who entered the shop 
 that day). What we want in order to facilitate the manager's decision is to estimate $ \theta $, the
-probability that a random customer is female. Our likelihood function looks as follows:
+probability that a random customer is female. 
+
+\textbf{Step 2:} Our likelihood function looks as follows:
 \begin{equation}
 L_{x}(\theta) = \binom{n}{k} \theta^{k} \times (1 - \theta)^{n-k} \ .
 \end{equation}
 As a mnemonic that $ \theta $ is unknown we can informally write
 $$ L_{x}(\theta) = \binom{n}{k} ?^{k} \times ?^{n-k} \ . $$
-To find the MLE, we will first differentiate the log-likelihood with respect to $ \theta $ since it is 
-easier to differentiate sums instead of products.
+
+\textbf{Step 3:} We can now take the logarithm of our likelihood function.
+\begin{align}
+\log(L_{x}(\theta)) &= \log\left(\binom{n}{k} \theta^{k} \times \theta^{n-k} \right) \\
+&= \log \left(\binom{n}{k}\right) + k\log(\theta) + (n-k)\log(1-\theta)
+\end{align}
+
+\textbf{Step 4:} To find the MLE, we will first differentiate the log-likelihood with respect to $ \theta $.
 \begin{align}
 \frac{\delta}{\delta \theta} \mathcal{L}_{x}(\theta)
 &= \frac{\delta}{\delta \theta} \log \left(\binom{n}{k}\right) + k\log(\theta) + (n-k)\log(1-\theta) \\
