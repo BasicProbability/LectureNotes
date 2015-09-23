@@ -368,7 +368,7 @@ is known as the \textbf{maximum likelihood estimate} (or as maximum likelihood e
 \begin{Definition}[Maximum Likelihood Estimate]
 A maximum likelihood estimate (MLE) for a parameter set $ \Theta $ \chris{confusing because $\Theta$ was RV before. Do you mean $\supp(\Theta)$?} on a data sample $ x $ 
 is a value $ \theta^{*} $ such that
-$$ \theta^{*} = \underset{\theta}{\arg\,\max}\, \, L_{x}(\theta) $$
+$$ \theta^{*} = \underset{\theta}{\arg\max}\, \, L_{x}(\theta) $$
 \end{Definition}
 
 In Figure~\ref{fig:likelihood_plots} we have plotted some likelihood functions. They are based on data
@@ -418,8 +418,8 @@ show you an example of how to use it.
 \item Define a probabilistic model.
 \item Write down the functional form of $ L_{x}(\theta) $ for the parameters of that model.
 \item Write down $ \mathcal{L}_{x}(\theta) $.
-\item Compute $ \frac{\delta}{\delta \theta} \mathcal{L}_{x}(\theta) $.
-\item Solve $ 0 = \frac{\delta}{\delta \theta} \mathcal{L}_{x}(\theta) $ for $ \theta $.
+\item Compute $ \frac{\partial}{\partial \theta} \mathcal{L}_{x}(\theta) $.
+\item Solve $ 0 = \frac{\partial}{\partial \theta} \mathcal{L}_{x}(\theta) $ for $ \theta $.
 \end{enumerate}
 
 \paragraph{Example of finding the MLE} Assume we have to do market research for a clothing store in Amsterdam.
@@ -440,8 +440,8 @@ at the store, then the gender of one partner will determine the gender of the ot
 way the partners in a couple determine each other's genders depends on whether the couple is homo- or
 heterosexual). For the sake of the example we will nevertheless assume that our assumptions hold true.
 
-\textbf{Step 1:} As the day is over, we have observed $ k $ women and $ n-k $ men. We postulate a model
-according which our model their
+\textbf{Step 1:} As the day is over, we have observed $ k $ women and $ n-k $ men. Above, we postulated a model
+according to which the
 occurrences are distributed according a binomial distribution whose parameter $ n $ we already know: it
 is simply the total number of our observations (a.k.a. the total number of customers who entered the shop 
 that day). What we want in order to facilitate the manager's decision is to estimate $ \theta $, the
@@ -460,49 +460,48 @@ $$ L_{x}(\theta) = \binom{n}{k} ?^{k} \times (1-?)^{n-k} \ . $$
 &= \log \left(\binom{n}{k}\right) + k\log(\theta) + (n-k)\log(1-\theta)
 \end{align}
 
-\textbf{Step 4:} To find the MLE, we will first differentiate the log-likelihood with respect to $ \theta $.
+\textbf{Step 4:} To find the MLE, we first differentiate the log-likelihood with respect to $ \theta $.
 \begin{align}
-\frac{\delta}{\delta \theta} \mathcal{L}_{x}(\theta)
-&= \frac{\delta}{\delta \theta} \log \left(\binom{n}{k}\right) + k \frac{\delta}{\delta \theta} \log(\theta) + (n-k) \frac{\delta}{\delta \theta} \log(1-\theta) \\
+\frac{\partial}{\partial \theta} \mathcal{L}_{x}(\theta)
+&= \frac{\partial}{\partial \theta} \log \left(\binom{n}{k}\right) + k \frac{\partial}{\partial \theta} \log(\theta) + (n-k) \frac{\partial}{\partial \theta} \log(1-\theta) \\
 &= \dfrac{k}{\theta} - \dfrac{n-k}{1-\theta}
 \end{align}
 
-\textbf{Step 5:} Finally, we set this derivative to 0 in order to find the maximum of $ \mathcal{L}_{x} $.
+\textbf{Step 5:} Finally, we want to find a point where this derivative vanishes in order to find the maximum of $ \mathcal{L}_{x} $.
 \begin{align}
 0 &= \dfrac{k}{\theta} - \dfrac{n-k}{1-\theta} &\Leftrightarrow \\
 \dfrac{n-k}{1- \theta} &= \dfrac{k}{\theta} &\Leftrightarrow \\
 (n-k) \theta &= k (1 - \theta) &\Leftrightarrow \\
-k -k\theta &= n\theta - k\theta &\Leftrightarrow \\
-\dfrac{k}{k\theta} - 1 &= \dfrac{n\theta}{k\theta} - 1 &\Leftrightarrow \\ 
-\dfrac{1}{\theta} &= \dfrac{n}{k} &\Leftrightarrow \\
+n\theta- k\theta &= k - k \theta &\Leftrightarrow \\
+n\theta&= k &\Leftrightarrow \\
 \theta &= \dfrac{k}{n}
 \end{align}
 
-And done we are! You now know once and for all that the MLE for \emph{any} binomial distribution is $ \frac{n}{k} $.
+And we are done! You know once and for all that the MLE for the parameter $\theta$ of \emph{any} binomial distribution with parameter $n$ (and having observed $k$ occurrences) is $ \frac{k}{n} $.
 
 \begin{Exercise}
 A coin is getting flipped 1000 times and comes up heads 600 times. According to the MLE, would you say that this coin is fair?
 \end{Exercise}
 
-Those of you who are already familiar with calculus may have felt a bit uncomfortable, because we simply state that setting the derivative of the log-likelihood
+Those who are already familiar with calculus may have felt a bit uncomfortable, because we simply state that setting the derivative of the log-likelihood
 to 0 will give us a maximum of that function. In general, this technique will only give us an extremum which might as well be a minimum. How can we be so sure that
 we really got a maximum? We will just do a prove by picture here and let you do the math. 
 
 Take another look at Figure~\ref{fig:likelihood_plots}. Clearly, we only
 see one maximum per function and that one is unique in all cases. 
 What you cannot see in the plots is that the likelihood is never 0 for any $ \theta \in (0,1) $. It is just
-really, really small, that's why it looks as if it was 0 in many places in the plot. What actually happens is that the likelihood is constantly decreasing as
+really, really small, that is why it looks as if it was 0 in many places in the plot. What actually happens is that the likelihood is constantly decreasing as
 $ \theta $ approaches 0 and 1. This constant decrease implies that the derivative is not equal to $ 0 $ anywhere other than at the maximum.
 
 Finally, notice that the likelihood is only equal to 0 when $ \theta = 0 $ or $ \theta = 1 $. Thus, the likelihood function does indeed have two minima. However, these 
 occur at the boundary points of the interval $ [0,1] $ and since we just stated that $ L_{x}(\theta) $ is constantly decreasing as $ \theta $ approaches those points,
-we can conclude that $ \frac{d}{d\theta}L_{x}(0) \not = 0 $ and $ \frac{d}{d\theta}L_{x}(1) = 0 $ at these points. This implies that the only point at which the
+we can conclude that $ \frac{\partial}{\partial\theta}L_{x}(0) \not = 0 $ and $ \frac{\partial}{\partial\theta}L_{x}(1) = 0 $ at these points. Hence, the only point at which the
 derivative of the likelihood function of the binomial distribution is $ 0 $ is at the sole maximum.
 
-We had mentioned above that having only one maximum is a desirable property. This is so because if we want to find the MLE, we have but one choice. If there were
+We had mentioned above that having only one maximum is a desirable property. If we want to find the MLE, we have but one choice in this case. If there were
 several maxima, we would have to compute all of them and pick amongst them. If there are two maxima that have equal likelihood values, we have no way of choosing
-between them and thus no way of determining the single best parameter estimate. Moreover, we will encounter situations in the next chapter where it very hard (if not
-impossible) to find the global MLE (i.e. the MLE at the highest maximum).
+between them and thus no way of determining the single best parameter estimate. Moreover, we will encounter situations in the next chapter where it is very hard (if not
+impossible) to find the global MLE (i.e.\ the MLE at the highest maximum).
 
 You may rightfully wonder what distributions have the desirable property of only having one maximum in their likelihood functions. It turns out that those are
 exactly the distributions in the \href{https://en.wikipedia.org/wiki/Exponential_family}{exponential family}. The link includes a list of those distributions and
@@ -518,17 +517,17 @@ a maximum. That is, show that $ \mathcal{L}_{x}''(\theta^{*}) > 0 $, where $ \ma
 
 Recall that in Section~\ref{parameterEstimation} we set ourselves the goal of finding a good parameter estimate from the posterior distribution over parameters.
 Let us say that the best parameter estimate is the one with the highest posterior probability. Then the question is: do we actually accomplish our goal with the MLE?
-Does the MLE give us the parameter with the highest posterior probability? Unfortunately, the general answer is no. This should be evident from Bayes' rule.
+Does the MLE give us the parameter with the highest posterior probability? Unfortunately, the general answer is no, which becomes evident from Bayes' rule.
 \begin{equation}
-\underset{\theta}{arg\,max}~P(\Theta = \theta| X=x) = \underset{\theta}{arg\,max}~P(X=x|\Theta=\theta) \times P(\Theta = \theta)
+\underset{\theta}{\arg\max}~P(\Theta = \theta| X=x) = \underset{\theta}{\arg\max}~P(X=x|\Theta=\theta) \times P(\Theta = \theta)
 \end{equation}
 
 The MLE only maximises over the likelihood term but not over the prior! Hence it will in general be different from the \textbf{maximum a posteriori} estimate.
 
 \begin{Definition}[Maximum a posteriori estimate]
-A maximum a posteriori (MAP) estimate for a parameter set $ \Theta $ on a data sample $ x $ 
+A maximum a posteriori (MAP) estimate for a parameter set $ \Theta $ \chris{$\supp(\Theta)$?} on a data sample $ x $ 
 is a value $ \theta^{*} $ such that
-$$ \theta^{*} = \underset{\theta}{arg\,max}\, \, P(\Theta = \theta| X=x) \ . $$
+$$ \theta^{*} = \underset{\theta}{\arg\max}\, \, P(\Theta = \theta| X=x) \ . $$
 \end{Definition}
 
 The MAP estimate can be derived with exactly the same steps as the MLE. However, parameters are usually real values which means that distributions over them
@@ -537,25 +536,21 @@ are continuous distributions. Since we have not dealt with continuous distributi
 
 Notice that up to now, we justified the maximum likelihood principle merely from intuition by postulating that high likelihood should somehow be an indicator for
 good parameter values. We will now justify the maximum likelihood principle more formally, by showing that the MLE is just a special kind of MAP estimate. Since
-this implies that under certain condition the MLE will also have the highest posterior probability, we can safely argue for the MLE based on its posterior probability.
+this realisation implies that under certain condition the MLE will also have the highest posterior probability, we can safely argue for the MLE based on its posterior probability.
 
 Let us assume that our prior distribution $ P_{\Theta} $ over parameters is uniform. Then we can write the MAP estimator as
 \begin{align}
-\underset{\theta}{arg\,max}\, \, \frac{d}{d\theta} \log &(P(\Theta = \theta| X=x)) \\
-&= \underset{\theta}{arg\,max}\, \, \frac{d}{d\theta}\log (P(X=x|\Theta=\theta) \times P(\Theta = \theta)) \\
-&= \underset{\theta}{arg\,max}\, \, \frac{d}{d\theta}\log (P(X=x|\Theta=\theta)) + log(P(\Theta = \theta)) \label{eq:posteriorDiff} \\
-&= \underset{\theta}{arg\,max}\, \, \frac{d}{d\theta}\log (P(X=x|\Theta=\theta)) \label{eq:MLE=MAP}
+&\underset{\theta}{\arg\max}\, \, \frac{\partial}{\partial\theta} \log (P(\Theta = \theta| X=x)) \\
+= &\underset{\theta}{\arg\max}\, \, \frac{\partial}{\partial\theta}\log (P(X=x|\Theta=\theta) \times P(\Theta = \theta)) \\
+= &\underset{\theta}{\arg\max}\, \, \frac{\partial}{\partial\theta}\log (P(X=x|\Theta=\theta)) + \log(P(\Theta = \theta)) \label{eq:posteriorDiff} \\
+= &\underset{\theta}{\arg\max}\, \, \frac{\partial}{\partial\theta}\log (P(X=x|\Theta=\theta)) \label{eq:MLE=MAP} \, ,
 \end{align}
+where we used the uniformity of $\Theta$ to get from \eqref{eq:posteriorDiff} to \eqref{eq:MLE=MAP}. Notice that $ \log(P(\Theta = \theta)) $ is a constant value for all $ \theta $ by our assumption that the prior distribution is uniform. This means we can neglect it when finding the maximum, because if we add a constant to all likelihood values, the MLE will not change. 
 
-This tells us that if we choose a uniform parameter prior the MLE will be the MAP estimate. Hence, what we are actually assuming whenever we choose the MLE as
-our parameter estimate, is that our prior over parameters is uniform. This is a very strong assumption to make and one may rightfully criticise the maximum likelihood
-principle because of this assumption (actually one should).
+This derivation tells us that if we choose a uniform parameter prior, the MLE will be the MAP estimate. Hence, what we are actually assuming whenever we choose the MLE as
+our parameter estimate, is that our prior over parameters is uniform. This is a very strong assumption to make and one may rightfully criticise the maximum likelihood principle because of this assumption (actually one should).
 
-To be clear how we got from line \eqref{eq:posteriorDiff} to line \eqref{eq:MLE=MAP} simply notice that $ log(P(\Theta = \theta)) $ is a constant value for all $ \theta $
-by our assumption that the prior distribution is uniform. This means we can neglect it when finding the maximum, because if we add a constant to all likelihood values,
-we the MLE will not change. 
-
-After we have shown you how to correctly derive the MLE from the MAP estimate, let us warn you about a seemingly convincing but faulty argument to show the same thing.
+After we have shown how to correctly derive the MLE from the MAP estimate, let us warn you about a seemingly convincing but faulty argument to show the same thing.
 Assuming that we have a uniform prior, we could have deduced the equivalence of the MLE and MAP estimate much more shortly by stating that
 \begin{equation}
 P(\Theta = \theta| X=x) \propto P(X=x|\Theta=\theta) \label{eq:wrongDerivation}
@@ -563,7 +558,7 @@ P(\Theta = \theta| X=x) \propto P(X=x|\Theta=\theta) \label{eq:wrongDerivation}
 because $ P(\Theta = \theta)) $ is a constant. This argument is flawed, however. As we said above, $ P_{\Theta} $ is a continuous distribution. All single values of
 $ \Theta $ have probability 0 under any continuous distribution. This means that the constant of proportionality that we are assuming here is 0. However, in the
 previous chapter, we have made it explicit that proportionality only holds if the constant of proportionality is any real number \emph{other than 0}. Thus, 
-Equation~\eqref{eq:wrongDerivation} is not even well-defined.
+Equation~\eqref{eq:wrongDerivation} is not even well-defined. \chris{Hmm, by the same argument, you could argue that $\log(P(\Theta=\theta))$ is not well-defined: for a continuous distribution of $\Theta$, it's $\log(0)$??}
 
 Let us conclude this section by saying that for the rest of this course we will make the assumption that we are using uniform parameter priors with justification.
 This means that we can safely use the MLE in order to find the parameter value with the highest posterior probability.
@@ -573,7 +568,7 @@ This means that we can safely use the MLE in order to find the parameter value w
 If your calculus is a bit rusty or you have never taken a calculus class before, you should consult 
 \href{https://www.coursera.org/learn/calculus1}{OSU's excellent (and very fun) online course} which allows you to learn at your own pace. The course also comes with
 \href{https://mooculus.osu.edu/handouts}{a lecture script} that contains many insightful examples and exercises. Let us emphasise that doing statistics (including
-machine learning) without a solid understanding of calculus is basically impossible.
+machine learning) without a solid understanding of calculus is close to impossible.
 
 If you are looking for a good introduction to
 parameter estimation that covers everything we have discussed here and also goes a considerable stretch further, we refer you to 
