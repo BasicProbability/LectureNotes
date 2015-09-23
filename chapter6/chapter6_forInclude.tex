@@ -5,7 +5,7 @@ maxima and that sometimes it may be hard to impossible to find the global maximu
 with the overall highest likelihood value). Such a situation occurs whenever the probabilistic model
 that we use to model our observations is a \textbf{mixture model}.
 
-\begin{Definition}[Mixture Model]
+\begin{Definition}[Mixture Model]\label{def:mixtureModel}
 Given any set of probability distributions $ P_{X1}, \ldots, P_{Xn} $ that are defined over the same
 random variable $ X $ we define a mixture model as
 $ P = \underset{i=1}{\overset{n}{\sum}} \alpha_{i}P_{Xi} $
@@ -14,11 +14,6 @@ $ \underset{i=1}{\overset{n}{\sum}} \alpha_{i} = 1 $.
 We call the distributions $ P_{X1}, \ldots, P_{Xn} $ \textbf{mixture components} and their weights
 $ \alpha_{i}, 1 \leq i \leq n $ \textbf{mixture weights}.
 \end{Definition}
-
-\begin{Exercise}
-Show that a mixture model is a probability distribution.
-\end{Exercise}
-
 
 Mixture models are extremely useful whenever we have different ways to think about our data. Each way
 of conceptualising our data can be encoded by one of the mixture components of the mixture model.
@@ -40,16 +35,76 @@ A mixture model comes to the rescue. Instead of assuming that only one coin has 
 we assume that all three coins have contributed to generating the 10 sequences. However, their distributions
 may be unequal. This is exactly what the mixture weights capture. We will, as usual, call our data
 $ x $. Also, each mixture component will be a binomial distribution, parametrized by the parameters of
-the coins. Thus is enough to formulate our mixture model.
-\begin{align}
-P(X=x|\Theta_{1}^{3}=\theta_{1}^{3}, A = \alpha_{1}^{3}) 
-&= \alpha_{1}P(X=x|\Theta_{1}=\theta_{1}) \\
-&+ \alpha_{2}P(X=x|\Theta_{2}=\theta_{2}) \nonumber \\
-&+ \alpha_{3}P(X=x|\Theta_{3}=\theta_{3}) \nonumber
+the coins. This is enough to formulate our mixture model.
+\begin{align}\label{eq:mixtureExample}
+&P(X=x|\Theta_{1}^{3}=\theta_{1}^{3}, A = \alpha_{1}^{3}) 
+= \alpha_{1}P(X=x|\Theta_{1}=0.4) \\
+&+ \alpha_{2}P(X=x|\Theta_{2}=0.5) + \alpha_{3}P(X=x|\Theta_{3}=0.65) \nonumber
 \end{align}
 
+Notice that if we were given the mixture weights, estimating
+the parameters of the mixture components would be easy: we would simply find the MLE for each mixture component. The mixture
+model could then easily be constructed because the mixture weights are known. 
 
+In the model given by Equation~\eqref{eq:mixtureExample} we are facing the opposite problem: we know the parameters of the
+mixture components and we want to find good estimates for the mixture weights. How can we do this? Well, observe the constraints
+on mixture weights in Definition~\ref{def:mixtureModel}. All mixture weights have to be non-negative and they have to sum to 1.
+This means that we can interpret them as a probability distribution. In particular, this will be a distribution over parameters
+of the mixture components (assuming that all mixture components have the same parametric form). That is, we get the following
+equivalences:
+\begin{equation}
+\hskip 0.5cm \alpha_{1} = P(\Theta_{1} = \theta_{1}) \hskip 0.5cm \alpha_{2} = P(\Theta_{2} = \theta_{1}) \hskip 0.5cm \alpha_{3} = P(\Theta_{3} = \theta_{1})
+\end{equation}
+This means that we can rewrite our mixture model as
+\begin{align} \label{eq:probabilisticMixtureModel}
+&P(X=x) 
+= P(\Theta_{1} = 0.4)P(X=x|\Theta_{1}=0.4) \\
+&+ P(\Theta_{2} = 0.5)P(X=x|\Theta_{2}=0.5) + P(\Theta_{3} = 0.65)P(X=x|\Theta_{3}=0.65) \nonumber
+\end{align}
 
+Notice that in our examples we assume that we have only three possible binomial parameters, namely $ \theta_{1} = 0.4, \theta_{2} = 0.5, \theta_{3} = 0.65 $. 
+Notice further that each summand
+in \eqref{eq:probabilisticMixtureModel} is in fact a joint distribution by the chain rule so that we can again rewrite the model to
+\begin{align}
+P(X=x) &= P(X=x,\Theta_{1}=0.4) + P(X=x,\Theta_{2}=0.5) \\
+&+ P(X=x,\Theta_{3}=0.65) \nonumber \\
+&= \underset{i=1}{\overset{3}{{\sum}}} P(X=x,\Theta=\theta_{c_{i}}) \label{eq:marginal}
+\end{align}
+where line \eqref{eq:marginal} is a simple marginalisation step. Notice that we have just accomplished something impressive: we have given a probabilistic justification
+for why mixture models do indeed model our data. Each mixture component-weight pair gives rise to a joint distribution over parameters and data but by summing over the 
+possible parameters we get the probability of the data. By induction, we can easily show that mixture models are definable for any number of mixture components.
+
+\begin{Exercise}
+Show that a mixture model of size $ n $ is a model of the data, i.e. show that $  \alpha_{i}P_{i}(X=x) = P(X=x) $ if $ \alpha_{i} $ are mixture weights as 
+defined in \ref{def:mixtureModel}.
+\end{Exercise}
+
+Notice that we have shown above that the formulation of mixture models as purely probabilistic model and as linear combinations of probability distributions are
+equivalent. So why did we even bother to give a purely probabilistic justification? On the one hand, it is mathematically satisfying to trace back new concepts
+to concepts that we are already familiar with (like joint distributions and the chain rule). More importantly, however, the probabilistic interpretation of mixture
+weights allows us to estimate them using the maximum likelihood principle. This is something we could not have done, if we had regarded them solely as scale factors
+for the mixture components. In our example there are only three possible parameters, meaning that we can impose a multinomial distribution over them. Let us
+call the parameters of that multinomial $ \gamma_{1}, \gamma_{2}, \gamma_{3} $. Furthermore, remind yourself that our data consists of 100 i.i.d. Bernoulli
+trial, $ k $ of which came up heads (with the usual restrictions on $ k $). Then our mixture model is
+
+\begin{align}
+P(X=x| \Gamma_{1}^{3}= \gamma_{1}^{3}) &\propto 0.4^{\gamma_{1}} \times (0.4^{k}0.6^{n-k}) \\
+&+ 0.5^{\gamma_{2}} \times (0.5^{k}0.5^{n-k}) + 0.65^{\gamma_{3}} \times 0.65^{n}0.35^{n-k} \nonumber \\
+&= 0.4^{\gamma_{1}+k}0.6^{n-k} + 0.5^{\gamma_{2}+k}0.5^{n-k} + 0.65^{\gamma_{3}+k}0.35^{n-k} \label{eq:multinomialLikelihood}
+\end{align}
+
+We have dropped the binomial and multinomial coefficients in the above equations, because they are constant and thus irrelevant to maximum likelihood estimation
+of the multinomial parameters. This means that Equation~\eqref{eq:multinomialLikelihood} is proportional to our likelihood function and we will thus
+maximize it. As usual, let us take the derivative of the log of that equation first. Since Equation~\eqref{eq:multinomialLikelihood} is a sum, we will maximize
+each of the summands individually.
+
+\begin{align}
+\frac{d}{d\gamma_{1}} \log(0.4^{\gamma_{1}+k}0.6^{n-k}) &= \frac{d}{d\gamma_{1}} (\gamma_{1} + k)\times \log(0.4) + C = \frac{\gamma_{1} + k}{0.4} \\
+\frac{d}{d\gamma_{2}} \log(0.5^{\gamma_{1}+k}0.5^{n-k}) &= \frac{d}{d\gamma_{2}} (\gamma_{2} + k)\times \log(0.5) + C = \frac{\gamma_{2} + k}{0.5} \\
+\frac{d}{d\gamma_{3}} \log(0.65^{\gamma_{3}+k}0.35^{n-k}) &= \frac{d}{d\gamma_{3}} (\gamma_{3} + k)\times \log(0.65) + C = \frac{\gamma_{3} + k}{0.65}
+\end{align}
+
+If we set each of these derivatives to 0, we find that $ \gamma_{1} = 0.4 $, $ \gamma_{2} = 0.5 $ and $ \gamma_{3} = 0.65 $.
 
 \section{Basics of Information Theory}
 
