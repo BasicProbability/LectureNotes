@@ -26,6 +26,7 @@
 \newmdtheoremenv{Theorem}{Theorem}[chapter]
 \newmdtheoremenv{Definition}[Theorem]{Definition}
 \newmdtheoremenv{Exercise}[Theorem]{Exercise}
+\newmdtheoremenv{Lemma}[Theorem]{Lemma}
 
 \newcommand{\supp}{\operatorname{supp}} 
 \newcommand{\E}{\mathbb{E}}
@@ -45,16 +46,21 @@
 \maketitle
 \end{titlepage}
 
+\pagenumbering{roman}
 \tableofcontents
-\graphicspath{{../chapter3/}}
+\graphicspath{{../chapter3/}{../chapter5/}}
 
 % insert preface
 \newpage
 \input{../contributors/contributors}
+\clearpage
+\setcounter{page}{1}
+\pagenumbering{arabic}
 \input{../chapter1/chapter1_forInclude}
 \input{../chapter2/chapter2_forInclude}
 \input{../chapter3/chapter3_forInclude}
 \input{../chapter4/chapter4_forInclude}
+\input{../chapter5/chapter5_forInclude}
 
 
 \end{document}
