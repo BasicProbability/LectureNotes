@@ -106,9 +106,48 @@ each of the summands individually.
 
 If we set each of these derivatives to 0, we find that $ \gamma_{1} = 0.4 $, $ \gamma_{2} = 0.5 $ and $ \gamma_{3} = 0.65 $.
 
+
+\section{The EM algorithm}
+
+In order to estimate the parameters of mixture models, we can employ a classical algorithm of 
+\textbf{unsupervised learning}, namely the \textbf{expectation-maximisation (EM) algorithm}. This
+algorithm allows us to find a local maximum of the likelihood function of mixture models or, more
+generally, models with missing data. 
+
+Let us quickly introduce the idea of missing data: Assume you run a website the recommends movies
+based on a user's preferences. In order to make statistical predictions about what type of user
+likes what kind of movie, you ask your users to rate movies for you according to different categories.
+Say you ask your users to rate the movies for entertainment value, action and fun. What may happen is
+that some of your users only rate a movie in one or two of these three categories. However, these
+ratings are still valuable to you and you do not want to throw them away, just because they are lacking
+a rating in one category. Thus you have a data set with some missing data that you have to fill in somehow.
+
+In mixture models the missing data can be thought of as annotations that tell you which mixture component
+generated a given data point. If you had this information, you could simply do maximum likelihood estimation.
+However, since you do not know which mixture component generated your data point, you can only
+assume that all mixture components may have done so with a probability that is given by their mixture
+weights. 
+
+The EM algorithm allows you to probabilistically fill in the missing data and find good mixture weights
+(where you should understand \textit{good} in the maximum likelihood sense). The idea behind the
+algorithm is simple: compute the expected number of occurrences of the missing data values (the mixture 
+components) and then simply do maximum likelihood estimation on those expectations. Repeat the procedure 
+so till the likelihood does not increase any further. Notice that this procedure requires you to
+fix the number of mixture components in advance.
+
+More formally, assume a data set $ x_{1}^{n} $. Furthermore, define $ Y $ as a random variable $ m $
+mixture components. Then the likelihood function
+\begin{align}
+L_{x}(\theta) = P(X=x|\Theta=\theta) = \underset{i=1}{\overset{m}{\sum}} P(X=x, Y=y|\Theta=\theta)
+\end{align}
+where $ \Theta $ ranges over the parameters of the joint distribution $ P_{XY} $. As we said above,
+we are interested in the 
+
+
 \section{Basics of Information Theory}
 
-When we talk about \textit{information}, we often use the term in qualitative sense. We say things like \textit{This is valuable information} or 
+When we talk about \textit{information}, we often use the term in qualitative sense. We say things like 
+\textit{This is valuable information} or 
 \textit{We have a lack of information}. We can also make statements about some information being more helpful than other. For a long time, however,
 people have been unable to quantify information. The person who succeeded in this endeavour was \href{https://en.wikipedia.org/wiki/Claude_Shannon}{Claude E. Shannon}
 who with his famous 1948 article \textit{A Mathematical Theory of Communication} single-handedly created a new discipline: Information Theory! He also revolutionised
