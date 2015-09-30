@@ -182,7 +182,8 @@ the smaller is the chance that we commit a large error when estimating the mean 
 the weak law of large numbers.
 
 \begin{Theorem}[Weak law of large numbers]\label{weakLaw}
-For $n \in \mathbb{N}$, let $X_{1}^{n},$ be  i.i.d.\ distributed random variables with distribution $ P_{X} $ and expectation $ \E[X] $. Further let
+For $n \in \mathbb{N}$, let $X_{1}^{n},$ be  i.i.d.\ distributed random variables with distribution $ P_{X} $, expectation $ \E[X] \in \mathbb{R} $
+and variance $ var(X) = \sigma^{2} \in \mathbb{R} $. Further let
 $ X_{1}^{n} $ have sample mean $ \overline{\mu} = \frac{1}{n} \underset{i=1}{\overset{n}{\sum}X_{i}} $. Then for any real $ \eps > 0 $, it holds that 
 $$ \underset{n \rightarrow \infty}{\lim}P(|\mathbb{E}[X] - \overline{\mu}| \geq \eps) = 0 \ . $$
 \end{Theorem}
@@ -205,7 +206,7 @@ Besides having established Lemma~\ref{markovIneq}, \href{https://en.wikipedia.or
 probability theory. For example, if you go on to study information theory and/or any computational linguistics courses, you are guaranteed to encounter \href{https://en.wikipedia.org/wiki/Markov_chain}{Markov chains}. For now, let us move on to our second auxiliary lemma.
 
 \begin{Lemma}[Chebyshev's inequality]\label{Chebyshev}
-Let $ X $ be a RV with expectation $ \mathbb{E}[X] $ and variance $ var(X) = \sigma^{2} $. Furthermore, let $ \eps > 0 $. Then
+Let $ X $ be a RV with expectation $ \mathbb{E}[X] $ and variance $ var(X) = \sigma^{2} \in \mathbb{R} $. Furthermore, let $ \eps > 0 $. Then
 $$ P( \left|\mathbb{E}[X] - X \right| \geq \eps) \leq \dfrac{\sigma^{2}}{\eps^{2}} \ . $$ 
 \end{Lemma}
 
@@ -232,7 +233,7 @@ Chebyshev's Lemma~\ref{Chebyshev} then implies that
 \underset{n \rightarrow 0}{\lim}P(|\mathbb{E}[X] - \overline{\mu}| \geq \eps) \leq \frac{\sigma^{2}}{n\eps^{2}} \ .
 \end{equation}
 
-If we fix $ \mathbb{E}[X] $ and $ \eps > 0 $ and increase $n$, the number of i.i.d.\ samples, this probability will go to 0.
+If we fix $ \eps > 0 $ and increase $n$, the number of i.i.d.\ samples, this probability will go to 0.
 More formally, choose $ \delta > 0 $. One way to show $ P(|\mathbb{E}[X] - \overline{\mu}| \geq \eps) $ to be smaller than $ \delta $, is to show 
 $ \frac{\sigma^{2}}{n\eps^{2}} < \delta $ which happens whenever $ \frac{\sigma^{2}}{\delta\eps^{2}} < n $. Thus, if we sample
 more than $ \frac{\sigma^{2}}{\delta\eps^{2}} $ data points, we can ensure that $ P(|\mathbb{E}[X] - \overline{\mu}| \geq \eps) < \delta $.
@@ -508,7 +509,7 @@ you will be happy to see that most commonly used distributions are members of th
 
 \begin{Exercise}
 You are given some likelihood function $ L_{x} $ for the binomial distribution along with its MLE $ \theta^{*} $. Show rigorously that $ \theta^{*} $ is indeed
-a maximum. That is, show that $ \mathcal{L}_{x}''(\theta^{*}) > 0 $, where $ \mathcal{L}_{x}'' $ is the second derivative of the log-likelihood function.
+a maximum. That is, show that $ \mathcal{L}_{x}''(\theta^{*}) < 0 $, where $ \mathcal{L}_{x}'' $ is the second derivative of the log-likelihood function.
 \end{Exercise}
 
  

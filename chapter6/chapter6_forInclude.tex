@@ -1,4 +1,6 @@
-\section{Mixture Models}
+\chapter{The EM algorithm and Information Theory}
+
+\section{Mixture Models}\label{sec:mixtureModels}
 
 In the previous chapter we have mentioned that it may happen that a likelihood function has multiple 
 maxima and that sometimes it may be hard to impossible to find the global maximum (i.e. the maximum
@@ -46,8 +48,7 @@ Notice that if we were given the mixture weights, estimating
 the parameters of the mixture components would be easy: we would simply find the MLE for each mixture component. The mixture
 model could then easily be constructed because the mixture weights are known. 
 
-In the model given by Equation~\eqref{eq:mixtureExample} we are facing the opposite problem: we know the parameters of the
-mixture components and we want to find good estimates for the mixture weights. How can we do this? Well, observe the constraints
+What happens if both the parameters of the mixture components and the mixture weights are unknown? First, observe the constraints
 on mixture weights in Definition~\ref{def:mixtureModel}. All mixture weights have to be non-negative and they have to sum to 1.
 This means that we can interpret them as a probability distribution. In particular, this will be a distribution over parameters
 of the mixture components (assuming that all mixture components have the same parametric form). That is, we get the following
@@ -83,28 +84,11 @@ Notice that we have shown above that the formulation of mixture models as purely
 equivalent. So why did we even bother to give a purely probabilistic justification? On the one hand, it is mathematically satisfying to trace back new concepts
 to concepts that we are already familiar with (like joint distributions and the chain rule). More importantly, however, the probabilistic interpretation of mixture
 weights allows us to estimate them using the maximum likelihood principle. This is something we could not have done, if we had regarded them solely as scale factors
-for the mixture components. In our example there are only three possible parameters, meaning that we can impose a multinomial distribution over them. Let us
-call the parameters of that multinomial $ \gamma_{1}, \gamma_{2}, \gamma_{3} $. Furthermore, remind yourself that our data consists of 100 i.i.d. Bernoulli
-trial, $ k $ of which came up heads (with the usual restrictions on $ k $). Then our mixture model is
+for the mixture components. 
 
-\begin{align}
-P(X=x| \Gamma_{1}^{3}= \gamma_{1}^{3}) &\propto 0.4^{\gamma_{1}} \times (0.4^{k}0.6^{n-k}) \\
-&+ 0.5^{\gamma_{2}} \times (0.5^{k}0.5^{n-k}) + 0.65^{\gamma_{3}} \times 0.65^{n}0.35^{n-k} \nonumber \\
-&= 0.4^{\gamma_{1}+k}0.6^{n-k} + 0.5^{\gamma_{2}+k}0.5^{n-k} + 0.65^{\gamma_{3}+k}0.35^{n-k} \label{eq:multinomialLikelihood}
-\end{align}
-
-We have dropped the binomial and multinomial coefficients in the above equations, because they are constant and thus irrelevant to maximum likelihood estimation
-of the multinomial parameters. This means that Equation~\eqref{eq:multinomialLikelihood} is proportional to our likelihood function and we will thus
-maximize it. As usual, let us take the derivative of the log of that equation first. Since Equation~\eqref{eq:multinomialLikelihood} is a sum, we will maximize
-each of the summands individually.
-
-\begin{align}
-\frac{d}{d\gamma_{1}} \log(0.4^{\gamma_{1}+k}0.6^{n-k}) &= \frac{d}{d\gamma_{1}} (\gamma_{1} + k)\times \log(0.4) + C = \frac{\gamma_{1} + k}{0.4} \\
-\frac{d}{d\gamma_{2}} \log(0.5^{\gamma_{1}+k}0.5^{n-k}) &= \frac{d}{d\gamma_{2}} (\gamma_{2} + k)\times \log(0.5) + C = \frac{\gamma_{2} + k}{0.5} \\
-\frac{d}{d\gamma_{3}} \log(0.65^{\gamma_{3}+k}0.35^{n-k}) &= \frac{d}{d\gamma_{3}} (\gamma_{3} + k)\times \log(0.65) + C = \frac{\gamma_{3} + k}{0.65}
-\end{align}
-
-If we set each of these derivatives to 0, we find that $ \gamma_{1} = 0.4 $, $ \gamma_{2} = 0.5 $ and $ \gamma_{3} = 0.65 $.
+There is one additional problem, however: if both the mixture weights and the mixture components are unknown, there is no closed-form solution for estimating the
+MLE. In other words, we can not simply apply calculus as we have been doing up to now. For this reason, we will turn to the \textbf{EM algorithm}, that allows
+us to at least find a local maximum of the likelihood function.
 
 
 \section{The EM algorithm}
@@ -136,12 +120,102 @@ so till the likelihood does not increase any further. Notice that this procedure
 fix the number of mixture components in advance.
 
 More formally, assume a data set $ x_{1}^{n} $. Furthermore, define $ Y $ as a random variable $ m $
-mixture components. Then the likelihood function
+mixture components. In more general case of missing data, $ Y $ is called \textbf{latent} or \textbf{hidden variable}
+because it is not observed. Then the likelihood function
 \begin{align}
 L_{x}(\theta) = P(X=x|\Theta=\theta) = \underset{i=1}{\overset{m}{\sum}} P(X=x, Y=y|\Theta=\theta)
 \end{align}
-where $ \Theta $ ranges over the parameters of the joint distribution $ P_{XY} $. As we said above,
-we are interested in the 
+where $ \Theta $ ranges over the parameters of the joint distribution $ P_{XY} $. Let $ t(y) $ be any
+statistic of the latent data. In most practical applications, $ t(x) $ is simply the count of the latent
+value $ y $ in the latent data. Then, given some estimate $ \overline{\theta}^{(i)} $ for the parameters of the joint
+distribution compute the expected value of the statistic $ t(y) $.
+\begin{equation} \label{Estep}
+t(y)^{(i+1)} = \E(t(y)|X = x,\overline{\theta}^{(i+1)})
+\end{equation} 
+
+Observe that we introduced superscripts. The EM algorithm is an iterative algorithm, meaning we repeat its steps several
+times. We use the the superscript to indicate the number of the repetition, thus $ i \in \mathbb{N} 0 \leq i \leq m $. We percolate
+information from previous iterations by conditioning on their parameter estimates; $ \overline{\theta}^{(0)} $ can be set arbitrarily.
+
+Equation~\eqref{Estep} is know as the \textbf{E(xpectation)-step} of the EM algorithm. To make the algorithm complete, we are still lacking a
+\textbf{M(aximization)-step}. But this one is simple. We pretend that the expected statistics of the latent data were actually observed. If
+our statistics are counts, then we simply pretend that we observed outcome $ y $ exactly $ t(y)^{(i+1)} $ times. Notice that since $ t(y)^{(i+1)} $
+is an expectation, it is a real and not a natural number. Once we pretend to observe the expected statistics, the maximization step can done
+using be maximum likelihood estimation.
+\begin{equation} \label{Mstep}
+\overline{\theta}^{(i+1)} = \underset{\theta}{\mbox{arg max}} P(X=x, t(Y) = t(y)|\theta)
+\end{equation}
+
+\begin{Definition}[EM algorithm]\label{def:EM}
+We assume a data set $ x = x_{1}^{n} $ and postulate that there is unobserved data $ y = y_{1}^{m} $ that belongs to that data set. We also
+assume a probabilistic model whose parameters are realisations of a RV $ \Theta $. Take any
+statistic $ t(y) $ of the latent data. Then any iterative algorithm with $ k $ iterations $ i \leq k; i,k \in \mathbb{N} $ that performs the steps
+\begin{align*}
+\mbox{\textbf{E-step} }~~~& t(y)^{(i+1)} &=& \E(t(y)|X = x, \Theta = \overline{\theta}^{(i+1)}) \\
+\mbox{\textbf{M-step} }~~~& \overline{\theta}^{(i+1)} &=& \underset{\theta}{\mbox{arg max}}~~P(X=x, t(Y) = t(y)|\Theta = \theta) 
+\end{align*}
+to update the model parameters is called an EM algorithm.
+\end{Definition}
+
+\paragraph{Example of an EM algorithm} Assume as in Section~\ref{sec:mixtureModels} that our data is $ x=x^{10}_{1} $ where each $ x_{i} $ is the 
+number of heads that we observed in a sequence of ten coin tosses. Again we also assume mixture components that are binomials with parameters
+$ 0.4, 0.5, 0.65 $. The latent data in this case is an annotation that for each observed sequence $ x_{i} $ reveals the coin that has been used
+to generate that sequence. Thus we have latent data $ y=y_{1}^{n} $ with $ supp(Y) = \{0.4,0.5,0.65\} $. Both the observed and latent variables
+are assumed i.i.d.
+We will assume that the fair coin is more likely to be used and hence set its initial mixture weight to $ 0.5 $ and the mixture weights of the 
+other two coins to $ 0.25 $ (any other choice would also be fine). Now let 
+us take a closer look a our data. To shorten notation, we write it as a list where the i$ ^{th} $ entry is the value of $ x_{i} $.
+$$ [6, 4, 7, 5, 6, 3, 5, 5, 7, 3] $$
+Then for each $ x_{i} $ we assume that it was generated by each of the three coins. For the first observation we get the following likelihood values.
+\begin{align}
+&P(X_{1}=6|\Theta=0.4) = 0.1114767& \\
+&P(X_{1}=6|\Theta=0.5) = 0.2050781& \nonumber \\ 
+&P(X_{1}=6|\Theta=0.65) = 0.2376685& \nonumber
+\end{align}
+
+Recall that the mixture weights are nothing else than priors over mixture components. Hence, in order to get the joint distribution over observed and
+latent data, we multiply the likelihoods by the mixture weights.
+\begin{align}
+&P(X_{1}=6,\Theta=0.4) = 0.02786918 \\
+&P(X_{1}=6,\Theta=0.5) = 0.1025391 \nonumber \\ 
+&P(X_{1}=6,\Theta=0.65) = 0.05941712 \nonumber
+\end{align}
+
+We are interested in the expected number of times that each coin has generated $ x_{1} $. Since $ x_{1} $ has been generated by exactly one coin,
+the highest expected count is 1. To see this, simply imagine that each sequence of tosses is padded with one more number indicating the coin
+used to produce the sequence. Then clearly, this coin is observed once as a sequence generator.
+
+In order to compute an expectation we first need a distribution over the mixture components. This distribution is simply the posterior. The
+posterior given $ x_{1} $ is shown below.
+\begin{align}\label{eq:posterior}
+P(\Theta=0.4|X_{1}=6) = 0.146814 \\
+P(\Theta=0.5|X_{1}=6) = 0.5401758 \nonumber \\
+P(\Theta=0.65|X_{1}=6) = 0.3130094 \nonumber
+\end{align}
+
+Now we can compute the expectation. We will use an indicator function ($ I_{a}(x) = 1 \mbox{ if } a=x;~0 $ otherwise) 
+for that because we each latent value has (hypothetically) been observed exactly once
+together with the observed data point $ x_{1} $. However, the probability of observing the latent value together with $ x_{1} $ follows a distribution.
+This distribution is exactly the posterior in \eqref{eq:posterior}. This means that $ \E[I_{0.4}(\theta)] = P(\Theta=0.4|X_{1}=6) $ and likewise for the
+other two mixture components.
+
+We compute these expectations for each data point and add them up. This gives us the expectations over the whole data set $ x $ and completes the E-step.
+In the M-step we assume that these expected values are the actual counts of how often we have observed each latent value. Let us call the counts 
+$ c_{0.4}, c_{0.5}, c_{0.65} $ where the index points to the corresponding mixture component. According to our model, the mixture components are multinomially
+distributed and thus in the M-step we want to find the MLE of that multinomial. In general, the MLE for $ \theta_{i} $ of a multinomial is
+$ \frac{c_{i}}{n} $\footnote{This can easily be seen by letting $ c_{i} $ be the number of successes in the realisation of a binomial RV and the sum of all
+$ c_{j},~j \not = i $ be the number of failures. Then clearly $ \frac{c_{i}}{n} $ is the MLE.}. In our case $ n=10 $. Thus we set 
+$ \theta_{i}^{1} = \frac{c_{i}}{n} $ and complete the M-step. With our new parameter estimates, we can now proceed to the second iteration of EM. \bigskip
+
+\philip{Include proof of correctness?}
+%\section{EM is a Maximum Likelihood Estimator}
+%
+%We are now going to show that the EM algorithm indeed gives us a maximum likelihood estimate. To this end we introduce an auxiliary function $ Q $ that
+%for any pair of parameters $ (\theta',\theta) $ gives us the log-likelihood over the hidden data $ \mathbb{y}(\theta') $ assuming that the hidden data
+%is observed according to the expectations computed in the E-step using $ \theta $ as an initial parameter.
+%\begin{equation}
+%Q(\theta',\theta) = \E[\mathbb{L}_{y,x}(\theta'|x,\theta)
+%\end{equation}
 
 
 \section{Basics of Information Theory}
@@ -190,14 +264,6 @@ It measures the information of a binary decision, like a coin flip or an answer 
 The entropy of the Bernoulli is 1 when the distribution is uniform, i.e. when both choices are equally 
 probable. 
 
-We also promised you at the outset of this section that you could easily transfer results from probability
-theory.  So let us do this for a couple of cases. The most obvious connection seems to exist between
-entropy and our results about expectations. For example, we know that expectation is linear, meaning
-that
-\begin{equation}
-\mathbb{E}[aX + bY] = a\mathbb{E}[X] + b\mathbb{E}[Y]
-\end{equation}
-where $ X,Y $ are RVs that share the same set of values and $ a,b \in \mathbb{R} $ are constants.
 \begin{figure}
 \center
 \includegraphics[scale=0.5]{binaryEntropy.png}
@@ -237,13 +303,61 @@ what is the entropy of moving the king?
 \end{Exercise}
 
 At the outset of this section we promised you that you could easily transfer results from probability 
-theory to information theory. The most obvious connection exists between entropy and our results about
-expectation. For example, we know that expectation is linear, meaning that for random variable $ X,Y $
-that range over the same values and constants $ a,b \in \mathbb{R} $ it is true that
-\begin{equation}
-\mathbb{E}[aX+bY] = a\mathbb{E}[X] + b\mathbb{E}[Y] \ .
-\end{equation}
-Let us attempt the same thing for the entropy function.
-\begin{equation}
-H(aX + bY) = \underset{x \in supp(X)}{\sum} -\log(aX + bY)*P(X 
-\end{equation}
+theory to information theory. We will not be able to show any kind of linearity for entropy because it contains
+log-terms and the logarithm is not linear. We can however find alternative expressions for joint entropy (where 
+the joint entropy is simply the entropy of a joint RV). Before we do so, let us also define the notion of 
+conditional entropy.
+
+\begin{Definition}[Conditional Entropy]
+For two jointly distributed \\ RVs $ X,Y $ the conditional entropy of $ X $ given that $ Y $ is defined as
+$$ H(X|Y) := \E[-\log_{2}(P(X=x|Y=y))] \ . $$
+\end{Definition}
+
+With this definition at hand we will now show that the joint entropy decomposes according to the
+chain rule.
+
+\begin{align}
+H(X,Y) &= \underset{x \in supp(X), y \in supp(Y)}{\sum} -\log(P(X=x,Y=y)) \times P(X=x, Y=y) \\
+&= \underset{x \in supp(X), y \in supp(Y)}{\sum} -\log(P(X=x| Y=y)) \\ &- \underset{y \in supp(Y)}{\sum}\log(P(Y=y)) \times P(Y=y) \nonumber \\
+&= H(X|Y) + H(Y)
+\end{align}
+
+\begin{Exercise}
+Proof that $ H(X,Y|Z) = H(X|Z) + H(Y|Z) $ if $ X \bot Y|Z $.
+\end{Exercise}
+
+Now that we have seen some information-theoretic concepts, you may be happy to hear that there also is an information-theoretic interpretation
+of EM. This interpretation will also help us to get a better intuition for the algorithm. To formulate that interpretation we will need
+one more concept, however.
+
+\begin{Definition}[Relative Entropy]
+The relative entropy of RVs \\ $ X,Y $ with $ supp(X) \subseteq supp(Y) $ is defined as
+$$ D(X||Y) = \E_{P_{X}}\left[\frac{P(X=x)}{P(Y=x)} \right] \ . $$
+If $ P_{X}(y) = 0 $ for any $ y \in supp(Y) $ we define $ D(X||Y) = \infty $.
+\end{Definition}
+
+The relative entropy is also commonly known as \textbf{Kullback-Leibler (KL)} divergence. It measures the entropy of $ X $ as scaled to $ Y $. Intuitively,
+it gives a measure of how ``far away'' $ P_{X} $ is from $ P_{Y} $. To understand ``far away'', recall that entropy is a measure of uncertainty. The
+relative entropy measure the uncertainty that you have about $ P_{X} $ if you know $ P_{Y} $. This uncertainty will be low if both distributions place most
+of their mass on the same outcomes. Since $ \log(1) = 0 $ the relative entropy is 0 if $ P_{X} = P_{Y} $.
+
+It is worthwhile to point out the difference between relative and conditional entropy. Conditional entropy is the average entropy of $ X $ given that you
+know what value $ Y $ takes on. In the case of relative entropy you do not know the value of $ Y $, only its distribution.
+
+\begin{Exercise}
+\philip{We can use this one for homework.} Show that $ D(X,Y|Y) = H(X|Y) $. Furthermore show that $ D(X,Y|Y) = H(X) $ if $ X\bot Y $.
+\end{Exercise}
+
+\philip{Include this?}
+\section{An Information-theoretic Interpretation of EM}
+
+\section*{Further reading}
+
+At the ILLC, the best place to learn more about information theory is \href{http://homepages.cwi.nl/~schaffne/courses/inftheory/2015/}{Christan Schaffner's}
+course that is taught every year. David MacKay also offers \href{http://www.inference.phy.cam.ac.uk/itprnn/book.pdf}{a free book on the subject}. Finally,
+Coursera also offers \href{https://www.coursera.org/course/informationtheory}{an online course on information theory}.
+
+To get a better understanding of EM and the other concepts discussed in this script along with some more examples, consult 
+\href{http://www.cs.columbia.edu/~mcollins/em.pdf}{Micheal Collins' lecture notes} .
+
+\end{document}
