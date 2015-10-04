@@ -75,7 +75,7 @@ P(X=x) &= P(X=x,\Theta_{1}=0.4) + P(X=x,\Theta_{2}=0.5)  \\
 \end{align}
 where \eqref{eq:marginal} is a simple marginalisation step. Notice that we have just accomplished something impressive: we have given a probabilistic justification
 for why mixture models do indeed model our data. Each mixture-component/weight pair gives rise to a joint distribution over parameters and data but by summing over the 
-possible parameters we get the probability of the data. By induction, we can easily show that mixture models can be defined for any number of mixture components.
+possible parameters we get the probability of the data. We can easily show that mixture models can be defined for any number of mixture components.
 
 \begin{Exercise}
 Show that a mixture model of size $ n $ is a model of the data, i.e.\ show that $  \sum_{i=1}^n \alpha_{i}P(X_i=x) = P(X=x) $ \chris{The previous $P_i$ was not defined} if $ \alpha_{i} $ are mixture weights as 
@@ -88,8 +88,8 @@ to concepts that we are already familiar with (like joint distributions and the 
 weights allows us to estimate them using the maximum-likelihood principle. This estimation is something we could not have done, if we had regarded them solely as scale factors
 for the mixture components. 
 
-There is one additional problem, however: if both the mixture weights and the mixture components are unknown, there is no closed-form solution for estimating the
-MLE. In other words, we can not simply apply calculus as we have been doing up to now. For this reason, we turn to the \textbf{EM algorithm}, that allows
+There is one additional problem, however: if the mixture weights are unknown, there is no closed-form solution for estimating the likelihood function. This is because
+the likelihood depends on the parameters of the mixture components their priors, the mixture weights, are unknown. In other words, we can not simply apply calculus as we have been doing up to now. For this reason, we turn to the \textbf{EM algorithm}, that allows
 us to at least find a local maximum of the likelihood function.
 
 
@@ -115,23 +115,27 @@ However, since you do not know which mixture component generated your data point
 assume that all mixture components may have done so with a probability that is given by the posterior distribution
 over mixture components.
 
-The EM algorithm allows you to probabilistically fill in the missing data and find good mixture weights
+The EM algorithm allows us to probabilistically fill in the missing data and find good mixture weights
 (where you should understand \textit{good} in the maximum-likelihood sense). The idea behind the
 algorithm is simple: compute the expected number of occurrences of the missing data values (the mixture 
 components) and then do maximum likelihood estimation on those expectations. Repeat the procedure 
-until the likelihood does not increase any further. Notice that this procedure requires you to
+until the likelihood does not increase any further. Notice that this procedure requires to
 fix the number of mixture components in advance.
 
 More formally, assume a data set $ x_{1}^{n} $. Furthermore, define $ Y $ as a random variable indicating $ m $ possible
 mixture components. In the more general case of missing data, $ Y $ is called \textbf{latent} or \textbf{hidden variable}
-because it is not observed. Then the likelihood function if 
+because it is not observed. Then the likelihood function is 
 \begin{align}
 L_{x}(\theta) = P(X=x|\Theta=\theta) = \underset{y=1}{\overset{m}{\sum}} P(X=x, Y=y|\Theta=\theta)
 \end{align}
-where $ \Theta $ ranges over the parameters of the joint distribution $ P_{XY} $. Let $ t(y) $ be any
-statistic of the latent data. In most practical applications, $ t(y) $ is simply the count of the latent
-value $ y $ in the latent data. Then, given some estimate $ \overline{\theta}^{(i)} $ for the parameters of the joint
-distribution compute the expected value of the statistic $ t(y) $. \chris{Hmm, what is the RV in this expectation? We should have some RV to compute the expectation over... while fixing the data $x$ and the parameter $\theta$. I'm also confused about the $y$. Notation-wise it looks like an outcome of $Y$, so $y \in \supp(Y)$, but it could also be the ``latent data'' (in analogy to $x$ which is the data)? Or is it $t(Y)$ and the expectation is taken over $Y$?}
+where $ \Theta $ ranges over the parameters of the joint distribution $ P_{XY} $. Let $ t(y) $ be the
+statistic that allows for the computation of the MLE. For all distributions that we have seen so far and in fact for all
+distributions in the exponential family, this statistic is the number of times we observe a particular outcome $ y $. The formulation
+that we give of the EM algorithm is specific for exponential family distributions and can be made more specific. However, since virtually
+all distributions that are of interest in practice do belong to the exponential family, we will not make this kind of generalisation.
+
+Given some estimate $ \overline{\theta}^{(i)} $ for the parameters of the joint
+distribution compute the expected value of the statistic $ t(y) $.
 \begin{equation} \label{Estep}
 t(y)^{(i+1)} = \E(t(y)|X = x,\Theta = \overline{\theta}^{(i+1)})
 \end{equation} 
@@ -152,8 +156,8 @@ using be maximum-likelihood estimation:
 
 \begin{Definition}[EM algorithm]\label{def:EM}
 We assume a data set $ x = x_{1}^{n} $ and postulate that there is unobserved data $ y = y_{1}^{m} $ that belongs to that data set. We also
-assume a probabilistic model whose parameters are realisations of a RV $ \Theta $. Take any
-statistic $ t(y) $ of the latent data. Then any iterative algorithm with $ k $ iterations that performs the following steps for $0\leq i \leq k$,
+assume a probabilistic model whose parameters are realisations of a RV $ \Theta $. Let $ t(y) $ be count
+of outcome $ y $. Then any iterative algorithm with $ k $ iterations that performs the following steps for $0\leq i \leq k$,
 \begin{align*}
 \mbox{\textbf{E-step:} } \quad t(y)^{(i+1)} &= \E(t(y) \mid X = x, \Theta = \overline{\theta}^{(i+1)}) \\
 \mbox{\textbf{M-step:} } \qquad \overline{\theta}^{(i+1)} &= \underset{\theta}{\arg\max} \; P(X=x, t(Y) = t(y) \mid \Theta = \theta) 
@@ -199,7 +203,7 @@ P(\Theta=0.65|X_{1}=6) = 0.3130094 \nonumber
 
 We can compute the expectation. As stastic of the latent value $a \in \supp(Y)$\chris{correct?}, we use an indicator function ($ I_{a}(\theta) = 1 \mbox{ if } a=\theta;~0 $ otherwise) 
 because each latent value has (hypothetically) been observed exactly once
-together with the observed data point $ x_{1} $. However, the probability of observing the latent value $a$ together with $ x_{1} $ follows a distribution.
+together with the observed data point $ x_{1} $. The probability of observing the latent value together with $ x_{1} $ follows the posterior distribution in \eqref{eq:posterior}. 
 This distribution is exactly the posterior in \eqref{eq:posterior}. For instance, $ \E[I_{0.4}(\theta)] = P(\Theta=0.4|X_{1}=6) $ and likewise for the
 other two mixture components.
 
@@ -230,7 +234,7 @@ does not occur very often, meaning that if we sample from the RV repeatedly, we 
 mass of the distribution is concentrated on only a small subset of its support. 
 
 On the other hand, we quite often are surprised,
-if we cannot predict what the outcome of our next draw from the RV might be. We are surprised when the distribution over values of the RV is uniform. Thus,
+if we cannot predict what the outcome of our next draw from the RV might be. We are surprised when the distribution over values of the RV is (close to) uniform. Thus,
 we are going to be most surprised on average if we are observing realisations of a uniformly distributed RV.
 
 Shannon's idea was that observing RVs that cause a lot of surprises is informative because we cannot predict the outcomes and with each new outcome we have effectively
@@ -256,7 +260,7 @@ The entropy $H(P_X)$ of a RV $ X $ with distribution $P_X$ is defined as $H(P_X)
 Figure~\ref{fig:binaryEntropy} shows the entropy of the Bernoulli distribution as a function of the
 parameter $ \theta $. The entropy function of the Bernoulli is often called the \textbf{binary entropy}.
 It measures the information of a binary decision, like a coin flip or an answer to a yes/no-question.
-The entropy of the Bernoulli is 1 when the distribution is uniform, i.e.\ when both choices are equally 
+The entropy of the Bernoulli is 1 bit when the distribution is uniform, i.e.\ when both choices are equally 
 probable. 
 
 \begin{figure}
