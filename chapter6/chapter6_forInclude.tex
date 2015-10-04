@@ -209,7 +209,22 @@ $ c_{0.4}, c_{0.5}, c_{0.65} $ where the index points to the corresponding mixtu
 distributed and thus in the M-step we want to find the MLE of that multinomial. In general, the MLE for $ \theta_{i} $ of a multinomial is
 $ \frac{c_{i}}{n} $\footnote{This fact can easily be seen by letting $ c_{i} $ be the number of successes in the realisation of a binomial RV and the sum of all
 $ c_{j},~j \not = i $ be the number of failures. Then clearly $ \frac{c_{i}}{n} $ is the MLE.}. In our case $ n=10 $. Thus we set 
+<<<<<<< HEAD
 $ \theta_{i}^{1} = \frac{c_{i}}{n} $ and complete the M-step. With our new parameter estimates, we can proceed to the second iteration of EM.
+=======
+$ \theta_{i}^{1} = \frac{c_{i}}{n} $ and complete the M-step. With our new parameter estimates, we can proceed to the second iteration of EM. \bigskip
+
+\philip{Include proof of correctness?}\chris{What does correctness mean here?}
+%\section{EM is a Maximum Likelihood Estimator}
+%
+%We are now going to show that the EM algorithm indeed gives us a maximum likelihood estimate. To this end we introduce an auxiliary function $ Q $ that
+%for any pair of parameters $ (\theta',\theta) $ gives us the log-likelihood over the hidden data $ \mathbb{y}(\theta') $ assuming that the hidden data
+%is observed according to the expectations computed in the E-step using $ \theta $ as an initial parameter.
+%\begin{equation}
+%Q(\theta',\theta) = \E[\mathbb{L}_{y,x}(\theta'|x,\theta)
+%\end{equation}
+
+>>>>>>> 25438cee8e149212c958d7030422cc838f9497b6
 
 \section{Basics of Information Theory}
 
