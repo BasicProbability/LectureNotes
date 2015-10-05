@@ -8,7 +8,7 @@ with the overall highest likelihood value). Such a situation occurs whenever the
 that we use to model our observations is a \textbf{mixture model}.
 
 \begin{Definition}[Mixture Model]\label{def:mixtureModel}
-Given any set of probability distributions $ P_{X_1}, \ldots, P_{X_n} $ over the same RV $ X $ 
+Given any set of probability distributions $ P_{X_1}, \ldots, P_{X_n} $ 
 we define a mixture model as
 $ P = \underset{i=1}{\overset{n}{\sum}} \alpha_{i}P_{X_i} $
 where we require that all $ \alpha_{i} \geq 0$ and 
@@ -131,14 +131,15 @@ L_{x}(\theta) = P(X=x|\Theta=\theta) = \underset{y=1}{\overset{m}{\sum}} P(X=x, 
 \end{align}
 where $ \Theta $ ranges over the parameters of the joint distribution $ P_{XY} $. Let $ t(y) $ be the
 statistic that allows for the computation of the MLE. For all distributions that we have seen so far and in fact for all
-distributions in the exponential family, this statistic is the number of times we observe a particular outcome $ y $. The formulation
+distributions in the exponential family, this statistic is the number of times we observe each outcome 
+in $ \supp(Y) $. The formulation
 that we give of the EM algorithm is specific for exponential family distributions and can be made more specific. However, since virtually
 all distributions that are of interest in practice do belong to the exponential family, we will not make this kind of generalisation.
 
 Given some estimate $\theta^{(i)} $ for the parameters of the joint
 distribution compute the expected value of the statistic $ t(y) $.
 \begin{equation} \label{Estep}
-t(y)^{(i+1)} = \E(t(y)|X = x,\Theta = \theta^{(i)})
+t(y)^{(i+1)} = \E(t(Y)|X = x,\Theta = \theta^{(i)})
 \end{equation} 
 
 Observe that we introduced superscripts. The EM algorithm is an iterative algorithm, meaning we repeat its steps several
@@ -151,17 +152,18 @@ our statistics are counts, then we simply pretend that we observed outcome $ y $
 is an expectation, it is a real and not a natural number. Once we pretend to observe the expected statistics, the maximization step can be done
 using be maximum-likelihood estimation:
 \begin{equation} \label{Mstep}
-\theta^{(i+1)} = \underset{\theta}{\arg\max} P(X=x, t(Y) = t(y)|\theta)
+\theta^{(i+1)} = \underset{\theta}{\arg\max} P(X=x, t(Y) = t(y)^{(i+1)}|\theta)
 \end{equation}
 
 \begin{Definition}[EM algorithm]\label{def:EM}
-We assume a data set $ x = x_{1}^{n} $ and postulate that there is unobserved data $ y = y_{1}^{m} $ that belongs to that data set. We also
+We assume a data set $ x = x_{1}^{n} $ and postulate that there is unobserved data $ y = y_{1}^{m} $ which
+is a realisation of RV $ Y $. We also
 assume a probabilistic model whose parameters are realisations of a RV
-$ \Theta $. Let $ t(y) $ be the count of outcome $ y $. Then any
+$ \Theta $. Let $ t(y) $ be the counts of all outcomes in the realisation $ y $. Then any
 iterative algorithm with $ k $ iterations that performs the following
 steps for $0\leq i \leq k-1$, 
 \begin{align*}
-\mbox{\textbf{E-step:} } \quad t(y)^{(i+1)} &= \E(t(y) \mid X = x, \Theta = \theta^{(i)}) \\
+\mbox{\textbf{E-step:} } \quad t(y)^{(i+1)} &= \E(t(Y) \mid X = x, \Theta = \theta^{(i)}) \\
 \mbox{\textbf{M-step:} } \qquad \theta^{(i+1)} &= \underset{\theta}{\arg\max} \; P(X=x, t(Y) = t(y)^{(i+1)} \mid \Theta = \theta) 
 \end{align*}
 to update the model parameters is called an EM algorithm. 
