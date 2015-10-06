@@ -58,14 +58,16 @@ relations:
 \hskip 0.5cm \alpha_{1} = P(\Theta_{1} = \theta_{1}) \hskip 0.5cm \alpha_{2} = P(\Theta_{2} = \theta_{1}) \hskip 0.5cm \alpha_{3} = P(\Theta_{3} = \theta_{1})
 \end{equation}
 Hence, we can rewrite our mixture model as
-\begin{align} \label{eq:probabilisticMixtureModel}
+\begin{align} 
+\begin{split} \label{eq:probabilisticMixtureModel}
 &P(X=x) 
 = P(\Theta_{1} = 0.4)P(X=x|\Theta_{1}=0.4) \\
-&+ P(\Theta_{2} = 0.5)P(X=x|\Theta_{2}=0.5) + P(\Theta_{3} = 0.65)P(X=x|\Theta_{3}=0.65) \nonumber
+&\quad + P(\Theta_{2} = 0.5)P(X=x|\Theta_{2}=0.5) + P(\Theta_{3} = 0.65)P(X=x|\Theta_{3}=0.65)
+\end{split}
 \end{align}
 
-Notice that in our examples we assume that we have only three possible binomial parameters, namely $ \theta_{1} = 0.4, \theta_{2} = 0.5, \theta_{3} = 0.65 $. 
-Notice further that each summand
+In our examples, we assume that we have only three possible binomial parameters, namely $ \theta_{1} = 0.4, \theta_{2} = 0.5, \theta_{3} = 0.65 $. 
+Each summand
 in \eqref{eq:probabilisticMixtureModel} is in fact a joint distribution by the chain rule so that we can again rewrite the model as
 \begin{align}
 \begin{split}\label{eq:marginal}
@@ -79,7 +81,7 @@ for why mixture models do indeed model our data. Each mixture-component/weight p
 possible parameters we get the probability of the data. We can easily show that mixture models can be defined for any number of mixture components.
 
 \begin{Exercise}
-Show that a mixture model of size $ n $ is a model of the data, i.e.\ show that $  \sum_{i=1}^n \alpha_{i}P_{X_{i}}(X=x) = P(X=x) $ if $ \alpha_{i} $ are mixture weights as 
+Show that a mixture model of size $ n $ is a model of the data, i.e.\ show that $  \sum_{i=1}^n \alpha_{i}P(X_i=x) = P(X=x) $ if $ \alpha_{i} $ are mixture weights as 
 defined in Definition~\ref{def:mixtureModel}.
 \end{Exercise}
 
@@ -133,7 +135,7 @@ where $ \Theta $ ranges over the parameters of the joint distribution $ P_{XY} $
 statistic that allows for the computation of the MLE. For all distributions that we have seen so far and in fact for all
 distributions in the exponential family, this statistic is the number of times we observe each outcome 
 in $ \supp(Y) $. The formulation
-that we give of the EM algorithm is specific for exponential family distributions and can be made more specific. However, since virtually
+that we give of the EM algorithm is specific for exponential family distributions and can be made more general. However, since virtually
 all distributions that are of interest in practice do belong to the exponential family, we will not make this kind of generalisation.
 
 Given some estimate $\theta^{(i)} $ for the parameters of the joint
@@ -143,10 +145,10 @@ t(y)^{(i+1)} = \E(t(Y)|X = x,\Theta = \theta^{(i)})
 \end{equation} 
 
 Observe that we introduced superscripts. The EM algorithm is an iterative algorithm, meaning we repeat its steps several
-times. We use the the superscript to indicate the number $i$ of the repetition, thus $ 0 \leq i \leq m $. We pass on
+times. We use the the superscript to indicate the number $i$ of the repetition, thus $ 0 \leq i \leq k $. We pass on
 information from previous iterations by conditioning on their parameter estimates; $\theta^{(0)}$ can be set arbitrarily.
 
-Equation~\eqref{Estep} is know as the \textbf{E(xpectation)-step} of the EM algorithm. To make the algorithm complete, we are still lacking a
+Equation~\eqref{Estep} is known as the \textbf{E(xpectation)-step} of the EM algorithm. To make the algorithm complete, we are still lacking a
 \textbf{M(aximization)-step}. But that step is simple. We pretend that the expected statistics of the latent data were actually observed. If
 our statistics are counts, then we simply pretend that we observed outcome $ y $ exactly $ t(y)^{(i+1)} $ times. Notice that since $ t(y)^{(i+1)} $
 is an expectation, it is a real and not a natural number. Once we pretend to observe the expected statistics, the maximization step can be done
@@ -205,7 +207,7 @@ P(\Theta=0.5|X_{1}=6) = \frac{P(X_{1}=6,\Theta=0.5)}{P(X_1 = 6)} = 0.5401758 \no
 P(\Theta=0.65|X_{1}=6) = \frac{P(X_{1}=6,\Theta=0.65)}{P(X_1 = 6)} = 0.3130094 \nonumber
 \end{align}
 
-We can compute the expectation. As statistic for the latent value $a \in \supp(Y)$\chris{correct?}\philip{In principle correct. I just used a instead of y here because I wanted to remind people what an indicator function is in general for any value a (that does not necessarily have anything to do with Y).}, we use an indicator function ($ I_{a}(\theta) = 1 \mbox{ if } a=\theta;~0 $ otherwise) 
+We can compute the expectation. As statistic for the latent value $a \in \supp(Y)$, we use an indicator function ($ I_{a}(\theta) = 1 \mbox{ if } a=\theta;~0 $ otherwise) 
 because each latent value has (hypothetically) been observed exactly once
 together with the observed data point $ x_{1} $. The probability of observing the latent value together with $ x_{1} $ follows the posterior distribution in \eqref{eq:posterior}. 
 This distribution is exactly the posterior in \eqref{eq:posterior}. For instance, $ \E[I_{0.4}(\theta)] = P(\Theta=0.4|X_{1}=6) $ and likewise for the
@@ -362,8 +364,12 @@ If $ P(X=y) = 0 $ for any $ y \in \supp(Y) $ we define $ D(P_X||P_Y) = \infty $.
 \end{Definition}
 
 The relative entropy is commonly known as \textbf{Kullback-Leibler (KL)} divergence. It measures the entropy of $ X $ as scaled to $ Y $. Intuitively,
-it gives a measure of how ``far away'' $ P_{X} $ is from $ P_{Y} $. To understand ``far away'', recall that entropy is a measure of uncertainty. The
-relative entropy measure the uncertainty that you have about $ P_{X} $ if you know $ P_{Y} $\chris{hard to see why at this point}. This uncertainty is low if both distributions place most
+it gives a measure of how ``far away'' $ P_{X} $ is from $ P_{Y} $. To
+understand ``far away'', recall that entropy is a measure of
+uncertainty. 
+% The
+% relative entropy measure the uncertainty that you have about $ P_{X} $ if you know $ P_{Y} $\chris{hard to see why at this point}.
+This uncertainty is low if both distributions place most
 of their mass on the same outcomes. Since $ \log(1) = 0 $ the relative entropy is 0 if $ P_{X} = P_{Y} $.
 
 It is worthwhile to point out the difference between relative and conditional entropy. Conditional entropy is the average entropy of $ X $ given that you
