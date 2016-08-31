@@ -16,11 +16,13 @@ While it may in general be quite hard to formulate latent variable models, there
 latent variable models that have wide-spread applications. One such class are \textbf{mixture models}.
 
 \begin{Definition}[Mixture Model]\label{def:mixtureModel}
-We assume same-dimensional vectors of random variables $ X_{1}^{n} $ and $ C_{1}^{n} $ where
-$ C_{i}(\omega) = C_{j}(\omega), C_{i}(\omega) = C_{j}(\omega) $ for all $ 1 \leq i,j, \leq n $ and $ \omega \in \Omega $ and 
-$ C_{i} \sim Cat(\Theta_{c_{i}}) $. We further assume distributions 
-$ P(X_{1}^{n}=x_{1}^{n}, C_{1}^{n} = c_{1}^{n}) $ which factors as
-$$ P(X_{1}^{n}=x_{1}^{n}, C_{1}^{n} = c_{1}^{n})= P(C_{1}^{n} = c_{1}^{n}) \prod_{i=1}^{n} P(X_{i}=x_{i}|C_{i} = c_{i}) \ . $$
+We assume jointly distributed random variables $ X=X_{1}^{n} $ and $ Y=Y_{1}^{n} $ where $ Y $ is categorical and
+$ \mathcal{Y} = \{c_{1}, \ldots, c_{k}\} $. The $ X_{i} $ are observed data, the $ Y_{i} $ are latent
+or observed and the $ c_{j}, 1\leq j \leq k $ are called mixture components. 
+If the distribution
+$ P(X_{1}^{n}=x_{1}^{n}, Y_{1}^{n} = y_{1}^{n}) $ factors as
+$$ P(X_{1}^{n}=x_{1}^{n}, Y_{1}^{n} = Y_{1}^{n})= P(Y_{1}^{n} = y_{1}^{n}) \prod_{i=1}^{n} P(X_{i}=x_{i}|Y_{i} = y_{i}) \ . $$
+we call this model a mixture model.
 \end{Definition}
 
 Mixture models are extremely useful whenever we have different ways to think about our data. Each way
@@ -45,12 +47,12 @@ may not be equal. This inequality is exactly what the mixture weights capture. W
 that the mixture components are independent of each other. In the present case this means that the coin that generated each
 sequence of coin flips was chosen independently of the coins used for the other sequences.
 
-In order to model the contribution of each coin, we introduce at latent RV $ C $ over mixture components with values $ c_{1}, c_{2}, c_{3} $ representing the three coins.
+In order to model the contribution of each coin, we introduce at latent RV $ Y $ over mixture components with values $ c_{1}, c_{2}, c_{3} $ representing the three coins.
 In the present case, each mixture component is linked to a binomial distribution, parametrized by the biases of
 the coins. As usual, we call our data $ x $. This information suffices to formulate our mixture model.
 \begin{align} 
-P(X=x|C_{1}^{3}=c_{1}^{3}) 
-&= \alpha_{1}P(X=x|C=c_{1}) \label{eq:mixtureExample} \\
+P(X=x|Y_{1}^{3}=Y_{1}^{3}) 
+&= \alpha_{1}P(X=x|Y=y_{1}) \label{eq:mixtureExample} \\
 &+ \alpha_{2}P(X=x|C=c_{2}) + \alpha_{3}P(X=x|C=c_{3}) \nonumber
 \end{align}
 
