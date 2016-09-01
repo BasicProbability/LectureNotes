@@ -21,7 +21,6 @@
 \newcommand{\hlkwb}[1]{\textcolor[rgb]{0.69,0.353,0.396}{#1}}%
 \newcommand{\hlkwc}[1]{\textcolor[rgb]{0.333,0.667,0.333}{#1}}%
 \newcommand{\hlkwd}[1]{\textcolor[rgb]{0.737,0.353,0.396}{\textbf{#1}}}%
-\let\hlipl\hlkwb
 
 \usepackage{framed}
 \makeatletter
@@ -353,26 +352,18 @@ represented by the parameters of the distributions that they are linked to.}
 Next we turn to the sufficient statistics for the binomial distributions linked to the mixture components. These are the counts of the observed outcomes. However,
 since the binomials are conditional distributions (they are conditioned on the identity of the coins), the counts have to be taken with respect to their conditioning
 contexts. In other words: we cannot count the observed outcomes independently but we have to count pairs of observed and latent variables. Formally this means that 
-for one binomially distributed observation $ x_{i} $ that $ E[X_{i}=x_{i}|Y_{i}=c_{j},\Theta=\theta^{0}] = P(Y_{i}=c_{j}|X_{i}=x_{i}, \Theta=\theta) $. This is again
+for one binomially distributed observation $ x_{i} $ that $ E[X=x_{i},Y_{i}=c_{j}|\Theta=\theta^{0}] = P(Y_{i}=c_{j}|X_{i}=x_{i}, \Theta=\theta^{0}) $. This is again
 just the posterior that we find in Table~\ref{tab:posteriors}. The only difference is how we are going to sum the posteriors this time. Before we were interested
 in the sufficient statistics of the categorical over mixture components and thus summed over all observed outcomes. Now we actually need to discriminate between
 observed outcomes. We only sum over observations that had the same outcome. Working with Table~\ref{tab:posteriors} this means that we simply multiplying each
 cell, which contains the posterior for one observation, by the number of times each outcome has been observed in the data set. For the pairs $ (X=2,Y=c_{1}) $
 and $ (X=4,Y = c_{3}) $ this gives:
 \begin{align}
-E[X=2|Y=c_{1},\Theta=\theta^{0}_{c^{1}}] = 4 \times 0.5674795 = 2.269918 \\
-E[X=4|Y=c_{3},\Theta=\theta^{0}_{c^{3}}] = 5 \times 0.0944114 = 0.472057
+E[X=2,Y=c_{1}|\Theta=\theta^{0}_{c^{1}}] = 4 \times 0.5674795 = 2.269918 \\
+E[X=4,Y=c_{3}|\Theta=\theta^{0}_{c^{3}}] = 5 \times 0.0944114 = 0.472057
 \end{align} 
 The expected sufficient statistics for all binomials can be found in Table~\ref{tab:binomPosteriors}. That we have computed all sufficient statistics
 for our model means that we have completed the E-step!
-
-\paragraph{M-step} As pointed out before, the M-step is rather trivial if once we have all the necessary expectations. Recall that according to our model, 
-the mixture components are categorically
-distributed and thus in the M-step we want to find the MLE of that categorical. In general, the MLE for $ \theta_{j} $ of a categorical is
-$ \frac{\#c_{j}}{n} $\footnote{This fact can easily be seen by letting $ \#c_{j} $ be the number of successes in the realisation of a binomial RV and the sum of all
-$ \#c_{m},~m \not = j $ be the number of failures. Then clearly $ \frac{\#c_{j}}{n} $ is the MLE.}. In our case $ n=20 $. Since we have not observed the
-latent variables, we simply use their expected sufficient statistics (their expected counts) instead. Thus we set 
-$ \theta_{j}^{(1)} = \frac{\E[Y = c_{j}|X=x,\Theta= \theta^{0}]}{20} $.
 
 \begin{table}
 \center
@@ -396,6 +387,58 @@ outcome & 0.4 & 0.5 & 0.65\\
 
 \caption{Posteriors expectations of the observed outcomes in the context of each mixture component.}
 \label{tab:binomPosteriors}
+\end{table}
+
+
+
+\paragraph{M-step} As pointed out before, the M-step is rather trivial once we have all the necessary expectations. Recall that according to our model, 
+the mixture components are categorically
+distributed and thus in the M-step we want to find the MLE of that categorical. In general, the MLE for $ \theta_{j} $ of a categorical is
+$ \frac{\#c_{j}}{n} $\footnote{This fact can easily be seen by letting $ \#c_{j} $ be the number of successes in the realisation of a binomial RV and the sum of all
+$ \#c_{m},~m \not = j $ be the number of failures. Then clearly $ \frac{\#c_{j}}{n} $ is the MLE.}. In our case $ n=20 $. Since we have not observed the
+latent variables, we simply use their expected sufficient statistics (their expected counts) instead. Thus we set 
+$ \theta_{j}^{(1)} = \frac{\E[Y = c_{j}|X=x,\Theta= \theta^{0}]}{20} $. The updated mixture weights then are 
+\begin{align}
+P(Y=c_{1}|\Theta= \theta^{1}) = 0.3337246 \\
+P(Y=c_{2}|\Theta= \theta^{1}) = 0.5261878 \nonumber \\
+P(Y=c_{3}|\Theta= \theta^{1}) = 0.1400877 \nonumber
+\end{align}
+
+We already know the maximum likelihood estimate for binomial distributions from 
+Section\ref{sec:parameterEstimation}. The only novelty when it comes to EM for mixture models
+is that the conditioning contexts are not observed anymore. Again, we fall back on the expected
+context counts again. The the maximum likelihood estimate for an outcome $ x $ conditioned on
+mixture component $ c_{j} $ is
+$$ \theta_{c_{j}x}^{1} = \frac{E[X=x|Y=c_{j},\Theta=\theta^{0}]}{\sum_{x \in \mathcal{X}}E[X=x|Y_{i}=c_{j},\Theta=\theta^{0}]}\ . $$
+The updated binomial distributions are given in Table~\ref{tab:newBinoms}. This completes our parameter
+updates and thus the M-step. We can start the next round of estimation by doing the E-step using the
+updated parameters $ \theta^{1} $. We will stop iterating when the parameters do not change anymore or
+after a pre-specified number of iterations.
+
+\begin{table}
+\center
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}
+\begin{tabular}{c|c|c|c}
+\hline
+outcome & 0.4 & 0.5 & 0.65\\
+\hline
+2 & 0.3400885 & 0.1567615 & 0.0286828\\
+\hline
+3 & 0.1369016 & 0.0946558 & 0.0321643\\
+\hline
+4 & 0.2574317 & 0.2669881 & 0.1684862\\
+\hline
+5 & 0.1775925 & 0.2762778 & 0.3237902\\
+\hline
+6 & 0.0879856 & 0.2053167 & 0.4468764\\
+\hline
+\end{tabular}
+
+
+\end{knitrout}
+\caption{}
+\label{tab:newBinoms}
 \end{table}
 
 %\begin{table}
