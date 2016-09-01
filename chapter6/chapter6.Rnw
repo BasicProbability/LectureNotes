@@ -21,9 +21,14 @@
 \title{Basic Probability}
 \date{}
 
+<<setup, include=F>>=
+library(knitr)
+@
+
 \begin{document}
 
 \setcounter{chapter}{5}
-\input{chapter6_forInclude}
+<<child="chapter6_forInclude.Rnw">>=
+@
 
 \end{document}
