@@ -275,7 +275,7 @@ plot at the bottom shows the same function applied to a larger data set. One cle
 \section{Sufficient Statistics}\label{sec:sufficientStats}
 
 A popular interpretation of statistics is that they are data summaries. Obviously, some statistics summarize
-the data better than others. For example, the constant function $ \mathbb{6}(\cdot) $ which returns the
+the data better than others. For example, the constant function $ \mathbf{6}(\cdot) $ which returns the
 value 6 on all inputs delivers an extremely poor summary of the data (in fact it is not sensitive to the
 data at all). The mean is a more useful summary as it captures some overall tendency in the data. 
 
@@ -286,18 +286,20 @@ concerned with in this script, which are all in the exponential family.}. If a s
 conveys all the information about the parameters that the data contain, we call it a \textbf{sufficient
 statistic}. The formal definition is somewhat less obvious.
 
-\begin{Definition}[Sufficient Statistics (discrete)]
-Given some discrete data $ x=x_{1}^{n} $ that has a distribution with parameters $ \theta $, 
-a statistic $ t(x) $ is sufficient if $ P(X|T(x) = t(x)) $ is independent of $ \theta $.
+\begin{Definition}[Sufficient Statistics (discrete)]\label{def:discreteSuffStat}
+Given some discrete RV $ X $ over data and a statistical model with parameters $ \theta $, 
+a statistic $ t(x) $ is sufficient if $ P(X=x|t(X) = t(x), \Theta = \theta) $ does not depend on $ \theta $,
+i.e. if 
+$$ P(X=x|t(X) = t(x), \Theta = \theta) = P(X=x|t(X) = t(x)) \ . $$
 \end{Definition}
 
 The above definition captures exactly what it means for a statistic to contain all the information
 about the parameters. Once we know the sufficient statistic, we can simply ignore the parameters. As an
 example, consider the binomial distribution with $ n $ trials. For any outcome $ x=x_{1}^{n} $,
 the statistic $ t(x) = \sum_{i=1}^{n} x_{i} $ is sufficient. To see this, consider the distribution
-$ P(X|\sum_{i=1}^{n} x_{i}) $. It takes the following form
+$ P(X|\sum_{i=1}^{n} x_{i}, \Theta = \theta) $. It takes the following form
 \begin{equation*}
-P\left( X=y|\sum_{i=1}^{n} x_{i} \right) = 
+P\left( X=y|\sum_{i=1}^{n} x_{i}, \Theta = \theta \right) = 
 \begin{cases}
 0 & \mbox{if } \sum_{i=1}^{n} y_{i} \not = \sum_{i=1}^{n} x_{i} \\
 \frac{1}{\binom{k}{n}} & \mbox{otherwise, where } k = \sum_{i=1}^{n} x_{i}
@@ -313,7 +315,7 @@ A statistic that is non-sufficient for the binomial distribution the value of th
 $ t(x) = x_{1} $. There are several binary sequences that have the same starting value but
 different numbers of ones and zeros. The corresponding condition is
 \begin{equation*}
-P(X=y|x_{1})
+P(X=y|x_{1}, \Theta = \theta)
 \begin{cases}
 = 0 & \mbox{ if } y_{1} \not = x_{1} \\
 \propto \binom{k}{n} \theta_{k} (1 - \theta)^{n-k} & \mbox{ otherwise, where } k = \sum_{i=1}^{n} x_{i}
@@ -321,17 +323,54 @@ P(X=y|x_{1})
 \end{equation*}
 where the proportionality follows because we need to renormalise the probability to all those
 sequences whose starting values is equal to $ x_{1} $. The crucial point, however, is that the parameter
-shows up in the left-hand-side and thus $ x_{1} $ is not a sufficient statistic for the binomial
+shows up in the right hand side and thus $ x_{1} $ is not a sufficient statistic for the binomial
 distribution.
 
 \begin{Exercise}
-Assume a data set $ x=x_{1}^{n} $ whose observations are i.i.d. according to a Poisson distribution
+Assume a RV $ X=X_{1}^{n} $ whose observations are i.i.d. according to a Poisson distribution
 with parameter $ \lambda $. Recall that the p.m.f. of the Poisson for one data point is
-$$ P(X=x|\Lambda = lamda) = e^{-\lambda}\frac{\lambda^{x}}{x^{!}} \ . $$
+$$ P(X=x|\Lambda = \lambda) = e^{-\lambda}\frac{\lambda^{x}}{x!} \ . $$
 Find the sufficient statistic for the Poisson.
 \end{Exercise}
 
-\textbf{TODO: ADD GENERAL DEFINITION THAT ALSO APPLIES TO DISCRETE DISTRIBUTIONS}
+Definition~\ref{def:discreteSuffStat} is constrained to discrete distributions. It is also not very useful
+when one does not yet know the sufficient statistics and has to find them. We will remedy both these problems
+with the following theorem.
+\begin{Theorem}[Factorisation Theorem]
+Assume a discrete RV over data $ X $ and a statistical model $ P(X=x|\Theta=\theta) $ with parameters $ \theta $.
+A statistic $ t(X) $ is sufficient if and only if the model can be written as
+$$ P(X = x | \Theta = \theta) = g(\theta, t(x))h(x, t(x)) \ . $$
+\end{Theorem}
+paragraph{Proof} Assume $ t(x) $ is sufficient. Then
+\begin{align}
+&P(X = x | \Theta = \theta) = \\ 
+&P(X=x|t(X) = t(x)) P(t(X) = t(x)| \Theta = \theta) = h(x, t(x))g(\theta, t(x)) \ . \nonumber
+\end{align}
+Now assume that $ P(X = x | \Theta = \theta) = g(\theta, v(x))h(x, v(x)) $ for some statistic $ v(x) $. We need to show
+that $ v(x) $ is sufficient in the sense of Definition~\ref{def:discreteSuffStat}. Observe that $ P(X=x,V(X)=v(x)|\Theta = \theta) = P(X=x|\Theta = \theta) $
+since $ v(\cdot) $ is deterministic. Thus
+\begin{align}
+&P(v(X)= v| \Theta = \theta) = \sum_{x:v(x)=v}P(X=x,v(x)=v| \Theta = \theta) \\
+&= \sum_{x:v(x)=v}P(X=x,v(x)=v| \Theta = \theta) = \sum_{x:v(x)=v} g(v, \theta) h(x,v) \nonumber
+\end{align}
+where the last equality follows from our assumption that the p.m.f. of $ X $ can be rewritten in the desired way. We now use the p.m.f. for $ v(x) $
+in the next step.
+\begin{align}
+&P(X=x|v(X) = v, \Theta=\theta) = \dfrac{P(X=x,v(X)= v|\Theta = \theta)}{P(v(X) = v|\Theta = \theta)} \\
+&= \dfrac{P(X=x|\Theta = \theta))}{P(v(X) = v|\Theta = \theta))}  \\
+&= \frac{g(\theta, v)h(x, v)}{\sum_{x:v(x)=v} g(v, \theta) h(x,v)}
+= \frac{h(x, v)}{\sum_{x:v(x)=v} h(x,v)}
+\end{align}
+Clearly, the conditional does not depend on $ \theta $ and thus $ v(X) $ is sufficient. 
+\par
+
+Now that we have shown the factorisation theorem for discrete RVs we will use it as a general definition for sufficiency, thereby
+also including continuous RVs.
+\begin{Definition}[Sufficient Statistic]
+Given some RV $ X $ over data and a statistical model with parameters $ \theta $, 
+a statistic $ t(x) $ is sufficient if $ P(X=x|t(X) = t(x), \Theta = \theta) $ can be written as
+$$ P(X = x | \Theta = \theta) = g(\theta, t(x))h(x, t(x)) \ . $$
+\end{Definition}
 
 \section{Parameter Estimation}\label{parameterEstimation}
 
