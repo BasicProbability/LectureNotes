@@ -81,6 +81,7 @@
 
 \setcounter{chapter}{5}
 
+
 \chapter{The Gaussian Distribution}
 
 If there is any one distribution that has traversed mathematics and found a home in cultural memory, it surely is the \textbf{Gaussian} or \textbf{normal distribution}
@@ -91,19 +92,19 @@ to explore in this chapter.
 Before going into any detail, let us first motivate this distribution. What we want is a distribution on a real vector space ($ \mathbb{R}^{n} $). We will
 start out with the simplest case and fist look at the Gaussian distribution on the real line. Our desiderata for the Gaussian\footnote{Notice that Gauss' original
 motivation was different from ours. While we are giving a largely geometric account of the normal distribution, Gauss was concerned with finding a distribution
-on $ n $ independent points whose maximum likelihood estimate (See Section~\ref{eq:parameterEstimation} would be the mean of those points.} are as follows:
+on $ n $ independent points whose maximum likelihood estimate (See Section~\ref{eq:parameterEstimation}) would be the mean of those points.} are as follows:
 \begin{itemize}
-\item The distribution should be centred around one specific point which we will call the mean
-\item The more distant a point is from the mean, the less probable it should be
-\item The distance metric should be adjustable so as to assign distant points more or less probability as needed
-\item Equally distant points should have the same probability, independent of their direction
+\item The distribution should be centred around one specific point which we will call the mean.
+\item The more distant a point is from the mean, the less probable it should be.
+\item The distance metric should be adjustable so as to assign distant points more or less probability as needed.
+\item Equally distant points should have the same probability, independent of their direction.
 \end{itemize}
 
 \section{The Univariate Gaussian}
 
 The Gaussian distribution is one of the most important and most widely used distributions in all of statistics. The reason is that many natural observations
 tend to be normally distributed. Many other distributions are also based on it or can be approximated by a Gaussian. Finally, there are several mathematical
-properties of the Gaussian that make calculating with it rather easy. In this Section we will look at the \textbf{univariate} Gaussian distribution, that is
+properties of the Gaussian that make calculating with it rather easy. In this section we will look at the \textbf{univariate} Gaussian distribution, that is
 the Gaussian distribution in one dimension. In Section~\ref{sec:mvGauss} we will also see how to model data in $ \mathbb{R}^{n} $ that is extremely complexly 
 structured with \textbf{multivariate} Gaussian distributions.
 
@@ -118,9 +119,9 @@ structured with \textbf{multivariate} Gaussian distributions.
 \label{fig:uniGauss}
 \end{figure}
 
-\subsection{Deriving the Density}
+\subsection{Deriving the density}
 
-What we want is a distribution that models spatial data, i.e. data that lives in some vector space. There should be a centre of mass around which the data concentrates
+What we want is a distribution that models spatial data, i.e.\ data that lives in some vector space. There should be a centre of mass around which the data concentrates
 and deviation from that centre of mass should be ``penalized'', meaning that the further away from the centre a data point is, the less probable it should be.
 Since we are interested in modelling spatial data in real vector spaces, we will choose the \href{https://en.wikipedia.org/wiki/Euclidean_distance}{Euclidian
 distance} as a distance measure. In the case of one dimension, the Euclidean distance is simply the absolute difference. For $ x,y \in \mathbb{R} $, the Euclidian
@@ -130,9 +131,9 @@ As it looks right now, all deviations are going to be penalized to the same exte
 What if we want to be a bit stricter and penalize points that are far away from the centre even more or conversely, if we wanted to be lenient and diminish the penalty
 for deviation from the centre? In such a case we would have to scale the Euclidian distance. In fact, there is a generalization of the Euclidean distance that
 allows for scaling. It is called the \href{https://en.wikipedia.org/wiki/Mahalanobis_distance}{Mahalanobis distance}. In the one-dimensional case, it introduces
-a scale factor by which the difference between two point is scaled. The Mahalanobis distance between $ x,y \in \mathbb{R} $ is 
+a scale factor by which the difference between two points is scaled. The Mahalanobis distance between $ x,y \in \mathbb{R} $ is 
 \begin{equation*}
-\left(\frac{x - y}{\sigma}\right)^{2}
+\left(\frac{x - y}{\sigma}\right)^{2} \, ,
 \end{equation*}
 where $ \sigma > 0 $ is an adjustable scale factor. If $ \sigma < 1 $ it will exaggerate the difference between $ x $ and $ y $ and hence lead to a greater
 penalty for distant points. Conversely, if $ \sigma > 1 $ it will lessen the difference between $ x $ and $ y $ and therefore lead to a smaller penalty for 
@@ -159,16 +160,16 @@ $ \mu $ and scale parameter $ \sigma $, we write $ X \sim \N{\mu}{\sigma} $. The
 p(x) \propto \exp\left(-\frac{1}{2} \left(\frac{x - \mu}{\sigma}\right)^{2} \right) \ .
 \end{equation}
 In order to get a proper density, we still need to normalize. This requires a non-trivial integration that falls without the scope of this subsection\footnote{If
-you are interested in seeing several different proofs, check \href{https://en.wikipedia.org/wiki/Gaussian_integral}{here}. Laplace's proof is probably the easiest to follow.}. We
-will just state the normalizer here. The full univariate normal density with parameters $ \mu $ (mean) and $ \sigma^{2} $ (variance) is
+you are interested in seeing several different proofs, check \href{https://en.wikipedia.org/wiki/Gaussian_integral}{this wikipedia entry}. Laplace's proof is probably the easiest to follow.}. We
+will just state the normalizing factor here. The full univariate normal density with parameters $ \mu $ (mean) and $ \sigma^{2} $ (variance) is
 \begin{equation}
 p(x) = \frac{1}{\sqrt{2\pi}\sigma} \exp\left(-\frac{1}{2} \left(\frac{x - \mu}{\sigma}\right)^{2} \right) \ .
 \end{equation}
 
-Notice that we do actually never need this general density. Why? We can transform any Gaussian distribution into a \textbf{standard normal distribution}. This is 
+Notice that we do actually never \chris{better: rarely?} need this general density. Why? We can transform any Gaussian distribution into a \textbf{standard normal distribution}. This is 
 the normal distribution with 0 mean and unit variance $ \N{0}{1} $. It is so important that it even has its own notation. 
 \begin{equation}
-\Phi(x) = p(x) \mbox{ where } X \sim \N{0}{1}
+\Phi(x) := p(x) \mbox{ where } X \sim \N{0}{1}
 \end{equation}
 
 \begin{Exercise}
@@ -187,19 +188,18 @@ Order the points $ 0.5 $, $ 0.8 $ and $ 1 $ according to their probability under
 Our goal in this section is to define a Gaussian distribution on $ \mathbb{R}^{n} $. This will require quite a bit of linear algebra. Readers who have not taken
 a linear algebra course are advised to skip this section.
 
-Let us start out by considering a random vector whose $ n $ dimension are independent. That mean that the probability of the vector can be factorised.
+Let us start out by considering a random vector whose $ n $ dimensions are independent. That means that the probability of the vector can be factorised.
 \begin{equation}
 p(\vec{x}) = \prod_{i=1}^{n} p(x_{i})
 \end{equation}
-If each of the dimensions is distributed according to the same Gaussian $ \mathcal{N}(\mu, \sigma^{2}) $, we can easily generate random vectors of this form 
-by making $ n $ independent from the Gaussian.
+If each of the dimensions is distributed according to the same Gaussian $ \mathcal{N}(\mu, \sigma^{2}) $, we can easily generate random vectors of this form by taking $ n $ independent samples from the Gaussian.
 
 Unfortunately, this severely limits our ability to model data. Not only can we never model correlations between dimensions, we also require that all dimensions
 have the same variance. The data that we can model needs to be extremely homogeneous.
 
-We could lessen this problem by drawing each random dimension from a different Gaussian. This way, we would be able to assign different means and variances to different
-dimensions. However, we could still not capture covariances. What we need is a single Gaussian over $ \mathbb{R}^{n} $. This will allow us to model (potentially) dependent
-dimensions. Having a mean vector with different mean values per dimension is trivial. In fact, we will further assume that the means of the dimensions are independent of
+We could lessen this problem by drawing each random dimension from a different Gaussian. In this way, we would be able to assign different means and variances to different
+dimensions. However, we could still not capture covariances\chris{what is this? readers don't know at this point, or do they? maybe give some quick recall}. What we need is a single Gaussian over $ \mathbb{R}^{n} $ which will allow us to model (potentially) dependent
+dimensions. Having a mean vector with different mean values per dimension is trivial. In fact, we will further \chris{what do you mean by ``further'', it sounds like ``additionally'' and then it does not make sense} assume that the means of the dimensions are independent of
 each other. Thus our mean vector will simply be 
 $ \vec{\mu} = \begin{bmatrix}
 \mu_{1} & \ldots & \mu_{n}
@@ -210,10 +210,10 @@ covariances of the dimensions. To do this, we introduce \textbf{covariance matri
 
 \begin{Definition}[Covariance matrix]
 A $ n \times n $ matrix $ \Sigma $ is called a covariance matrix of an $ n $-dimensional RV $ X $ if for $ 0 < i,j \leq n $ 
-$$ \Sigma_{j,i} = cov(X_{j}, X_{i}) \ . $$
+$$ \Sigma_{j,i} = cov(X_{j}, X_{i}) \ . $$ \chris{why flipping the indices?}
 \end{Definition}
 
-The covariance matrix is has a couple of important properties which we will use when computing with it.
+The covariance matrix has a couple of important properties which we will use when computing with it.
 \begin{enumerate}
 \item \textbf{Symmetry:} follows from the definition and the symmetry of the covariance.
 \item \textbf{positive semi-definiteness:} See below.
@@ -247,42 +247,42 @@ Another important result is based solely on the symmetry of the matrix. By the s
 M = U \Lambda U^{-1}
 \end{equation}
 where $ \Lambda $ is a diagonal matrix and $ U $ is orthonormal. Let us try to interpret this decomposition. The orthonormal matrix $ U^{-1} $ is a linear map from
-$ \mathbb{R}^{n} $ to $ \mathbb{R}^{n} $. It effectively rotates the input. The matrix $ \Lambda $ then scales the each row of the input and finally the matrix
+$ \mathbb{R}^{n} $ to $ \mathbb{R}^{n} $. It effectively rotates the input. The matrix $ \Lambda $ then scales each row of the input and finally the matrix
 $ U $ rotates the scaled input back. From the spectral theorem we know that the entries of $ \Lambda $ are the eigenvalues of $ M $. Therefore, the columns of $ U $
-are the corresponding eigenvectors normalized to unit length. The decomposition thus gives us an efficient way of finding the eigenvalues of $ M $. We are now going
+are the corresponding eigenvectors normalized to unit length. The decomposition thus gives us an efficient \chris{what do you mean by ``efficient''???} way of finding the eigenvalues of $ M $. We are now going
 to show that these eigenvalues are always non-negative for PSD matrices.
 
-\begin{Lemma}[Eigenvalues of PSD matrices are non-negative]
-Assume this was not the case. Let $ z $ be an eigenvalue of a positive 
-semi-definite matrix $ A $ with negative eigenvalue $ \lambda $. Then we get $ z^{\top}Az = z^{\top}\lambda z = \lambda z^{\top} z < 0 $ which contradicts the
-premise that $ A $ is positive semi-definite. $ \square $
+\begin{Lemma}[Positive Eigenvalues]
+Eigenvalues of PSD matrices are non-negative.
 \end{Lemma}
+\paragraph{Proof}  Assume this was not the case. Let $ z $ be an eigenvector of a positive 
+semi-definite matrix $ A $ with negative eigenvalue $ \lambda < 0$. Then we get $ z^{\top}Az = z^{\top}\lambda z = \lambda z^{\top} z < 0 $ which contradicts the
+premise that $ A $ is positive semi-definite. $ \square $
 
-We conclude that positive semi-definite matrices (and thus covariance matrices) only have non-negative eigenvalues.
-This in turn implies that PSD matrices always have roots. These roots can easily be derived as 
+The lemma in turn implies that PSD matrices always have roots. These roots can easily be defined as $M^{\nicefrac{1}{2}} := U \Lambda^{\nicefrac{1}{2}} U^{-1}$ because
 \begin{equation}\label{eq:PSDRoots}
-M^{\nicefrac{1}{2}} = U \Lambda^{\nicefrac{1}{2}}\Lambda^{\nicefrac{1}{2}} U^{-1} = U \Lambda^{\nicefrac{1}{2}}U^{-1} U \Lambda^{\nicefrac{1}{2}} U^{1} \ .
+(M^{\nicefrac{1}{2}})^2 = U \Lambda^{\nicefrac{1}{2}}U^{-1} U \Lambda^{\nicefrac{1}{2}} U^{-1}  =  U\Lambda^{\nicefrac{1}{2}}\Lambda^{\nicefrac{1}{2}} U^{-1} = M\ .
 \end{equation} 
 
-Covariance matrices are not always used in practice. It is sometimes more convenient to use their inverse instead. That inverse, $ \Sigma^{-1} $, is called a precision
-matrix. The names are telling: The entries in the covariance matrix measure to what extend two dimensions grow or shrink in relation to each other. The higher
+Covariance matrices are not always used in practice. It is sometimes more convenient to use their inverse instead. That inverse, $ \Sigma^{-1} $, is called a \emph{precision
+matrix}. The names are telling: The entries in the covariance matrix measure to what extend two dimensions grow or shrink in relation to each other. The higher
 that value the more deviation from the mean we will observe. 
-The entries in the precision matrix tell us how precise (i.e. how close to the mean) the distribution is. Higher
-precisions means that we are going to observe less deviation from the mean vector.
+The entries in the precision matrix tell us how precise (i.e.\ how close to the mean) the distribution is. Higher
+precisions mean that we are going to observe less deviation from the mean vector.
 
-\subsection{Deriving the Density}
+\subsection{Deriving the density}
 
 Now that we have learned about the covariance matrix, we are all set to define the multivariate Gaussian. Let us take a step back and remind ourselves of how easy
 it was to generate random vectors with independent means and variances. For the multivariate Gaussian, we will have to replace the mean with a mean vector (whose
-components are again independent\footnote{Notice that we our presentation is taking place in a frequentist setting. In Bayesian probability theory, the claim that
+components are again independent\footnote{Note to the experts: our presentation is taking place in a frequentist setting. In Bayesian probability theory, the claim that
 the dimensions of the mean vector are independent may very well be false.}) and a covariance matrix, changing the notation from $ \N{\mu}{\sigma^{2}} $
 to $ \N{\vec{\mu}}{\Sigma} $. As before, the parameter values are exactly equal to the mean and (co)variance of the distribution.
 
 While we have not yet properly defined the multivariate Gaussian, we can already explore some of its properties. By simple linearity of expectation, we have
 for any vector $ \vec{y} \in \mathbb{R}^{n} $ and any random Vector $ X \sim \N{\vec{\mu}}{\Sigma} $ that $ \E[X + y] = \E[X] + y $ and therefore that
 $ X + y \sim \N{\vec{\mu} + y}{\Sigma} $. Similarly, by properties of the (co)variance and the expecation, 
-we know that for any matrix $ A \in \mathbb{R}^{n} $ it holds that
-$ var(AX) = A^{2}var(X) = AA\Sigma = A\Sigma A^{\top} $ and therefore that $ AX \sim \N{A\vec{\mu}}{A\Sigma A^{\top}} $. 
+we know that for any matrix $ A \in \mathbb{R}^{n\times n} $ it holds that
+$ var(AX) = A^{2}var(X) = AA\Sigma = A\Sigma A^{\top} $ \chris{this is incorrect for instance for $A= \{\{1,1\},\{0,0\}\}$ and $\Sigma = id$}and therefore that $ AX \sim \N{A\vec{\mu}}{A\Sigma A^{\top}} $.
 
 Taken together, the fact that $ AX + \vec{y} \sim \N{A\vec{\mu} + \vec{y}}{A\Sigma A^{\top}} $ is called the \textbf{affine property} of the Gaussian distribution.
 Any affine transformation of a Gaussian RV will again yield a Gaussian RV. We will exploit this fact to define the multivariate Gaussian distribution. Recall
@@ -322,7 +322,7 @@ the dimensions of $ Z $ are i.i.d. according to a univariate standard normal dis
 
 With this definition at hand, let us derive the general multivariate density. The problem is that in a covariance matrix the variances are not independent anymore.
 Thus, we cannot readily apply the factorization from Equation~\eqref{eq:mvstandardNormal}. The question now is whether we can substitute the covariance matrix with
-another matrix that where the variances are indeed independent. The spectral theorem answers this question positively. Recall that all square matrices can be decomposed
+another matrix where the variances are indeed independent. The spectral theorem answers this question positively. Recall that all square matrices can be decomposed
 according to Equation~\eqref{eq:eigenvalueDecomp}. The matrix $ \Lambda $ has its eigenvalues on the diagonal. Since it is congruent with the original matrix $ M $,
 they both have the same eigenvalues. It is clear from Equation~\eqref{eq:PSDRoots} that we can use $ U \Lambda^{\nicefrac{1}{2}} = \Sigma^{\nicefrac{1}{2}} $ when applying the affine transformation of the standard normal distribution.
 For $ X \sim \N{0}{I}, \vec{\mu} \in \mathbb{R}^{n}, A = U\Lambda^{\nicefrac{1}{2}}U^{-1} \in \mathbb{R}^{n\times n} $ and $ Y = AX + \vec{\mu} $ we exploit
@@ -342,8 +342,8 @@ the fact that $ Y \sim \N{\vec{\mu}}{AIA^{\top}} = \N{\vec{\mu}}{\Sigma} $. In t
 \end{align}
 Before we interpret this density (whose standardly given form is \eqref{eq:mvGDensityDet}) let us clarify the derivation. In order to change the indices in
 Equation~\eqref{eq:quadraticForm} we have 
-used the fact that for any $ n\times n $ square matrix $ M $ and vector $ \vec{x} \in \mathbb{R}^{n} $ we have the equality $ \vec{x}^{2}M = \vec{x}M\vec{x}^{\top} $.
-We then replaced $ A^{2} $ with $ \Sigma $. In the final line we have explicitly calculated the sum in the normalizer.
+used the fact that for any $ n\times n $ square matrix $ M $ and vector $ \vec{x} \in \mathbb{R}^{n} $ we have the equality $ \vec{x}^{2}M = \vec{x}M\vec{x}^{\top} $. \chris{what do you mean by $\vec{x}^{2}$??}
+We then replaced $ A^{2} $ with $ \Sigma $. In the final line we have explicitly calculated the sum in the normalizer. \chris{what is the definition of $|\Sigma|$?}
 \begin{align}
 \sum_{j=1}^{n}A_{ij} &= \sum_{j=1}^{n} \sum_{k=1}^{n} U_{ik} \sum_{l=1}^{n} \Lambda^{\nicefrac{1}{2}}_{kl} U^{\top}_{lj} \\
 &= \sum_{j=1}^{n} \sum_{k=1}^{n} U_{ik} \Lambda^{\nicefrac{1}{2}}_{kk} U^{\top}_{kj} \label{eq:diagonality} \\
@@ -353,17 +353,17 @@ In the above, line \eqref{eq:diagonality} follows because $ \Lambda $ is diagona
 $ U $ is orthogonal. The product in the normalizer is now a product of (square roots of) eigenvalues of a diagonal matrix, which is equal to the (square root of the) 
 determinant of that matrix. Since congruent matrices have the same eigenvalues, this is the same as the determinant of $ \Sigma $. This completes our derivation of the multivariate Gaussian density.
 
-From the derivation, you probably already have some intuition of what's going on. Let us make this intuition more precise. A normal distribution with zero mean
+From the derivation, you probably already have some intuition of what is going on. Let us make this intuition more precise. A normal distribution with zero mean
 and covariance matrix $ \sigma I $ for $ \sigma \in \mathbb{R} $ defines a ball in which most of the probability mass lies. Being a ball, this structure is perfectly
 round, showing the same amount of deviance in all directions. A two-dimensional example of this is given in the upper left corner of Figure~\ref{fig:multiGauss}, where
-we show the density for the standard normal distribution on the two-dimensional plane.. 
+we show the density for the standard normal distribution on the two-dimensional plane. 
 Since the mean is zero, the ball is centred at the origin. If we change the mean, we are 
 performing a shift of the balls centre away from the mean (lower left of Figure~\ref{fig:multiGauss}). The chosen mean there is 
 $ \vec{\mu} = \begin{bmatrix}
 2 & -2
 \end{bmatrix} $, while $ \Sigma = I $ as in the standard normal case.
 
-We can also stretch individual dimensions by of the ball by letting the elements on the diagonal of the
+We can also stretch individual dimensions of the ball by letting the elements on the diagonal of the
 covariance matrix vary independently (upper right of Figure~\ref{fig:multiGauss}). The covariance matrix used here is 
 \begin{equation*}
 \Sigma = \begin{bmatrix}
