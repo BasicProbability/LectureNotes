@@ -615,14 +615,14 @@ Equation~\eqref{eq:geometric} is known as the \textbf{geometric distribution}. I
 are two versions of the geometric distribution. The one given in \eqref{eq:geometric} does not allow for the waiting time to be 0. It will always be at least 1, even
 if when our first draw is already a success. Sometimes one does want to allow for 0 waiting time, however. In that case, one uses a geometric distribution that looks as 
 follows:
-\begin{equation}\label{eq:geometric}
+\begin{equation}
 P(T=t) = \theta^{k} (1-\theta)^{t} \ .
 \end{equation}
 While it is save to work with only one of these (after all we can transform them by simply adding or subtracting 1 to their outcomes), be aware of the difference when
 working with software, for example, where only one of the two versions will be implemented.
 
 Notice that if $ k=1 $ there is only one sequence of size $ t $ that ends in a success. If we let $ k>1 $, there are more sequences of length $ y $ that end in a success 
-and contain $ k $ successes in total. The probability for any such sequence can easily be calculated by generalising Equation~\eqref{geometric}.
+and contain $ k $ successes in total. The probability for any such sequence can easily be calculated by generalising Equation~\eqref{eq:geometric}.
 \begin{equation}
 P(T=t) = \theta^{k} (1-\theta)^{t-k}
 \end{equation}
