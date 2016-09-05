@@ -254,10 +254,10 @@ the spread of a RV is the variance.
 
 \begin{Definition}[Variance]
 The variance of a RV $ X $ is given by
-$$ var(X) := \E[\, (X - \E[X])^{2} \, ] \, .$$
+$$ \var(X) := \E[\, (X - \E[X])^{2} \, ] \, .$$
 \end{Definition}
 
-The expression for $ var(X) $ is rather scary-looking but let us try to make sense of it. The inner part is the difference between
+The expression for $ \var(X) $ is rather scary-looking but let us try to make sense of it. The inner part is the difference between
 each value of the random variable and the expectation. Thus the outer expectation is just a weighted sum of differences between 
 values in the support and the expectation. However, since values of $ X $ can be smaller or greater than the expectation, this
 sum will be 0. Therefore we square it, leaving us with only positive values. In summary, the variance is the expectation
@@ -265,7 +265,7 @@ of the squared differences between the expectation and the values in the support
 
 Computing the variance as an expectation can be cumbersome. We show how it can be done more efficiently.
 \begin{align}
-var(X) &= \E[\, (X - \E[X])^{2} \, ] \\
+\var(X) &= \E[\, (X - \E[X])^{2} \, ] \\
 &= \sum_{x \in \supp(X)} P(X=x) (x - \E[X])^{2} \\
 &= \sum_{x \in \supp(X)} P(X=x) (x^2 - 2x\E[X] + \E[X]^{2}) \\
 &= \sum_{x \in \supp(X)} P(X=x)  x^{2} -  \!\!\!\!\! \sum_{x \in \supp(X)} \!\!\!\!\! P(X=x) 2x\E[X] + \E[X]^{2} \\
@@ -284,14 +284,14 @@ Compute the variance of the RV Z from the previous section.
 
 Although variance is not linear, we can still try to figure out what happens when we multiply a RV by a constant or add a constant to it.
 \begin{align}
-var(aX+b) &= \E[ (aX+b - \E[aX+b])^2 ] \\
+\var(aX+b) &= \E[ (aX+b - \E[aX+b])^2 ] \\
 &=\E[ (aX+b - a\E[X] - b)^2 ] \\
 &=\E[ a^2 (X-\E[X])^2 ] \\
-&= a^2 var(X)
+&= a^2 \var(X)
 \end{align}
 
 \begin{Exercise}
-Give an alternative proof of $var(aX+b) = a^2 var(X)$ by using $var(X)
+Give an alternative proof of $\var(aX+b) = a^2 \var(X)$ by using $\var(X)
 = \E[X^{2}] - \E[X]^{2}$.
 \end{Exercise}
 % \begin{align}
@@ -299,7 +299,7 @@ Give an alternative proof of $var(aX+b) = a^2 var(X)$ by using $var(X)
 % &= \E[(aX+b)^{2}] - (a\E[X]+b)^{2} \\
 % &= \E[a^{2}X^{2} + 2abX + b^{2}] - a^{2}\E[X]^{2} - 2ab\E[X] - b^{2} \\
 % &= a^{2}\E[X^{2}] + 2ab\E[X] + b^{2} - a^{2}\E[X]^{2} - 2ab\E[X] - b^{2} \\
-% &= a^{2}\E[X^{2}] - a^{2}\E[X]^{2} = a^{2}var(X) \
+% &= a^{2}\E[X^{2}] - a^{2}\E[X]^{2} = a^{2}\var(X) \
 % \end{align}
 
 What we see that the variance is not affected by adding a constant to the RV. This makes sense, as constant additions just shift
@@ -386,7 +386,7 @@ $X\backslash Y$	& 1		& 2		& 3		\\
 \end{table}
 
 \begin{Exercise}
-Find the marginal distributions $ P_X $ and $ P_{Y} $ in table \ref{jointTable}.
+Find the marginal distributions $ P_X $ and $ P_{Y} $ in Table~\ref{jointTable}.
 \end{Exercise}
 
 We have already seen how the joint probability of random variables links back the the probability space that underlies them.
@@ -413,7 +413,7 @@ if $P_{XY} = P_X P_Y$, i.e.\ $\forall x \in \supp(X), \forall y \in \supp(Y): P(
 
 As with events, independence is equivalent to stating that $ P_{X|Y} = P_{X} $ (and
 to $P_{Y|X}=P_Y$). Moreover, independence makes it much easier to calculate the expectation and variance of functions of jointly distributed random variables.
-%\footnote{Notice that the joint random variable $(X,Y)$ is not a \emph{real-valued} random variable anymore. Hence $\E[X,Y]$ and $var(X,Y$) are not defined. Rather, we can define a new (real-valued) random variable as $f(X,Y)$ for a function $f: \mathbb{R} \times \mathbb{R} \rightarrow \mathbb{R}$. and compute $\E[f(X,Y)]$ and $var(f(X,Y))$.} 
+%\footnote{Notice that the joint random variable $(X,Y)$ is not a \emph{real-valued} random variable anymore. Hence $\E[X,Y]$ and $\var(X,Y$) are not defined. Rather, we can define a new (real-valued) random variable as $f(X,Y)$ for a function $f: \mathbb{R} \times \mathbb{R} \rightarrow \mathbb{R}$. and compute $\E[f(X,Y)]$ and $\var(f(X,Y))$.} 
 For independent $X$ and $Y$, we have
 \begin{align}
 \E[XY] &= \sum_{x \in \supp(X)} \sum_{y \in \supp(Y)} P(X=x,Y=y) x y \\
@@ -427,31 +427,31 @@ value). However, we can again compute the variance of functions. For addition, i
 much easier.
 
 \begin{Exercise}
-Show that for independent RVs $X$ and $Y$, we have that $ var(X + Y) =
-var(X) + var(Y) $. Give an example of dependent $X$ and $Y$ with $ var(X + Y) \neq
-var(X) + var(Y) $.
+Show that for independent RVs $X$ and $Y$, we have that $ \var(X + Y) =
+\var(X) + \var(Y) $. Give an example of dependent $X$ and $Y$ with $ \var(X + Y) \neq
+\var(X) + \var(Y) $.
 \end{Exercise}
 
 While the variance of two jointly distributed variables is not defined, there is the concept of \textbf{covariance}. While the variance measures the spread
-of one RV, covariance measures to what extend two variables spread together. In other words, to what extend two variables change systematically together.
+of one RV, covariance measures to what extend two variables spread together. In other words, to what extend two variables change systematically together. 
 \begin{Definition}[Covariance]
-The covariance of two RVs $ X,Y $ is given as
-$$ cov(X,Y) = \E\left[\left(X - \E[X]\right)\left(Y - E[Y]\right)\right] $$
+The covariance of two RVs $ X,Y $ with joint distribution $P_{XY}$ is defined by
+$$ cov(X,Y) := \E\left[\left(X - \E[X]\right)\left(Y - E[Y]\right)\right] $$
 \end{Definition}
 
-Notice that covariance is symmetric. Another interesting question is to what extend two variables influence each other, i.e. how much the outcome of one
+Notice that covariance is symmetric. Another interesting question is to what extend two variables influence each other, i.e.\ how much the outcome of one
 influences the outcome of the other. The general concept behind this question is called \textbf{correlation}. There are different measures of correlation.
 We present the quasi-standard one here.
 \begin{Definition}[Pearson Correlation]
-The Pearson correlation coefficient between to RVs $ X $ and $ Y $ is given as
-$$ \rho_{XY} = \frac{cov(X,Y)}{var(X)var(Y)} $$
+The Pearson correlation coefficient between to RVs $ X $ and $ Y $ with joint distribution $P_{XY}$ is given as
+$$ \rho_{XY} = \frac{cov(X,Y)}{\var(X)\var(Y)} $$
 \end{Definition}
 
 The correlation coefficient $ \rho $ measures the ratio of covariance to the product of variances. It answers the question of how much more change there systematic
 joint change there is between $ X $ and $ Y $ under there joint distribution than there is unsystematic (or coincidental) joint change under their respective
-marginal distributions. Notice that covariance and correlation are closely related, so much in fact that one sometimes see the following definition of covariance.
+marginal distributions.\chris{WHAT???} Notice that covariance and correlation are closely related, so much in fact that one sometimes sese the following definition of covariance.
 \begin{equation}
-cov(X,Y) =  \rho_{XY}var(X)var(Y)
+cov(X,Y) =  \rho_{XY} \var(X)\var(Y)
 \end{equation}
 
 As with expectation and variance, independence of two variables also has consequences for their correlation and covariance.
