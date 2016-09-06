@@ -432,26 +432,34 @@ Show that for independent RVs $X$ and $Y$, we have that $ \var(X + Y) =
 \var(X) + \var(Y) $.
 \end{Exercise}
 
-While the variance of two jointly distributed variables is not defined, there is the concept of \textbf{covariance}. While the variance measures the spread
-of one RV, covariance measures to what extend two variables spread together. In other words, to what extend two variables change systematically together. 
+While the variance of two jointly distributed variables is not defined, there is the concept of \textbf{covariance}. The variance measures the spread
+of one RV, the covariance measures to what extend two variables spread together. In other words, to what extend two variables change together systematically. 
 \begin{Definition}[Covariance]
 The covariance of two RVs $ X,Y $ with joint distribution $P_{XY}$ is defined by
 $$ cov(X,Y) := \E\left[\left(X - \E[X]\right)\left(Y - E[Y]\right)\right] $$
 \end{Definition}
 
-Notice that covariance is symmetric. Another interesting question is to what extend two variables influence each other, i.e.\ how much the outcome of one
-influences the outcome of the other. The general concept behind this question is called \textbf{correlation}. There are different measures of correlation.
+Notice that covariance is symmetric. Let us for a moment look at it as a function of $ X $ only. Then $ (Y - \E[Y]) = c \in \mathbb{R} $
+serves as a coefficient that determines how much the covariance changes as we change $ P_{X} $. Under this view, the covariance would be a linear function
+of $ X $. The precise meaning of saying that the covariance measures the systematic joint change of $ X $ and $ Y $ is thus that it measures their linear dependence
+on each other.
+
+Another interesting question is to what extend two variables influence each other, i.e.\ how much the outcome of one
+determines the outcome of the other. The general concept behind this question is called \textbf{correlation}. Correlation is always a measure of dependence
+between two RVs (recall that the dependence per se is binary -- either the variables are dependent or they are not). There are different measures of correlation.
 We present the quasi-standard one here.
 \begin{Definition}[Pearson Correlation]
-The Pearson correlation coefficient between to RVs $ X $ and $ Y $ with joint distribution $P_{XY}$ is given as
-$$ \rho_{XY} = \frac{cov(X,Y)}{\var(X)\var(Y)} $$
+The Pearson correlation coefficient between to RVs $ X $ and $ Y $ with finite non-zero variance and joint distribution $P_{XY}$ is given as
+$$ \rho_{XY} = \frac{cov(X,Y)}{\sigma(X)\sigma(Y)} $$
+where $ \sigma(X) = \sqrt{\var(X)} $.
 \end{Definition}
 
-The correlation coefficient $ \rho $ measures the ratio of covariance to the product of variances. It answers the question of how much more change there systematic
-joint change there is between $ X $ and $ Y $ under there joint distribution than there is unsystematic (or coincidental) joint change under their respective
-marginal distributions.\chris{WHAT???} Notice that covariance and correlation are closely related, so much in fact that one sometimes sese the following definition of covariance.
+The correlation coefficient $ \rho $ measure the dependence between variables through their (co)variances. If two RVs $ X $ and $ Y $ are highly dependent, one provides a 
+lot of information about the other. This holds also true for functions of $ X $ and $ Y $. Clearly, variance is a function of an RV and thus the variances of 
+highly dependent variables are informative of one another.\textbf{TODO} Notice that covariance and correlation are closely related, so much in fact that one sometimes sees the 
+following definition of covariance.
 \begin{equation}
-cov(X,Y) =  \rho_{XY} \var(X)\var(Y)
+cov(X,Y) =  \rho_{XY} \sigma(X)\sigma(Y)
 \end{equation}
 
 As with expectation and variance, independence of two variables also has consequences for their correlation and covariance.
