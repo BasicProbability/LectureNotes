@@ -432,6 +432,7 @@ Show that for independent RVs $X$ and $Y$, we have that $ \var(X + Y) =
 \var(X) + \var(Y) $.
 \end{Exercise}
 
+
 While the variance of two jointly distributed variables is not defined, there is the concept of \textbf{covariance}. The variance measures the spread
 of one RV, the covariance measures to what extend two variables spread together. In other words, to what extend two variables change together systematically. 
 \begin{Definition}[Covariance]
@@ -439,25 +440,37 @@ The covariance of two RVs $ X,Y $ with joint distribution $P_{XY}$ is defined by
 $$ cov(X,Y) := \E\left[\left(X - \E[X]\right)\left(Y - E[Y]\right)\right] $$
 \end{Definition}
 
-Notice that covariance is symmetric. Let us for a moment look at it as a function of $ X $ only. Then $ (Y - \E[Y]) = c \in \mathbb{R} $
-serves as a coefficient that determines how much the covariance changes as we change $ P_{X} $. Under this view, the covariance would be a linear function
-of $ X $. The precise meaning of saying that the covariance measures the systematic joint change of $ X $ and $ Y $ is thus that it measures their linear dependence
-on each other.
+\begin{Exercise}
+Define any two random variables with joint distribution $ P_{XY} $ such that $ cov(X,Y) < 0 $.
+\end{Exercise}
 
+\philip{
+Notice that covariance is symmetric. Let us for a moment look at it as a function of $ X $ only. Then, for every value $ y \in \supp{Y} $, the quantity 
+$ (y - \E[Y]) = c_{y} \in \mathbb{R} $
+serves as a coefficient which scales $ (X - E[X]) $ and that thus determines how much the covariance changes as we change $ P_{X} $. 
+Under this view, the covariance is be a linear function
+of $ X $. The precise meaning of saying that the covariance measures the systematic joint change of $ X $ and $ Y $ is thus that it measures their linear dependence
+on each other.}
+
+\philip{
 Another interesting question is to what extend two variables influence each other, i.e.\ how much the outcome of one
 determines the outcome of the other. The general concept behind this question is called \textbf{correlation}. Correlation is always a measure of dependence
-between two RVs (recall that the dependence per se is binary -- either the variables are dependent or they are not). There are different measures of correlation.
-We present the quasi-standard one here.
+between two RVs. Recall that the definition of independence is binary -- either two variables are independent or they are not.
+Correlation allows us to make more fine-grained relationships between RVs. There are different measures of correlation.
+We present the quasi-standard one here.}
 \begin{Definition}[Pearson Correlation]
 The Pearson correlation coefficient between to RVs $ X $ and $ Y $ with finite non-zero variance and joint distribution $P_{XY}$ is given as
 $$ \rho_{XY} = \frac{cov(X,Y)}{\sigma(X)\sigma(Y)} $$
 where $ \sigma(X) = \sqrt{\var(X)} $.
 \end{Definition}
 
-The correlation coefficient $ \rho $ measure the dependence between variables through their (co)variances. If two RVs $ X $ and $ Y $ are highly dependent, one provides a 
-lot of information about the other. This holds also true for functions of $ X $ and $ Y $. Clearly, variance is a function of an RV and thus the variances of 
-highly dependent variables are informative of one another.\textbf{TODO} Notice that covariance and correlation are closely related, so much in fact that one sometimes sees the 
-following definition of covariance.
+\philip{
+The correlation coefficient $ \rho $ measure the dependence between variables through their (co)variances. It does so by normalizing each of the two RVs to having
+unit variance. The Pearson correlation is then simply the covariance of the normalized variables. 
+Notice that because the covariance can take on both positive and negative values, the
+Pearson correlation lies in the interval $ [-1,1] $. The interpretation of $ \rho_{XY} $ is thus that it measure the relative linear influence (dependence) of the 
+variables on one another. This is different from the covariance which measures the absolute linear dependence that the variables have on each other. Notice that covariance 
+and correlation are closely related, so much in fact that one sometimes sees the following definition of covariance.}
 \begin{equation}
 cov(X,Y) =  \rho_{XY} \sigma(X)\sigma(Y)
 \end{equation}
