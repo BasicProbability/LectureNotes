@@ -276,13 +276,13 @@ plot at the bottom shows the same function applied to a larger data set. One cle
 
 A popular interpretation of statistics is that they are data summaries. Obviously, some statistics summarize
 the data better than others. For example, the constant function $ \mathbf{6}(\cdot) $ which returns the
-value 6 on all inputs delivers an extremely poor summary of the data (in fact it is not sensitive to the
+value 6 on all inputs delivers an extremely poor summary of most data (in fact it is not sensitive to the
 data at all). The mean is a more useful summary as it captures some overall tendency in the data. 
 
 Is there any statistic that captures all the necessary information in the data? This questions is hard
 to answer in general but when it comes to capturing the information about the parameters of the
 underlying distribution, the answer is yes\footnote{At least for the distributions that we are 
-concerned with in this script, which are all in the exponential family.}. If a statistics
+concerned with in this script, which are all in the \href{https://en.wikipedia.org/wiki/Exponential_family}{exponential family}.}. If a statistics
 conveys all the information about the parameters that the data contain, we call it a \textbf{sufficient
 statistic}. The formal definition is somewhat less obvious.
 
@@ -311,7 +311,7 @@ order in which the events occurred. This shows that the sufficient statistic is 
 in general (after all, we might care about the order of events). It only captures all the information
 about the parameters that the data contain.
 
-A statistic that is non-sufficient for the binomial distribution the value of the first outcome, i.e.
+A statistic that is non-sufficient for the binomial distribution is the value of the first outcome, i.e.\ 
 $ t(x) = x_{1} $. There are several binary sequences that have the same starting value but
 different numbers of ones and zeros. The corresponding condition is
 \begin{equation*}
@@ -328,9 +328,9 @@ distribution.
 
 \begin{Exercise}
 Assume a RV $ X=X_{1}^{n} $ whose observations are i.i.d. according to a Poisson distribution
-with parameter $ \lambda $. Recall that the p.m.f. of the Poisson for one data point is
+with parameter $ \lambda $. Recall that the p.m.f. of the Poisson distribution for one data point is
 $$ P(X=x|\Lambda = \lambda) = e^{-\lambda}\frac{\lambda^{x}}{x!} \ . $$
-Find the sufficient statistic for the Poisson.
+Show that $t(x) = \sum_{i=1}^n x_i$ is a sufficient statistic for the Poisson distribution as well.
 \end{Exercise}
 
 Definition~\ref{def:discreteSuffStat} is constrained to discrete distributions. It is also not very useful
@@ -339,19 +339,22 @@ with the following theorem.
 \begin{Theorem}[Factorisation Theorem]
 Assume a discrete RV over data $ X $ and a statistical model $ P(X=x|\Theta=\theta) $ with parameters $ \theta $.
 A statistic $ t(X) $ is sufficient if and only if the model can be written as
-$$ P(X = x | \Theta = \theta) = g(\theta, t(x))h(x, t(x)) \ . $$
+$$ P(X = x | \Theta = \theta) = g(\theta, t(x)) \cdot h(x, t(x)) \ . $$
 \end{Theorem}
-paragraph{Proof} Assume $ t(x) $ is sufficient. Then
+\paragraph{Proof} Assume $ t(x) $ is sufficient. Then
 \begin{align}
-&P(X = x | \Theta = \theta) = \\ 
-&P(X=x|t(X) = t(x)) P(t(X) = t(x)| \Theta = \theta) = h(x, t(x))g(\theta, t(x)) \ . \nonumber
+P(X = x | \Theta = \theta) &= P(X=x, t(X)=t(x) | \Theta = \theta) \label{eq:fact1}\\ 
+&= P(X=x|t(X) = t(x), \Theta=\theta) \cdot P(t(X) = t(x)| \Theta = \theta)\\
+&= P(X=x|t(X) = t(x)) \cdot P(t(X) = t(x)| \Theta = \theta) \label{eq:fact2}\\
+&= h(x, t(x)) \cdot g(\theta, t(x)) \ , \nonumber
 \end{align}
-Now assume that $ P(X = x | \Theta = \theta) = g(\theta, v(x))h(x, v(x)) $ for some statistic $ v(x) $. We need to show
+where in~\eqref{eq:fact1}, we used the fact that $t(\cdot)$ is a deterministic function, the second equality is the chain rule and in~\eqref{eq:fact2}, we use that $t(x)$ is sufficient.
+Now assume that $ P(X = x | \Theta = \theta) = g(\theta, v(x)) \cdot h(x, v(x)) $ for some statistic $ v(x) $. We need to show
 that $ v(x) $ is sufficient in the sense of Definition~\ref{def:discreteSuffStat}. Observe that $ P(X=x,V(X)=v(x)|\Theta = \theta) = P(X=x|\Theta = \theta) $
 since $ v(\cdot) $ is deterministic. Thus
 \begin{align}
-&P(v(X)= v| \Theta = \theta) = \sum_{x:v(x)=v}P(X=x,v(x)=v| \Theta = \theta) \\
-&= \sum_{x:v(x)=v}P(X=x,v(x)=v| \Theta = \theta) = \sum_{x:v(x)=v} g(v, \theta) h(x,v) \nonumber
+&P(v(X)= v| \Theta = \theta) = \sum_{x:v(x)=v}P(X=x,v(X)=v| \Theta = \theta) \\
+&= \sum_{x:v(x)=v}P(X=x | \Theta = \theta) = \sum_{x:v(x)=v} g(v, \theta) h(x,v) \nonumber
 \end{align}
 where the last equality follows from our assumption that the p.m.f. of $ X $ can be rewritten in the desired way. We now use the p.m.f. for $ v(x) $
 in the next step.
@@ -361,15 +364,15 @@ in the next step.
 &= \frac{g(\theta, v)h(x, v)}{\sum_{x:v(x)=v} g(v, \theta) h(x,v)}
 = \frac{h(x, v)}{\sum_{x:v(x)=v} h(x,v)}
 \end{align}
-Clearly, the conditional does not depend on $ \theta $ and thus $ v(X) $ is sufficient. 
-\par
+Clearly, the conditional does not depend on $\theta $ and thus $ v(X) $ is sufficient. $ \square $ \bigskip
+
 
 Now that we have shown the factorisation theorem for discrete RVs we will use it as a general definition for sufficiency, thereby
 also including continuous RVs.
 \begin{Definition}[Sufficient Statistic]
 Given some RV $ X $ over data and a statistical model with parameters $ \theta $, 
 a statistic $ t(x) $ is sufficient if $ P(X=x|t(X) = t(x), \Theta = \theta) $ can be written as
-$$ P(X = x | \Theta = \theta) = g(\theta, t(x))h(x, t(x)) \ . $$
+$$ P(X = x | \Theta = \theta) = g(\theta, t(x)) \cdot h(x, t(x)) \ . $$
 \end{Definition}
 
 \section{Parameter Estimation}\label{parameterEstimation}
@@ -396,7 +399,7 @@ $ x $ we have $ P(X=x) = P(X=x|\Theta = \theta) $ as long as the parameters of $
 the dependence of the distribution on its parameters explicit.
 
 \begin{Definition}[Likelihood Function]\label{def:likelihood}
-For $n \in \mathbb{N} $ and a \emph{fixed} set of $n$ data points or observations $ x = x^{1}_{n} $, we define the \emph{likelihood function} of a 
+For $n \in \mathbb{N} $ and a \emph{fixed} set of $n$ data points or observations $ x = x^{1}_{n}=x_1,x_2,\ldots,x_n$, we define the \emph{likelihood function} of a 
 family of distributions $ P_{x|\Theta} $ as $$ L_{x}(\theta) := P(X=x|\Theta = \theta) \ . $$
 \end{Definition}
 
@@ -459,7 +462,7 @@ are going to present one classic (and still very relevant) answer which is given
 \label{fig:dense_likelihood} 
 \end{subfigure}
 \caption{Plots of likelihood functions for different data samples. All data samples were randomly drawn
-from a binomial distribution with parameters $ n=10 $ and $ \theta=0.7 $. Figure~\ref{fig:sparse_likelihood}
+from a binomial distribution with parameters $ n=10 $ and $ \theta=0.7 $. \chris{maybe we should actually *give* these data samples to make it more concrete? I think the graphs are a bit hard to understand like that.} Figure~\ref{fig:sparse_likelihood}
 depicts the likelihood functions for data samples consisting of 2 draws each. 
 Figure~\ref{fig:dense_likelihood}
 shows the likelihood function for a data sample consisting of 50 draws. The vertical lines indicate
@@ -509,7 +512,7 @@ and 2) when using a computer, very small values may be rounded down to 0. Logari
 as they turn very small numbers into negative numbers that have rather large absolute values.
 
 \begin{Definition}[Log-Likelihood]
-For $n \in \mathbb{N} $ and a \emph{fixed} set of $n$ data points or observations $ x = x^{1}_{n} $, we define the 
+For $n \in \mathbb{N} $ and a \emph{fixed} set of $n$ data points or observations $ x = x^{1}_{n} = x_1,x_2,\ldots,x_n $, we define the 
 log-likelihood function over a 
 family of distributions $ P_{x|\Theta} $ as 
 $$ \mathcal{L}_{x}(\theta) := \log \left(L_{x}(\theta) \right) \ . $$
@@ -603,10 +606,10 @@ $ \theta $ approaches 0 and 1. This constant decrease implies that the derivativ
 Finally, notice that the likelihood is only equal to 0 when $ \theta = 0 $ or $ \theta = 1 $. 
 Thus, the likelihood function does indeed have two minima. However, these 
 occur at the boundary points of the interval $ [0,1] $ and since we just stated that $ L_{x}(\theta) $ is constantly decreasing as $ \theta $ approaches those points,
-we can conclude that $ \frac{d}{d\theta}L_{x}(0) \not = 0 $ and $ \frac{d}{d\theta}L_{x}(1) \not = 0 $ at these points \textbf{Check this!}. Hence, the only point at which the
+we can conclude that $ \frac{d}{d\theta}L_{x}(0) \not = 0 $ and $ \frac{d}{d\theta}L_{x}(1) \not = 0 $ at these points \textbf{Check this! \chris{do you mean the students, or me, Chris?}}. Hence, the only point at which the
 derivative of the likelihood function of the binomial distribution is $ 0 $ is at the sole maximum.
 
-We had mentioned above that having only one maximum is a desirable property. If we want to find the MLE, we have but one choice in this case. If there were
+We have mentioned above that having only one maximum is a desirable property. If we want to find the MLE, we have but one choice in this case. If there were
 several maxima, we would have to compute all of them and pick amongst them. If there are two maxima that have equal likelihood values, we have no way of choosing
 between them and thus no way of determining the single best parameter estimate. Moreover, we will encounter situations in the next chapter where it is very hard (if not
 impossible) to find the global MLE (i.e.\ the MLE at the highest maximum).
@@ -636,7 +639,7 @@ Does the MLE give us the parameter with the highest posterior probability? Unfor
 The MLE only maximises over the likelihood term but not over the prior! Hence it will in general be different from the \textbf{maximum a posteriori} estimate.
 
 \begin{Definition}[Maximum a posteriori estimate]
-A maximum a posteriori (MAP) estimate for a parameter set~~$\supp(\Theta)$? on a data sample $ x $ 
+A maximum a posteriori (MAP) estimate for a parameter set~~$\supp(\Theta)$ on a data sample $ x $ 
 is a value $ \theta^{*} $ such that
 $$ \theta^{*} = \underset{\theta}{\arg\max}\, \, P(\Theta = \theta| X=x) \ . $$
 \end{Definition}
