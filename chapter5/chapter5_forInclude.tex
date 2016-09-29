@@ -448,25 +448,27 @@ are going to present one classic (and still very relevant) answer which is given
 \section{The Maximum Likelihood Principle}
 
 \begin{figure}
-\center
-\begin{subfigure}{\textwidth}
-\center
-\includegraphics[scale=.4]{sparse_likelihood.png}
+\begin{subfigure}{.45\textwidth}
+\includegraphics[scale=.3]{sparse_likelihood.png}
 \caption{}
 \label{fig:sparse_likelihood}
 \end{subfigure}
-\begin{subfigure}{\textwidth}
-\center
-\includegraphics[scale=.4]{dense_likelihood.png}
+~
+\begin{subfigure}{.45\textwidth}
+\includegraphics[scale=.3]{dense_likelihood.png}
 \caption{}
 \label{fig:dense_likelihood} 
 \end{subfigure}
 \caption{Plots of likelihood functions for different data samples. All data samples were randomly drawn
-from a binomial distribution with parameters $ n=10 $ and $ \theta=0.7 $. \chris{maybe we should actually *give* these data samples to make it more concrete? I think the graphs are a bit hard to understand like that.} Figure~\ref{fig:sparse_likelihood}
-depicts the likelihood functions for data samples consisting of 2 draws each. 
+from a binomial distribution with parameters $ n=10 $ and $ \theta=0.7 $. Figure~\ref{fig:sparse_likelihood}
+depicts the likelihood functions for data samples consisting of 2 draws each. The vertical lines indicate
+at which value of $ \theta $ the likelihoods reach their maximums. Two draws contain relatively little
+information about the underlying distribution and thus the likelihood function is fairly spread, indicating that there
+are several parameter values that are about equally good.
 Figure~\ref{fig:dense_likelihood}
-shows the likelihood function for a data sample consisting of 50 draws. The vertical lines indicate
-at which value of $ \theta $ the likelihoods reach their maximums.}
+shows the likelihood function for a data sample consisting of 50 draws. 50 draws convey much more information about the underlying distribution
+and therefore the likelihood function is peaked around the MLE (which is also close to the true parameter $ 0.7 $. Deviating slightly from the MLE in his scenario
+leads to a huge drop in likelihood, effectively ruling out a huge part of the parameter space as candidates for the true parameter.}
 \label{fig:likelihood_plots}
 \end{figure}
 
@@ -606,7 +608,7 @@ $ \theta $ approaches 0 and 1. This constant decrease implies that the derivativ
 Finally, notice that the likelihood is only equal to 0 when $ \theta = 0 $ or $ \theta = 1 $. 
 Thus, the likelihood function does indeed have two minima. However, these 
 occur at the boundary points of the interval $ [0,1] $ and since we just stated that $ L_{x}(\theta) $ is constantly decreasing as $ \theta $ approaches those points,
-we can conclude that $ \frac{d}{d\theta}L_{x}(0) \not = 0 $ and $ \frac{d}{d\theta}L_{x}(1) \not = 0 $ at these points \textbf{Check this! \chris{do you mean the students, or me, Chris?}}. Hence, the only point at which the
+we can safely conclude that the maximum does not lie on the boundary points. Hence, the only point at which the
 derivative of the likelihood function of the binomial distribution is $ 0 $ is at the sole maximum.
 
 We have mentioned above that having only one maximum is a desirable property. If we want to find the MLE, we have but one choice in this case. If there were
