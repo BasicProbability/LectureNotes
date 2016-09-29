@@ -202,8 +202,8 @@ derives from the fact that it basically provides us with the theoretical underpi
 In order to prove the weak law of large numbers, we use two auxiliary lemmas. Once we have proven those, Theorem~\ref{weakLaw} will follow easily. 
 
 \begin{Lemma}[Markov's inequality]\label{markovIneq}
-For a non-negative real random variable $ X $ and any $ a>0 $ it holds that
-$$ P(X \geq a) \leq \dfrac{\mathbb{E}[X]}{a} \ . $$
+For any random variable $ X $ and any $ a>0 $ it holds that
+$$ P(|X| \geq a) \leq \dfrac{\mathbb{E}[|X|]}{a} \ . $$
 \end{Lemma}
 
 \begin{Exercise}
@@ -295,7 +295,7 @@ $$ P(X=x|t(X) = t(x), \Theta = \theta) = P(X=x|t(X) = t(x)) \ . $$
 
 The above definition captures exactly what it means for a statistic to contain all the information
 about the parameters. Once we know the sufficient statistic, we can simply ignore the parameters. As an
-example, consider the binomial distribution with $ n $ trials. For any outcome $ x=x_{1}^{n} $,
+example, consider the Bernoulli distribution. For set of i.i.d Bernoulli trials $ x=x_{1}^{n} $,
 the statistic $ t(x) = \sum_{i=1}^{n} x_{i} $ is sufficient. To see this, consider the distribution
 $ P(X|\sum_{i=1}^{n} x_{i}, \Theta = \theta) $. It takes the following form
 \begin{equation*}
@@ -311,14 +311,14 @@ order in which the events occurred. This shows that the sufficient statistic is 
 in general (after all, we might care about the order of events). It only captures all the information
 about the parameters that the data contain.
 
-A statistic that is non-sufficient for the binomial distribution is the value of the first outcome, i.e.\ 
+A statistic that is non-sufficient for the Bernoulli distribution is the value of the first outcome, i.e.\ 
 $ t(x) = x_{1} $. There are several binary sequences that have the same starting value but
-different numbers of ones and zeros. The corresponding condition is
+different numbers of ones and zeros. The corresponding conditional distribution is
 \begin{equation*}
 P(X=y|x_{1}, \Theta = \theta)
 \begin{cases}
 = 0 & \mbox{ if } y_{1} \not = x_{1} \\
-\propto \binom{k}{n} \theta_{k} (1 - \theta)^{n-k} & \mbox{ otherwise, where } k = \sum_{i=1}^{n} x_{i}
+\propto \binom{k}{n} \theta^{k} (1 - \theta)^{n-k} & \mbox{ otherwise, where } k = \sum_{i=1}^{n} x_{i}
 \end{cases}
 \end{equation*}
 where the proportionality follows because we need to renormalise the probability to all those
@@ -360,7 +360,7 @@ where the last equality follows from our assumption that the p.m.f. of $ X $ can
 in the next step.
 \begin{align}
 &P(X=x|v(X) = v, \Theta=\theta) = \dfrac{P(X=x,v(X)= v|\Theta = \theta)}{P(v(X) = v|\Theta = \theta)} \\
-&= \dfrac{P(X=x|\Theta = \theta))}{P(v(X) = v|\Theta = \theta))}  \\
+&= \dfrac{P(X=x|\Theta = \theta)}{P(v(X) = v|\Theta = \theta)}  \\
 &= \frac{g(\theta, v)h(x, v)}{\sum_{x:v(x)=v} g(v, \theta) h(x,v)}
 = \frac{h(x, v)}{\sum_{x:v(x)=v} h(x,v)}
 \end{align}
