@@ -341,12 +341,12 @@ the data. Thus the expected sufficient statistics for a categorical are the expe
 probabilities! Thus we need to multiply the posteriors per of each observed outcome with the number of times this outcome was
 seen in the data and sum over all observed outcomes. For mixture component $ c_{1} $ (the first coin with parameter $ \theta^{0}_{c_{1}} = 0.4 $) this gives
 \begin{align}
-\E(Y = c_{1}|X=x,\Theta= \theta^{0}) = 2 \times 0.5674795 + 3 \times 0.4568744 \\ 
+\E(Y = c_{1}|X=x,\Theta= \theta^{0}) = 2 \times 0.5674795 + 3 \times 0.4568744 \label{eq:c1Expectation} \\ 
 + 4 \times 0.3436451 + 5 \times 0.237068 + 6 \times 0.1114767 = 5.946387 \nonumber \ .
 \end{align}
-By parallel calculations we get $ \E(Y = c_{2}X=x,\Theta= \theta^{0}) = 10.7153 $ and $ \E(Y = c_{3}X=x,\Theta= \theta^{0}) = 3.338238 $. 
+By parallel calculations we get $ \E(Y = c_{2}\mid X=x,\Theta= \theta^{0}) = 10.7153 $ and $ \E(Y = c_{3}\mid X=x,\Theta= \theta^{0}) = 3.338238 $. 
 These are our expected sufficient statistics. Importantly, we get 
-$ \E[Y = c_{1}|X=x,\Theta= \theta^{0}] + \E[Y = c_{2}|X=x,\Theta= \theta^{0}] + \E[Y = c_{3}|X=x,\Theta= \theta^{0}] \approx 20 $ (there is some slight numerical imprecision
+$ \E[Y = c_{1}\mid X=x,\Theta= \theta^{0}] + \E[Y = c_{2}\mid X=x,\Theta= \theta^{0}] + \E[Y = c_{3}\mid X=x,\Theta= \theta^{0}] \approx 20 $ (there is some slight numerical imprecision
 caused by our computer). Notice that this is a useful debugging technique when implementing the algorithm: if the expected number of mixture components
 does not add up to the number of latent variables in your model, then you almost certainly have a bug in your code!
 
@@ -355,7 +355,7 @@ does not add up to the number of latent variables in your model, then you almost
 
 \begin{tabular}{c|c|c|c|c}
 \hline
-outcome & \#occurrences & 0.4 & 0.5 & 0.65\\
+outcome & \#occurrences & c\_1 & c\_2 & c\_3\\
 \hline
 2 & 4 & 0.5674795 & 0.4124300 & 0.0200905\\
 \hline
@@ -370,8 +370,7 @@ outcome & \#occurrences & 0.4 & 0.5 & 0.65\\
 \end{tabular}
 
 
-\caption{Posteriors for the mixture components of the coin flip data set from our EM example. The mixture components are 
-represented by the parameters of the distributions that they are linked to.}
+\caption{Posteriors per outcome for the mixture components of the coin flip data set from our EM example.}
 \label{tab:posteriors}
 \end{table}
 
@@ -379,16 +378,34 @@ Next we turn to the sufficient statistics for the binomial distributions linked 
 since the binomials are conditional distributions (they are conditioned on the identity of the coins), the counts have to be taken with respect to their conditioning
 contexts. In other words: we cannot count the observed outcomes independently but we have to count pairs of observed and latent variables. Formally this means that 
 for one binomially distributed observation $ x_{i} $ that $ \E[X=x_{i},Y_{i}=c_{j}|\Theta=\theta^{0}] = P(Y_{i}=c_{j}|X_{i}=x_{i}, \Theta=\theta^{0}) $. This is again
-just the posterior that we find in Table~\ref{tab:posteriors}. The only difference is how we are going to sum the posteriors this time. Before we were interested
-in the sufficient statistics of the categorical over mixture components and thus summed over all observed outcomes. Now we actually need to discriminate between
-observed outcomes. We only sum over observations that had the same outcome. Working with Table~\ref{tab:posteriors} this means that we simply multiplying each
-cell, which contains the posterior for one observation, by the number of times each outcome has been observed in the data set. For the pairs $ (X=2,Y=c_{1}) $
+just the posterior that we find in Table~\ref{tab:posteriors}. 
+
+To get the expectations for the mixture components, we summed the columns in Table~\ref{tab:posteriors}, effectively conflating all outcomes of $ X $. We did this
+because we did not care about $ X $ at this stage, only about the expectations of $ Y $. When computing the posteriors for the outcomes given the mixture components,
+we have to sum the posteriors differently. Now we actually need to discriminate between
+observed outcomes. We only sum over observations that had the same outcome. Working with Table~\ref{tab:posteriors} this means that we multiply each
+cell, which contains the posterior for one observation, by the number of times each outcome has been observed in the data set. In other words, we are summing
+the posteriors over the observations that were equal to the given outcome. For the pairs $ (X=2,Y=c_{1}) $
 and $ (X=4,Y = c_{3}) $ this gives:
 \begin{align}
 \E[X=2,Y=c_{1}|\Theta=\theta^{0}_{c^{1}}] = 4 \times 0.5674795 = 2.269918 \\
 \E[X=4,Y=c_{3}|\Theta=\theta^{0}_{c^{3}}] = 5 \times 0.0944114 = 0.472057
 \end{align} 
-The expected sufficient statistics for all binomials can be found in Table~\ref{tab:binomPosteriors}. That we have computed all sufficient statistics
+The expected number of times each outcome has been drawn from each coin can be found in Table~\ref{tab:binomCounts}. 
+
+Recall that the sufficient statistic for the binomial is 
+$ \sum_{i=1}^{n} x_{i} $ where $ x_{i} $ is the $ i^{th} $ Bernoulli trial of that binomial. 
+When dealing with $ m $ i.i.d. binomial draws, this becomes $ \sum_{i=1}^{nm} x_{i} $. Notice that we do not
+know $ m $ because we don't actually know how many draws stem from each coin. Instead, we use the expected number of times
+that each coin (mixture component) was used. We have already computed these expectations and noted them down in Table~\ref{tab:posteriors}. Thus, for coin $ c_{1} $
+the expected sufficient binomial statistic is
+\begin{align}
+\E\left[\sum_{i=1}^{nm} x_{i}\mid c_{1}\right] &= 2 \times 2.2699180 + 3 \times 0.9137487+ 4 \times 1.7182254  \\
+&+ 5 \times 1.1853398 + 6 \times 0.5872594 = 23.60424 \nonumber
+\end{align}
+The expected sufficient statistics for all coins are given in Table~\ref{tab:binomPosteriors}.
+
+That we have computed all sufficient statistics
 for our model means that we have completed the E-step!
 
 \begin{table}
@@ -396,7 +413,7 @@ for our model means that we have completed the E-step!
 
 \begin{tabular}{c|c|c|c}
 \hline
-outcome & 0.4 & 0.5 & 0.65\\
+outcome & c\_1 & c\_2 & c\_3\\
 \hline
 2 & 2.2699180 & 1.6497199 & 0.0803621\\
 \hline
@@ -412,6 +429,22 @@ outcome & 0.4 & 0.5 & 0.65\\
 
 
 \caption{Posterior expectations of the observed outcomes in the context of each mixture component.}
+\label{tab:binomCounts}
+\end{table}
+
+\begin{table}
+\center 
+
+\begin{tabular}{c|c|c}
+\hline
+c\_1 & c\_2 & c\_3\\
+\hline
+23.60424 & 45.02833 & 14.36743\\
+\hline
+\end{tabular}
+
+
+\caption{Expected sufficient statistics for each or the three coins.}
 \label{tab:binomPosteriors}
 \end{table}
 
@@ -421,9 +454,13 @@ outcome & 0.4 & 0.5 & 0.65\\
 the mixture components are categorically
 distributed and thus in the M-step we want to find the MLE of that categorical. In general, the MLE for $ \theta_{j} $ of a categorical is
 $ \frac{\#c_{j}}{n} $\footnote{This fact can easily be seen by letting $ \#c_{j} $ be the number of successes in the realisation of a binomial RV and the sum of all
-$ \#c_{m},~m \not = j $ be the number of failures. Then clearly $ \frac{\#c_{j}}{n} $ is the MLE.}. In our case $ n=20 $. Since we have not observed the
+$ \#c_{m},~m \not = j $ be the number of failures. Then clearly $ \frac{\#c_{j}}{n} $ is the MLE.}. In our case $ n=10 $. Since we have not observed the
 latent variables, we simply use their expected sufficient statistics (their expected counts) instead. Thus we set 
-$ \theta_{j}^{(1)} = \frac{\E[Y = c_{j}|X=x,\Theta= \theta^{0}]}{20} $. The updated mixture weights then are 
+$ \theta_{j}^{(1)} = \frac{\E[Y = c_{j}|X=x,\Theta= \theta^{0}]}{20} $\footnote{When implementing the algorithm, numerical imprecisions occur due the limited
+memory of our computers. To ensure that the distribution obtained from the M-step really sums to 1, you should use the sum 
+$ \sum_{j=1}^{3} \frac{\E[Y = c_{j}|X=x,\Theta= \theta^{0}]}{20} $. This sum should be equal to 20 up to at least the third decimal but may not be exactly equal to
+20. Having a distribution that does not exactly sum to 1 may not be to bad after 1 M-step. However, since the M-step gets repeated after every iteration, the
+error introduced by numerical imprecision would grow exponentially, if we always divided by 20 instead of the above sum.}. The updated mixture weights then are 
 \begin{align}
 P(Y=c_{1}|\Theta= \theta^{1}) = 0.3337246 \\
 P(Y=c_{2}|\Theta= \theta^{1}) = 0.5261878 \nonumber \\
@@ -433,9 +470,26 @@ P(Y=c_{3}|\Theta= \theta^{1}) = 0.1400877 \nonumber
 We already know the maximum likelihood estimate for binomial distributions from 
 Section\ref{sec:parameterEstimation}. The only novelty when it comes to EM for mixture models
 is that the conditioning contexts are not observed anymore. Again, we fall back on the expected
-context counts again. The maximum likelihood estimate for an outcome $ x $ conditioned on
+context counts. The maximum likelihood estimate for an outcome $ x $ conditioned on
 mixture component $ c_{j} $ is
-$$ \theta_{c_{j}x}^{1} = \frac{\E[X=x|Y=c_{j},\Theta=\theta^{0}]}{\sum_{x \in \mathcal{X}}\E[X=x|Y_{i}=c_{j},\Theta=\theta^{0}]}\ . $$
+\begin{equation}
+\theta^{1}_{c_{j}} = \frac{\E[X=x|Y=c_{j},\Theta=\theta^{0}]}{\sum_{x \in \mathcal{X}}\E[X=x|Y_{i}=c_{j},\Theta=\theta^{0}]}\ .
+\end{equation}
+
+For example, if we want to find the conditional distribution for $ c_{1} $, we need to compute the binomial MLE \textit{only
+for the data associated with $ c_{1} $}! We already know from Equation~\eqref{eq:c1Expectation} that the total expected 
+occurrence of $ c_{1} $ in our data is $ 5.946387 $. You can verify that this is exactly the sum of the first column in
+Table~\ref{tab:binomCounts}. We also know that the MLE for repeated binomial trials is $ \frac{\sum^{nm}_{i=1}x_{i}}{nm} $ where
+$ n $ is the number of Bernoulli trials in each binomial draw (10 in our case) and $ m $ is the number of of binomial draws. Since we do
+not observe the number of draws from $ c_{1} $ our best guess is the posterior expectation. Thus we set $ m = 5.946387 $. We also do not
+directly observe the number of success per draw from $ c_{1} $ and instead compute the number of expected successes. The number of 
+expected successes happens to be the expected sufficient statistic for the binomial. We have already computed those sufficient statistics
+in Table~\ref{tab:binomPosteriors}. For coin $ c_{1} $ the binomial MLE is thus
+\begin{equation}
+\theta_{c_{j}}^{(1)} =  \frac{\E\left[\sum_{i=1}^{nm} x_{i}\mid c_{1}\right]}{n\E\left[c_{j}\right]} = \frac{23.60424}{10 \times 5.946387}
+= 
+\end{equation}
+
 The updated binomial distributions are given in Table~\ref{tab:newBinoms}. This completes our parameter
 updates and thus the M-step. We can start the next round of estimation by doing the E-step using the
 updated parameters $ \theta^{1} $. We will stop iterating when the parameters do not change anymore or
@@ -443,27 +497,29 @@ after a pre-specified number of iterations.
 
 \begin{table}
 \center
-\begin{knitrout}
-\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}
-\begin{tabular}{c|c|c|c}
+\begin{kframe}
+\begin{alltt}
+\hlstd{newBinoms} \hlkwb{=} \hlkwd{matrix}\hlstd{(}\hlnum{0}\hlstd{,}\hlnum{1}\hlstd{, cols)}
+
+\hlkwa{for} \hlstd{(j} \hlkwa{in} \hlnum{1}\hlopt{:}\hlstd{cols) \{}
+        \hlstd{newBinoms[}\hlnum{1}\hlstd{,j]} \hlkwb{=} \hlstd{binomPosteriorExp[}\hlnum{1}\hlstd{,j]}\hlopt{/}\hlstd{(}\hlnum{10} \hlopt{*} \hlkwd{sum}\hlstd{(binomPosteriors[,j]))}
+\hlstd{\}}
+
+\hlstd{output} \hlkwb{=} \hlstd{newBinoms}
+\hlkwd{colnames}\hlstd{(output)} \hlkwb{=} \hlkwd{c}\hlstd{(}\hlstr{"c_1"}\hlstd{,} \hlstr{"c_2"}\hlstd{,} \hlstr{"c_3"}\hlstd{)}
+\hlkwd{kable}\hlstd{(output,} \hlkwc{align}\hlstd{=}\hlstr{"c"}\hlstd{)}
+\end{alltt}
+\end{kframe}
+\begin{tabular}{c|c|c}
 \hline
-outcome & 0.4 & 0.5 & 0.65\\
+c\_1 & c\_2 & c\_3\\
 \hline
-2 & 0.3400885 & 0.1567615 & 0.0286828\\
-\hline
-3 & 0.1369016 & 0.0946558 & 0.0321643\\
-\hline
-4 & 0.2574317 & 0.2669881 & 0.1684862\\
-\hline
-5 & 0.1775925 & 0.2762778 & 0.3237902\\
-\hline
-6 & 0.0879856 & 0.2053167 & 0.4468764\\
+0.3536485 & 0.4278732 & 0.5128013\\
 \hline
 \end{tabular}
 
 
-\end{knitrout}
-\caption{}
+\caption{New parameter values for the binomials associated with each mixture component.}
 \label{tab:newBinoms}
 \end{table}
 
