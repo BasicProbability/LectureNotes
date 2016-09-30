@@ -497,19 +497,7 @@ after a pre-specified number of iterations.
 
 \begin{table}
 \center
-\begin{kframe}
-\begin{alltt}
-\hlstd{newBinoms} \hlkwb{=} \hlkwd{matrix}\hlstd{(}\hlnum{0}\hlstd{,}\hlnum{1}\hlstd{, cols)}
 
-\hlkwa{for} \hlstd{(j} \hlkwa{in} \hlnum{1}\hlopt{:}\hlstd{cols) \{}
-        \hlstd{newBinoms[}\hlnum{1}\hlstd{,j]} \hlkwb{=} \hlstd{binomPosteriorExp[}\hlnum{1}\hlstd{,j]}\hlopt{/}\hlstd{(}\hlnum{10} \hlopt{*} \hlkwd{sum}\hlstd{(binomPosteriors[,j]))}
-\hlstd{\}}
-
-\hlstd{output} \hlkwb{=} \hlstd{newBinoms}
-\hlkwd{colnames}\hlstd{(output)} \hlkwb{=} \hlkwd{c}\hlstd{(}\hlstr{"c_1"}\hlstd{,} \hlstr{"c_2"}\hlstd{,} \hlstr{"c_3"}\hlstd{)}
-\hlkwd{kable}\hlstd{(output,} \hlkwc{align}\hlstd{=}\hlstr{"c"}\hlstd{)}
-\end{alltt}
-\end{kframe}
 \begin{tabular}{c|c|c}
 \hline
 c\_1 & c\_2 & c\_3\\

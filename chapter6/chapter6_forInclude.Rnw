@@ -427,7 +427,7 @@ after a pre-specified number of iterations.
 
 \begin{table}
 \center
-<<newBinoms, echo=T, results="asis">>=
+<<newBinoms, echo=F, results="asis">>=
 newBinoms = matrix(0,1, cols)
 
 for (j in 1:cols) {
