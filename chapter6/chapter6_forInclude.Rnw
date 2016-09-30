@@ -1,4 +1,4 @@
-\chapter{The EM algorithm and Information Theory}
+\chapter{The EM Algorithm}
 
 \section{Mixture Models}\label{sec:mixtureModels}
 
@@ -16,14 +16,15 @@ While it may in general be quite hard to formulate latent-variable models, there
 latent-variable models that have wide-spread applications. One such class are \textbf{mixture models}.
 
 \begin{Definition}[Mixture Model]\label{def:mixtureModel}
-We assume jointly distributed random variables $ X=X_{1}^{n} $ and $ Y=Y_{1}^{n} $ where $ Y $ is categorical and
+We assume jointly distributed random variables $ X=X_{1}^{n} $ and $
+Y=Y_{1}^{n} $ where $ Y $ is \href{https://en.wikipedia.org/wiki/Categorical_variable}{categorical} (as defined on Page~\pageref{lab:categorical}) and
 $ \mathcal{Y} = \{c_{1}, \ldots, c_{k}\} $. The $ X_{i} $ are observed data, the $ Y_{i} $ are latent
 or observed and the $ c_{j}, 1\leq j \leq k $ are called mixture components. 
 If the distribution
 $ P(X_{1}^{n}=x_{1}^{n}, Y_{1}^{n} = y_{1}^{n}) $ factors as
-$$ P(X_{1}^{n}=x_{1}^{n}, Y_{1}^{n} = Y_{1}^{n})= P(Y_{1}^{n} = y_{1}^{n}) \prod_{i=1}^{n} P(X_{i}=x_{i}|Y_{i} = y_{i}) \ . $$
-we call this model a mixture model. The marginal probabilities $ P(Y_{i}=y_{i}) $ for $ 1 \leq i \leq n $ are called
-mixture weights.
+$$ P(X_{1}^{n}=x_{1}^{n}, Y_{1}^{n} = Y_{1}^{n})= P(Y_{1}^{n} = y_{1}^{n}) \prod_{i=1}^{n} P(X_{i}=x_{i} \mid Y_{i} = y_{i}) \ . $$
+we call this model a \emph{mixture model}. The marginal probabilities $ P(Y_{i}=y_{i}) $ for $ 1 \leq i \leq n $ are called
+\emph{mixture weights}.
 \end{Definition}
 
 Mixture models are extremely useful whenever we have different ways to think about our data. Each way
@@ -54,8 +55,8 @@ that the mixture components are independent of each other. This means that the c
 sequence of coin flips was chosen independently of the coins used for the other sequences. As usual, we call our data $ x $. 
 This information suffices to formulate our mixture model.
 \begin{align} 
-&P(X=x_{1}^{n},Y_{1}^{n}=y_{1}^{n}\mid \Theta=\theta) \label{eq:mixtureExample} \\
-&= \prod_{i=1}^{n} P(Y_{i}= y_{i}|\Theta=\theta)P(X_{i}=x_{i}|Y_{i}=y_{i},\Theta=\theta) \nonumber 
+&P(X_1^n=x_{1}^{n},Y_{1}^{n}=y_{1}^{n}\mid \Theta=\theta) \label{eq:mixtureExample} \\
+&= \prod_{i=1}^{n} P(Y_{i}= y_{i} \mid \Theta=\theta)P(X_{i}=x_{i} \mid Y_{i}=y_{i},\Theta=\theta) \nonumber 
 \end{align}
 
 Notice that if we were given the mixture weights, estimating
@@ -65,21 +66,23 @@ model could then easily be constructed because the mixture weights are known.
 Usually, we face a more difficult problem when working with mixture models. Neither the mixture
 weights nor the parameters of the mixture components are known. In this case, doing straighforward MLE is impossible because the data is
 incomplete\chris{It seems to me that \emph{incomplete} is not defined
-  formally enough. What do we mean by it?}\philip{I extended the footnote with an explanation. Does that work?}\footnote{Incomplete data is 
+  formally enough. What do we mean by it?}\philip{I extended the
+  footnote with an explanation. Does that work?}\chris{That's helpful!}\footnote{Incomplete data is 
   another name for a collection of random variables of which some have unobservable (latent) outcomes. Data modelled with a mixture model is incomplete because it contains
-  an observed part (the number of heads in our example) and a latent part (the mixture components which in our example are the coins). In general, whenever you have complete data, analytic MLE computation is possible. The moment your data is incomplete, it becomes impossible.}. 
+  an observed part (the number of heads in our example) and a latent
+  part (the mixture components which in our example are the types of coin). In general, whenever you have complete data, analytic MLE computation is possible. The moment your data is incomplete, it becomes impossible.}. 
 
 How can we go about estimating the model parameters, i.e.\ the parameters of the mixture components and the mixture weights?
 Each factor
 in \eqref{eq:mixtureExample} is in fact a joint distribution (by the chain rule). We exploit this to rewrite the model as a model of the
 observed data only.
 \begin{align}\label{eq:marginal}
-P(X=x_{1}^{n}| \Theta= \theta) &= \prod_{i=1}^{n} \sum_{j=1}^{3} P(X_{i}=x_{i},Y_{i}=c_{j}| \Theta= \theta)
+P(X_1^n=x_{1}^{n} \mid  \Theta= \theta) &= \prod_{i=1}^{n} \sum_{j=1}^{3} P(X_{i}=x_{i},Y_{i}=c_{j} \mid  \Theta= \theta)
 \end{align}
 \philip{Compare this to Equation~\eqref{eq:mixtureExample}. There we constructed a probability distribution over the joint outcomes $ X_{1}^{n} $ and
-$ Y_{1}^{n} $. Because we assumed independence between mixture components, the distribution could be factorised over pairs $ (X_{i},Y_{i} $ for $ 1 \leq i \leq n $.
+$ Y_{1}^{n} $. Because we assumed independence between mixture components, the distribution could be factorised over pairs $ (X_{i},Y_{i})$ for $ 1 \leq i \leq n $.
 In Equation~\eqref{eq:marginal} we then inferred the marginal distribution for $ X_{1}^{n} $. Recall that in order to compute the marginal of $ X_{1}^{n} $ we
-need to sum over all possible $ Y_{1}^{n} $. Because their joint distribution factorises nicely, we can perform the marginalisation per $ (X_{i},Y_{i} $ pair.
+need to sum over all possible $ Y_{1}^{n} $. Because their joint distribution factorises nicely, we can perform the marginalisation per $ (X_{i},Y_{i})$ pair.
 This is exactly what is happening in Equation~\eqref{eq:marginal}. 
 Please pay attention to a crucial notational difference between \eqref{eq:mixtureExample} and
 \eqref{eq:marginal}: In the former we wrote $ Y_{i}=y_{i} $ whilst in the latter we wrote $ Y_{i}=c_{j} $. Why did we do this? Equation~\eqref{eq:mixtureExample} is
@@ -91,16 +94,24 @@ of summing over the possible outcomes $ c_{1},c_{2},c_{3} $.}
   \eqref{eq:mixtureExample} here??}\philip{Sorry, the conditioning was wrong in 6.1. Please check whether the above explanation helps you to understand what's going
   on now.}
 % \begin{align}\label{eq:marginal}
-% P(X=x_{1}^{n}| \Theta= \theta) &= \sum_{j=1}^3 P(Y_i = c_j)
-%                                  P(X=x_{1}^{n}|Y_{1}^{n}=y_{1}^{n},\Theta=\theta)
+% P(X=x_{1}^{n} \mid  \Theta= \theta) &= \sum_{j=1}^3 P(Y_i = c_j)
+%                                  P(X=x_{1}^{n} \mid Y_{1}^{n}=y_{1}^{n},\Theta=\theta)
 %   \\
-% &=  \prod_{i=1}^{n} \sum_{j=1}^{3} P(X_{i}=x_{1},Y_{i}=c_{j}| \Theta= \theta)
+% &=  \prod_{i=1}^{n} \sum_{j=1}^{3} P(X_{i}=x_{1},Y_{i}=c_{j} \mid  \Theta= \theta)
 % \end{align}
 
-\philip{We thus see that the sums are marginalisation steps.} Now that we have related mixture models to the probability of the observed data, we can hope to estimate
+\philip{We thus see that the sums are marginalisation steps.}\chris{I think all this can be written in a concise way as follows:
+\begin{align*}
+P(X_1^n=x_{1}^{n} \mid \Theta= \theta) &= \sum_{j_1=1}^3 \sum_{j_2=1}^3 \cdots \sum_{j_n=1}^3 P(X_1^n=x_{1}^{n}, Y_1=c_{j_1}, \ldots, Y_n=c_{j_n} \mid \Theta= \theta) \\
+&= \sum_{j_1=1}^3 \sum_{j_2=1}^3 \cdots \sum_{jn2=1}^3 \prod_{i=1}^{n} P(X_{i}=x_{i},Y_{i}=c_{j_i} \mid  \Theta= \theta) \\
+&= \prod_{i=1}^{n} \sum_{j=1}^3 P(X_{i}=x_{i},Y_{i}=c_{j} \mid  \Theta= \theta) \, ,
+\end{align*}
+where the second equality uses the fact that we have a mixture model and hence, the $P(X_1^n=x_1^n, Y_1^n=y_1^n \mid \Theta = \theta)$ factorizes.
+}
+Now that we have related mixture models to the probability of the observed data, we can hope to estimate
 their parameters using the maximum likelihood principle.
 
-There is one remaining problem, however: if the mixture weights are unknown, there is no closed-form solution for estimating the likelihood function. This is because
+There is one remaining problem, however: if the mixture weights $P(Y_i=y_i)$ are unknown, there is no closed-form solution for estimating the likelihood function. This is because
 the likelihood depends on the parameters of the mixture components whose distribution, given
 by the mixture weights, is unknown. This means that while we can compute the likelihood for each
 individual mixture component, we cannot compute the likelihood of the entire mixture model because we
@@ -126,7 +137,7 @@ namely the \textbf{expectation-maximisation (EM) algorithm}. This
 algorithm allows to find a local maximum of the likelihood function of mixture models or, more
 generally, models with missing data. 
 
-\paragraph{Another example of latent data} To give you some more intuition for what latent data is we provide a further example that has
+\paragraph{Another example of latent data.} To give you some more intuition for what latent data is we provide a further example that has
 spawned a lot of research. Assume you run a website that recommends movies
 based on a user's preferences. In order to make statistical predictions about what type of user
 likes what kind of movie, you ask your users to rate movies according to different categories.
@@ -148,17 +159,17 @@ component given the data point $ x_{i} $.
 Using the posterior over the latent (missing) data, the EM algorithm allows us to probabilistically fill in the missing data and find good mixture weights
 (where you should understand \textit{good} in the maximum-likelihood sense). The idea behind the
 algorithm is simple: first, compute the expected number of occurrences of the missing data values (the mixture 
-components). Then treat these expectations as observed and do maximum likelihood estimation as usual\footnote{Notice that expectations can be
-fractional \chris{what does ``fractional'' mean here?}\philip{i.e. take on non-integer values} and thus when treating them as observations we are handling a dataset with fractional observations. While this may be conceptually awkward
+components). Then treat these expectations as observed and do maximum likelihood estimation as usual\footnote{Notice that expectations can take on non-integer values and thus when treating them as observations we are handling a dataset with ``fractional'' observations. While this may be conceptually awkward
 it does not change the mathematics of maximum likelihood estimation.}. Repeat the procedure 
 until the likelihood does not increase any further. Notice that this procedure requires to
 fix the number of mixture components in advance.
 
 More formally, assume a data set $ X=x $. Furthermore, define $ Y $ as a random variable over latent data that can
-take on $ |Y| $ possible values. Then the likelihood function is 
+take on $ |\mathcal{Y}| $ possible values $c_1, c_2, \ldots, c_{|\mathcal{Y}|}$\chris{or $y_1, y_2, \ldots$??}. Then the likelihood function is 
 \begin{align}
-L_{x}(\theta) = P(X=x|\Theta=\theta) = \underset{j=1}{\overset{|Y|}{\sum}} P(X=x, Y=y_{j}|\Theta=\theta)
+L_{x}(\theta) = P(X=x \mid \Theta=\theta) = \underset{j=1}{\overset{|\mathcal{Y}|}{\sum}} P(X=x, Y=y_{j} \mid \Theta=\theta)
 \end{align}
+\chris{before, these values were called $c_j$...}
 where $ \Theta $ ranges over the parameters of the joint distributiforon $ P_{XY} $. Recall that EM
 probabilistically fills in missing data. However, since we are doing maximum likelihood estimation, we
 are not so much interested in the missing data itself but rather in the sufficient statistics of
@@ -166,7 +177,7 @@ that data (see Section~\ref{sec:sufficientStats}). Since we cannot directly obta
 of missing data, we will instead compute the \textit{expected sufficient statistics}\footnote{
 Because we are referring to sufficient statistics our exposition of EM is specific to distributions
 in the exponential family. The EM algorithm can also be made more general. However, since virtually
-all distributions that are of interest in practice do belong to the exponential family, we will not make this kind of generalisation.
+all distributions of interest in practice do belong to the exponential family, we will not make this kind of generalisation.
 }.
 
 The EM algorithm is an iterative 
@@ -176,22 +187,23 @@ To formalize the EM algorithm, assume we are at iteration $l$ for which we have 
 $\theta^{(l)} $ (the initial estimate $\theta^{(0)}$ can be set arbitrarily). Based on this parameter 
 estimate we then compute the expected sufficient statistics of our model which we will call $ t(y,x) $.
 \begin{equation} \label{Estep}
-t(y,x)^{(l+1)} = \E(t(Y,x)|X = x,\Theta = \theta^{(l)})
+t(y,x)^{(l+1)} = \E(t(Y,x) \mid X = x,\Theta = \theta^{(l)})
 \end{equation} 
+\chris{would it make sense to always write $\E_Y(\ldots)$ to indicate where the expectation is taken over?}
 
 Equation~\eqref{Estep} is known as the \textbf{E(xpectation)-step} of the EM algorithm. This name
 comes from the fact that in this step we compute the expected sufficient statistics. 
 To make the algorithm complete, we still miss a
 \textbf{M(aximization)-step}. But that step is simple. We pretend that the expected sufficient statistics of 
 the latent data were actually observed. Once we pretend to observe the expected statistics, the maximization 
-step can be performed using be maximum-likelihood estimation:
+step can be performed using the maximum-likelihood estimation:
 \begin{equation} \label{Mstep}
-\theta^{(l+1)} = \underset{\theta}{\arg\max} P(X=x, t(Y,X) = t(y,x)^{(l+1)}|\theta)
+\theta^{(l+1)} = \underset{\theta}{\arg\max}  P(X=x, t(Y,X) = t(y,x)^{(l+1)} \mid \theta)
 \end{equation}
 
 \begin{Definition}[EM algorithm]\label{def:EM}
 We assume a data set $ x $ and postulate that there is unobserved data $ y $. We also
-assume a probabilistic model $ P(X=x,Y=y|\Theta = \theta) $ whose parameters are realisations of a RV
+assume a probabilistic model $ P(X=x,Y=y \mid \Theta = \theta) $ whose parameters are realisations of a RV
 $ \Theta $. Let $ t(x,y) $ be the sufficient statistics for that model. Then any
 iterative algorithm with $ m $ iterations that performs the following
 steps for $0\leq l \leq m-1$, 
@@ -225,28 +237,28 @@ $$ [6, 5, 4, 2, 2, 6, 5, 5, 4, 2, 5, 2, 4, 4, 6, 4, 5, 6, 3, 3 ] $$
 Then for each $ x_{i} $ we check how likely each coin is to have generated that point. In order to compute the posterior for each coin given a data point, we need
 the likelihood for that data point. For the first observation we get the following likelihood values.
 \begin{align}
-&P(X_{1}=6|Y_{1} = c_{1}) = P(X_{1}=6|Y_{1}=c_{1},\Theta = 0.4) = 0.1114767& \\
-&P(X_{1}=6|Y_{1} = c_{2}) = P(X_{1}=6|Y_{2}=c_{2},\Theta = 0.5) = 0.2050781& \nonumber \\ 
-&P(X_{1}=6|Y_{1} = c_{3}) = P(X_{1}=6|Y_{3}=c_{3},\Theta = 0.65) = 0.2376685& \nonumber
+&P(X_{1}=6 \mid Y_{1} = c_{1}) = P(X_{1}=6 \mid Y_{1}=c_{1},\Theta = 0.4) = 0.1114767& \\
+&P(X_{1}=6 \mid Y_{1} = c_{2}) = P(X_{1}=6 \mid Y_{2}=c_{2},\Theta = 0.5) = 0.2050781& \nonumber \\ 
+&P(X_{1}=6 \mid Y_{1} = c_{3}) = P(X_{1}=6 \mid Y_{3}=c_{3},\Theta = 0.65) = 0.2376685& \nonumber
 \end{align}
 
 Recall that the mixture weights are nothing else than priors over mixture components. Hence, in order to get the joint distribution over observed and
 latent data, we multiply the likelihoods by the mixture weights.
 \begin{align}
-&P(X_{1}=6,Y_{1} = c_{1}) = 0.25 \times P(X_{1}=6|Y_{1}=c_{1},\Theta = 0.4) = 0.02786918 \\
-&P(X_{1}=6,Y_{1} = c_{2}) = 0.5 \times P(X_{1}=6|Y_{2}=c_{2},\Theta= 0.5)  = 0.1025391 \nonumber \\ 
-&P(X_{1}=6,Y_{1} = c_{3}) =  0.25 \times P(X_{1}=6|Y_{3}=c_{3},\Theta = 0.65)  = 0.05941712 \nonumber
+&P(X_{1}=6,Y_{1} = c_{1}) = 0.25 \times P(X_{1}=6 \mid Y_{1}=c_{1},\Theta = 0.4) = 0.02786918 \\
+&P(X_{1}=6,Y_{1} = c_{2}) = 0.5 \times P(X_{1}=6 \mid Y_{2}=c_{2},\Theta= 0.5)  = 0.1025391 \nonumber \\ 
+&P(X_{1}=6,Y_{1} = c_{3}) =  0.25 \times P(X_{1}=6 \mid Y_{3}=c_{3},\Theta = 0.65)  = 0.05941712 \nonumber
 \end{align}
 
 We are ultimately interested in the posterior over mixture components. Because we are dealing with a categorical
 distribution here, the posterior probability is exactly the expected
 number of times that each coin has generated data point $ x_{1} $. This is to say that
-$\E[Y=c_{j}|X_{1}=6, \Theta = \theta^{0}] = P(Y_{1}=c_{j}|X_{1}=6, \Theta=\theta^{0}) $. The
-posterior given $ x_{1} $ is shown below.
+$\E[Y=c_{j} \mid X_{1}=6, \Theta = \theta^{0}] = P(Y_{1}=c_{j} \mid X_{1}=6, \Theta=\theta^{0}) $. The
+posterior given $ x_{1}=6 $ is shown below.
 \begin{align}\label{eq:posterior}
-P(Y_{1} = c_{1}|X_{1}=6,\Theta= \theta^{0}) = \frac{P(X_{1}=6,Y_{1} = c_{1}|\Theta= \theta^{0})}{P(X_1 = 6|\Theta= \theta^{0})} = 0.146814 \\
-P(Y_{1} = c_{2}|X_{1}=6,\Theta= \theta^{0}) = \frac{P(X_{1}=6,Y_{1} = c_{2}|\Theta= \theta^{0})}{P(X_1 = 6|\Theta= \theta^{0})} = 0.5401758 \nonumber \\
-P(Y_{1} = c_{3}|X_{1}=6,\Theta= \theta^{0}) = \frac{P(X_{1}=6,Y_{1} = c_{3}|\Theta= \theta^{0})}{P(X_1 = 6|\Theta= \theta^{0})} = 0.3130094 \nonumber
+P(Y_{1} = c_{1} \mid X_{1}=6,\Theta= \theta^{0}) = \frac{P(X_{1}=6,Y_{1} = c_{1} \mid \Theta= \theta^{0})}{P(X_1 = 6 \mid \Theta= \theta^{0})} = 0.146814 \\
+P(Y_{1} = c_{2} \mid X_{1}=6,\Theta= \theta^{0}) = \frac{P(X_{1}=6,Y_{1} = c_{2} \mid \Theta= \theta^{0})}{P(X_1 = 6 \mid \Theta= \theta^{0})} = 0.5401758 \nonumber \\
+P(Y_{1} = c_{3} \mid X_{1}=6,\Theta= \theta^{0}) = \frac{P(X_{1}=6,Y_{1} = c_{3} \mid \Theta= \theta^{0})}{P(X_1 = 6 \mid \Theta= \theta^{0})} = 0.3130094 \nonumber
 \end{align}
 
 We compute these expectations over mixture components for each data point and add them up. The reason we can simply add the expectation is that
@@ -261,7 +273,7 @@ the data. Thus the expected sufficient statistics for a categorical are the expe
 probabilities! Thus we need to multiply the posteriors per of each observed outcome with the number of times this outcome was
 seen in the data and sum over all observed outcomes. For mixture component $ c_{1} $ (the first coin with parameter $ \theta^{0}_{c_{1}} = 0.4 $) this gives
 \begin{align}
-\E(Y = c_{1}|X=x,\Theta= \theta^{0}) = 2 \times 0.5674795 + 3 \times 0.4568744 \label{eq:c1Expectation} \\ 
+\E(Y = c_{1} \mid X=x,\Theta= \theta^{0}) = 2 \times 0.5674795 + 3 \times 0.4568744 \label{eq:c1Expectation} \\ 
 + 4 \times 0.3436451 + 5 \times 0.237068 + 6 \times 0.1114767 = 5.946387 \nonumber \ .
 \end{align}
 By parallel calculations we get $ \E(Y = c_{2}\mid X=x,\Theta= \theta^{0}) = 10.7153 $ and $ \E(Y = c_{3}\mid X=x,\Theta= \theta^{0}) = 3.338238 $. 
@@ -297,7 +309,7 @@ priors = c(0.25,0.5,0.25)
 params = c(0.4,0.5,0.65)
 posteriors = estep(data, priors, params)
 output = cbind(data, occurrences, posteriors)
-colnames(output) = c("outcome", "#occurrences", "c_1", "c_2", "c_3")
+colnames(output) = c("outcome", "#occurrences", "$c_1$", "$c_2$", "$c_3$")
 kable(output, align="c")
 @
 \caption{Posteriors per outcome for the mixture components of the coin flip data set from our EM example.}
@@ -307,7 +319,7 @@ kable(output, align="c")
 Next we turn to the sufficient statistics for the binomial distributions linked to the mixture components. These are the counts of the observed outcomes. However,
 since the binomials are conditional distributions (they are conditioned on the identity of the coins), the counts have to be taken with respect to their conditioning
 contexts. In other words: we cannot count the observed outcomes independently but we have to count pairs of observed and latent variables. Formally this means that 
-for one binomially distributed observation $ x_{i} $ that $ \E[X=x_{i},Y_{i}=c_{j}|\Theta=\theta^{0}] = P(Y_{i}=c_{j}|X_{i}=x_{i}, \Theta=\theta^{0}) $. This is again
+for one binomially distributed observation $ x_{i} $ that $ \E[X=x_{i},Y_{i}=c_{j} \mid \Theta=\theta^{0}] = P(Y_{i}=c_{j} \mid X_{i}=x_{i}, \Theta=\theta^{0}) $. This is again
 just the posterior that we find in Table~\ref{tab:posteriors}. 
 
 To get the expectations for the mixture components, we summed the columns in Table~\ref{tab:posteriors}, effectively conflating all outcomes of $ X $. We did this
@@ -318,8 +330,8 @@ cell, which contains the posterior for one observation, by the number of times e
 the posteriors over the observations that were equal to the given outcome. For the pairs $ (X=2,Y=c_{1}) $
 and $ (X=4,Y = c_{3}) $ this gives:
 \begin{align}
-\E[X=2,Y=c_{1}|\Theta=\theta^{0}_{c^{1}}] = 4 \times 0.5674795 = 2.269918 \\
-\E[X=4,Y=c_{3}|\Theta=\theta^{0}_{c^{3}}] = 5 \times 0.0944114 = 0.472057
+\E[X=2,Y=c_{1} \mid \Theta=\theta^{0}_{c^{1}}] = 4 \times 0.5674795 = 2.269918 \\
+\E[X=4,Y=c_{3} \mid \Theta=\theta^{0}_{c^{3}}] = 5 \times 0.0944114 = 0.472057
 \end{align} 
 The expected number of times each outcome has been drawn from each coin can be found in Table~\ref{tab:binomCounts}. 
 
@@ -386,24 +398,24 @@ distributed and thus in the M-step we want to find the MLE of that categorical. 
 $ \frac{\#c_{j}}{n} $\footnote{This fact can easily be seen by letting $ \#c_{j} $ be the number of successes in the realisation of a binomial RV and the sum of all
 $ \#c_{m},~m \not = j $ be the number of failures. Then clearly $ \frac{\#c_{j}}{n} $ is the MLE.}. In our case $ n=10 $. Since we have not observed the
 latent variables, we simply use their expected sufficient statistics (their expected counts) instead. Thus we set 
-$ \theta_{j}^{(1)} = \frac{\E[Y = c_{j}|X=x,\Theta= \theta^{0}]}{20} $\footnote{When implementing the algorithm, numerical imprecisions occur due the limited
+$ \theta_{j}^{(1)} = \frac{\E[Y = c_{j} \mid X=x,\Theta= \theta^{0}]}{20} $\footnote{When implementing the algorithm, numerical imprecisions occur due to the limited
 memory of our computers. To ensure that the distribution obtained from the M-step really sums to 1, you should use the sum 
-$ \sum_{j=1}^{3} \frac{\E[Y = c_{j}|X=x,\Theta= \theta^{0}]}{20} $. This sum should be equal to 20 up to at least the third decimal but may not be exactly equal to
+$ \sum_{j=1}^{3} \frac{\E[Y = c_{j} \mid X=x,\Theta= \theta^{0}]}{20} $. This sum should be equal to 20\chris{even when dividing by 20 as above???} up to at least the third decimal but may not be exactly equal to
 20. Having a distribution that does not exactly sum to 1 may not be to bad after 1 M-step. However, since the M-step gets repeated after every iteration, the
-error introduced by numerical imprecision would grow exponentially, if we always divided by 20 instead of the above sum.}. The updated mixture weights then are 
+error introduced by numerical imprecision would grow exponentially, if we always divided by 20 instead of the above sum.\chris{I don't get the last sentence here, please clarify. What should I divide by now?}}. The updated mixture weights then are 
 \begin{align}
-P(Y=c_{1}|\Theta= \theta^{1}) = \Sexpr{new_weights[1]} \\
-P(Y=c_{2}|\Theta= \theta^{1}) = \Sexpr{new_weights[2]} \nonumber \\
-P(Y=c_{3}|\Theta= \theta^{1}) = \Sexpr{new_weights[3]} \nonumber
+P(Y=c_{1} \mid \Theta= \theta^{1}) = \Sexpr{new_weights[1]} \\
+P(Y=c_{2} \mid \Theta= \theta^{1}) = \Sexpr{new_weights[2]} \nonumber \\
+P(Y=c_{3} \mid \Theta= \theta^{1}) = \Sexpr{new_weights[3]} \nonumber
 \end{align}
 
-We already know the maximum likelihood estimate for binomial distributions from 
+We already know the maximum-likelihood estimate for binomial distributions from 
 Section\ref{sec:parameterEstimation}. The only novelty when it comes to EM for mixture models
 is that the conditioning contexts are not observed anymore. Again, we fall back on the expected
 context counts. The maximum likelihood estimate for an outcome $ x $ conditioned on
 mixture component $ c_{j} $ is
 \begin{equation}
-\theta^{1}_{c_{j}} = \frac{\E[X=x|Y=c_{j},\Theta=\theta^{0}]}{\sum_{x \in \mathcal{X}}\E[X=x|Y_{i}=c_{j},\Theta=\theta^{0}]}\ .
+\theta^{1}_{c_{j}} = \frac{\E[X=x \mid Y=c_{j},\Theta=\theta^{0}]}{\sum_{x \in \mathcal{X}}\E[X=x \mid Y_{i}=c_{j},\Theta=\theta^{0}]}\ .
 \end{equation}
 
 For example, if we want to find the conditional distribution for $ c_{1} $, we need to compute the binomial MLE \textit{only
@@ -412,7 +424,7 @@ occurrence of $ c_{1} $ in our data is $ 5.946387 $. You can verify that this is
 Table~\ref{tab:binomCounts}. We also know that the MLE for repeated binomial trials is $ \frac{\sum^{nm}_{i=1}x_{i}}{nm} $ where
 $ n $ is the number of Bernoulli trials in each binomial draw (10 in our case) and $ m $ is the number of of binomial draws. Since we do
 not observe the number of draws from $ c_{1} $ our best guess is the posterior expectation. Thus we set $ m = 5.946387 $. We also do not
-directly observe the number of success per draw from $ c_{1} $ and instead compute the number of expected successes. The number of 
+directly observe the number of successes per draw from $ c_{1} $ and instead compute the number of expected successes. The number of 
 expected successes happens to be the expected sufficient statistic for the binomial. We have already computed those sufficient statistics
 in Table~\ref{tab:binomPosteriors}. For coin $ c_{1} $ the binomial MLE is thus
 \begin{equation}
@@ -444,7 +456,7 @@ kable(output, align="c")
 
 \section*{Further reading}
 \href{http://www.cs.columbia.edu/~mcollins/em.pdf}{A great tutorial on EM} is provided by \href{http://www.cs.columbia.edu/~mcollins/}{Michael Collins} who
-uses Na\"ive Bayes as a running example. If you want to delve deeper into the theory behind EM and see how it can be interpreted from an Information-theoretic
+uses Na\"ive Bayes as a running example. If you want to delve deeper into the theory behind EM and see how it can be interpreted from an information-theoretic
 perspective, have a look at \href{http://www.cs.toronto.edu/~fritz/absps/emk.pdf}{this classic paper}. The daring ones amongst you may also want to consult
 \href{http://web.mit.edu/6.435/www/Dempster77.pdf}{the original EM paper}. Be cautious of he notation they use which is very different from the notation
 used in this script.
