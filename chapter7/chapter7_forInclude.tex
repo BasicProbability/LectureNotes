@@ -148,7 +148,7 @@ Show that $ D(X,Y||Y) = H(X|Y) $. Furthermore show that $ D(X,Y||Y) = H(X) $ if 
 \end{Exercise}
 
 
-\section{An Information-Theoretic explanation of EM}
+\section{An Information-Theoretic View on EM}
 
 Let us start by remembering why we need EM. We have a model that defines a joint distribution
 over observed ($ x $) and latent data ($ z $). Such a model generally looks as follows:
@@ -158,20 +158,71 @@ P(X=x, Z=z | \Theta = \theta) = P(X=x|Z=z, \Theta=\theta) P(Z=z|\Theta = \theta)
 where we have chosen a factorization that provides a separate term for a distribution over only the
 latent data.
 
+
+
 Recall that the goal of the EM algorithm is to iteratively increase the likelihood through consecutive
 updates of parameter estimates. These updates are achieved through maximum likelihood estimation based
-on expected sufficient statistics. Naively, we could take the expectation with respect to any distribution
-over latent values. Obviously, we would like to find the best one, i.e. the one that is closest to the
-actual posterior. We can formalize this by introducing an auxiliary distribution\footnote{We follow
-standard notation here by denoting the auxiliary distribution $ Q $ instead of $ P $. Also, the
-parameter variable is chosen so as to distinguish it from the parameter variable of our model.} 
-$ Q(z|\Phi=\phi) $ under
-which we compute the expected sufficient statistics. We want to find the auxiliary distribution that
-is closest to actual posterior $ P_{Z|X=x,\Theta=\theta} $. We measure closeness in an information-theoretic
-sense using KL-divergence. Formally, our goal is to find 
-\begin{equation}
-Q^{*}_{Z|\Phi=\phi} = \underset{Q_{Z|\Phi=\phi}}{\mbox{arg min}}~D\left( Q_{Z|\Phi=\phi} || P_{Z|X=x,\Theta=\theta} \right) \ .
-\end{equation}
+on expected sufficient statistics. We are now going to show that a) EM computes a lower bound on the
+marginal log-likelihood of the data in each iteration and b) that this lower bound becomes tight when the
+expected sufficient statistics are taken with respect to the model posterior. The latter implies that
+EM performs the optimal update in each iteration.
+
+Let us start by expanding the data log-likelihood and then lower-bounding it.
+\begin{align}
+&\log(P(X=x|\Theta=\theta)) = \sum_{y} \log(P(X=x, Y=y| \Theta = \theta))  \\
+&= \sum_{y} \log\left(Q(Y=y|\Phi=\phi)\frac{P(X=x, Y=y| \Theta = \theta)}{Q(Y=y|\Phi=\phi)}\right) \\
+&\geq \sum_{y} Q(Y=y|\Phi=\phi) \log\left(\frac{P(X=x, Y=y| \Theta = \theta)}{Q(Y=y|\Phi=\phi)}\right)
+\label{eq:ELBO1}
+\end{align}
+Here, we have used \href{https://en.wikipedia.org/wiki/Jensen\%27s_inequality}{Jensen's Inequality} to
+derive the lower bound. Observe that the log is indeed a concave function. 
+
+We also have introduced
+an auxiliary distribution $ Q $ over the latent variables with parameters $ \phi $. 
+For reasons that we will explain shortly,
+this distributions is often called the \textbf{variational distribution} and its parameters the
+\textbf{variational parameters}. The letter $ Q $ is slightly non-standard to denote distributions but
+we are are following conventions from the field of \textbf{variational inference} here.
+
+In the next step, we factorise the model distribution in order to recover a KL divergence term between
+the variational distribution and the model posterior over latent variables.
+\begin{align}
+&\sum_{y} Q(Y=y|\Phi=\phi) \log\left(\frac{P(X=x, Y=y| \Theta = \theta)}{Q(Y=y|\Phi=\phi)}\right) \\
+&= \sum_{y} Q(Y=y|\Phi=\phi) \log\left(\frac{P(Y=y|X=x, \Theta = \theta)}{Q(Y=y|\Phi=\phi)}\right) + \log(P(X=x|\Theta=\theta)) \\
+&= -D(Q||P) + \log(P(X=x=|\Theta=\theta)) \label{eq:ELBO2}
+\end{align}
+Equation~\eqref{eq:ELBO1} gives us two insights. First it quantifies the gap between the lower bound
+and the actual data likelihood. Second, since KL divergence is always positive, the bound only becomes
+tight when $ P=Q $. But this is exactly what is happening in the E-step! The E-step sets $ P=Q $ and
+then computes expectations under that distribution (see Equation~\eqref{eq:ELBO1}). Because the E-step
+maximizes a lower bound on the marginal likelihood given model parameters $ \theta $ and the M-step
+maximizes the likelihood with respect to the expected sufficient statistics computed under $ Q $ (which
+in EM is just the model posterior over latent variables) it follows that EM increase the data likelihood
+in every iteration (or leaves it unchanged at worst).
+
+We will finish with a quick rejoinder on variational inference. EM is special case of variational inference.
+Variational inference is any inference procedure which uses an auxiliary distribution $ Q $ to compute
+a lower bound on the likelihood. In the general setting, the auxiliary distribution can be different from the 
+model posterior. This means that the bound never gets tight. However, in models in which the exact posterior 
+is hard (read: impossible) to compute, using a non-tight lower bound instead can be incredibly useful!
+
+The reason this inference procedure is called \textit{variational} is because it is based on the 
+\href{https://en.wikipedia.org/wiki/Calculus_of_variations}{calculus of variations}. This works mostly
+like normal calculus except that standard operations like differentiation are done with respect to functions
+instead of variables.
+
+%Naively, we could take the expectation with respect to any distribution
+%over latent values. Obviously, we would like to find the best one, i.e. the one that is closest to the
+%actual posterior. We can formalize this by introducing an auxiliary distribution\footnote{We follow
+%standard notation here by denoting the auxiliary distribution $ Q $ instead of $ P $. Also, the
+%parameter variable is chosen so as to distinguish it from the parameter variable of our model.} 
+%$ Q(z|\Phi=\phi) $ under
+%which we compute the expected sufficient statistics. We want to find the auxiliary distribution that
+%is closest to actual posterior $ P_{Z|X=x,\Theta=\theta} $. We measure closeness in an information-theoretic
+%sense using KL-divergence. Formally, our goal is to find 
+%\begin{equation}
+%Q^{*}_{Z|\Phi=\phi} = \underset{Q_{Z|\Phi=\phi}}{\mbox{arg min}}~D\left( Q_{Z|\Phi=\phi} || P_{Z|X=x,\Theta=\theta} \right) \ .
+%\end{equation}
 
 
 
@@ -181,7 +232,7 @@ At the ILLC, the best place to learn more about information theory is \href{http
 course} that is taught every year. David MacKay also offers \href{http://www.inference.phy.cam.ac.uk/itprnn/book.pdf}{a free book on the subject}. Finally,
 Coursera also offers \href{https://www.coursera.org/course/informationtheory}{an online course on information theory}.
 
-To get a better understanding of EM and the other concepts discussed in this script along with some more examples, consult 
-\href{http://www.cs.columbia.edu/~mcollins/em.pdf}{Micheal Collins' lecture notes} .
+The information-theoretic formulation of EM was pioneered in this \href{http://www.cs.toronto.edu/~fritz/absps/emk.pdf}{paper}. A very recent and intelligible 
+\href{https://arxiv.org/abs/1601.00670}{tutorial on variational inference} can be found on the archive.
 
 \end{document}
