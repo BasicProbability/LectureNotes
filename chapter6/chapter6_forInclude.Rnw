@@ -1,3 +1,52 @@
+<<computation, echo=F, cache=T>>=
+posterior = function(priors, likelihoods) {
+
+numerator = priors*likelihoods
+result = numerator/ sum(numerator)
+return(result)
+}
+
+estep = function(data, priors, params) {
+data_size = length(data)
+expectations = matrix(0, data_size, 3)
+for (i in 1:data_size) {
+	data_point = data[i]
+	expectations[i,] = posterior(priors, c(dbinom(data_point, 10, params[1]), dbinom(data_point, 10, params[2]), dbinom(data_point, 10, params[3])))
+	}
+return(expectations)
+}
+
+data = c(6, 5, 4, 2, 2, 6, 5, 5, 4, 2, 5, 2, 4, 4, 6, 4, 5, 6, 3, 3 )
+occurrences = matrix(table(sort(data)))
+unique_data = sort(unique(data))
+priors = c(0.25,0.5,0.25)
+params = c(0.4,0.5,0.65)
+posteriors = estep(unique_data, priors, params)
+
+rows = nrow(posteriors)
+cols = ncol(posteriors)
+
+binomPosteriors = matrix(0,rows,cols)
+for (i in 1:rows) {
+	binomPosteriors[i,] = posteriors[i,] * occurrences[i,1]
+}
+
+binomPosteriorExp = matrix(0,1,cols)
+for (j in 1:cols) {
+	binomPosteriorExp[1,j] = sum(binomPosteriors[,j] * unique_data)
+}
+
+expectedValues = c()
+for (i in 1:length(params)) {
+	expectedValues = c(expectedValues, sum(unique_data*binomPosteriors[,i]))
+}
+
+newBinoms = matrix(0,1, cols)
+for (j in 1:cols) {
+	newBinoms[1,j] = binomPosteriorExp[1,j]/(10 * sum(binomPosteriors[,j]))
+}
+@
+
 \chapter{The EM Algorithm}
 
 \section{Mixture Models}\label{sec:mixtureModels}
@@ -65,9 +114,7 @@ model could then easily be constructed because the mixture weights are known.
 
 Usually, we face a more difficult problem when working with mixture models. Neither the mixture
 weights nor the parameters of the mixture components are known. In this case, doing straighforward MLE is impossible because the data is
-incomplete\chris{It seems to me that \emph{incomplete} is not defined
-  formally enough. What do we mean by it?}\philip{I extended the
-  footnote with an explanation. Does that work?}\chris{That's helpful!}\footnote{Incomplete data is 
+incomplete\footnote{Incomplete data is 
   another name for a collection of random variables of which some have unobservable (latent) outcomes. Data modelled with a mixture model is incomplete because it contains
   an observed part (the number of heads in our example) and a latent
   part (the mixture components which in our example are the types of coin). In general, whenever you have complete data, analytic MLE computation is possible. The moment your data is incomplete, it becomes impossible.}. 
@@ -76,23 +123,23 @@ How can we go about estimating the model parameters, i.e.\ the parameters of the
 Each factor
 in \eqref{eq:mixtureExample} is in fact a joint distribution (by the chain rule). We exploit this to rewrite the model as a model of the
 observed data only.
-\begin{align}\label{eq:marginal}
-P(X_1^n=x_{1}^{n} \mid  \Theta= \theta) &= \prod_{i=1}^{n} \sum_{j=1}^{3} P(X_{i}=x_{i},Y_{i}=c_{j} \mid  \Theta= \theta)
-\end{align}
-\philip{Compare this to Equation~\eqref{eq:mixtureExample}. There we constructed a probability distribution over the joint outcomes $ X_{1}^{n} $ and
-$ Y_{1}^{n} $. Because we assumed independence between mixture components, the distribution could be factorised over pairs $ (X_{i},Y_{i})$ for $ 1 \leq i \leq n $.
-In Equation~\eqref{eq:marginal} we then inferred the marginal distribution for $ X_{1}^{n} $. Recall that in order to compute the marginal of $ X_{1}^{n} $ we
-need to sum over all possible $ Y_{1}^{n} $. Because their joint distribution factorises nicely, we can perform the marginalisation per $ (X_{i},Y_{i})$ pair.
-This is exactly what is happening in Equation~\eqref{eq:marginal}. 
-Please pay attention to a crucial notational difference between \eqref{eq:mixtureExample} and
-\eqref{eq:marginal}: In the former we wrote $ Y_{i}=y_{i} $ whilst in the latter we wrote $ Y_{i}=c_{j} $. Why did we do this? Equation~\eqref{eq:mixtureExample} is
-a joint distribution and thus $ Y_{i} $ needs to take on a \textit{specific} value $ y_{i} \in \{c_{1},c_{2},c_{3}\} $. To get the marginal distribution of
-$ X_{i} $, however, we need to sum over \textit{all} values that $ Y_{i} $ can take on. We do this by writing $ Y_{i} = c_{j} $ which provides us with a means
-of summing over the possible outcomes $ c_{1},c_{2},c_{3} $.}
-\chris{this is going too fast! I don't understand it, you also
-  switched from $y_1^n$ to $c_j$ somehow... where did you use
-  \eqref{eq:mixtureExample} here??}\philip{Sorry, the conditioning was wrong in 6.1. Please check whether the above explanation helps you to understand what's going
-  on now.}
+%\begin{align}\label{eq:marginal}
+%P(X_1^n=x_{1}^{n} \mid  \Theta= \theta) &= \prod_{i=1}^{n} \sum_{j=1}^{3} P(X_{i}=x_{i},Y_{i}=c_{j} \mid  \Theta= \theta)
+%\end{align}
+%\philip{Compare this to Equation~\eqref{eq:mixtureExample}. There we constructed a probability distribution over the joint outcomes $ X_{1}^{n} $ and
+%$ Y_{1}^{n} $. Because we assumed independence between mixture components, the distribution could be factorised over pairs $ (X_{i},Y_{i})$ for $ 1 \leq i \leq n $.
+%In Equation~\eqref{eq:marginal} we then inferred the marginal distribution for $ X_{1}^{n} $. Recall that in order to compute the marginal of $ X_{1}^{n} $ we
+%need to sum over all possible $ Y_{1}^{n} $. Because their joint distribution factorises nicely, we can perform the marginalisation per $ (X_{i},Y_{i})$ pair.
+%This is exactly what is happening in Equation~\eqref{eq:marginal}. 
+%Please pay attention to a crucial notational difference between \eqref{eq:mixtureExample} and
+%\eqref{eq:marginal}: In the former we wrote $ Y_{i}=y_{i} $ whilst in the latter we wrote $ Y_{i}=c_{j} $. Why did we do this? Equation~\eqref{eq:mixtureExample} is
+%a joint distribution and thus $ Y_{i} $ needs to take on a \textit{specific} value $ y_{i} \in \{c_{1},c_{2},c_{3}\} $. To get the marginal distribution of
+%$ X_{i} $, however, we need to sum over \textit{all} values that $ Y_{i} $ can take on. We do this by writing $ Y_{i} = c_{j} $ which provides us with a means
+%of summing over the possible outcomes $ c_{1},c_{2},c_{3} $.}
+%\chris{this is going too fast! I don't understand it, you also
+%  switched from $y_1^n$ to $c_j$ somehow... where did you use
+%  \eqref{eq:mixtureExample} here??}\philip{Sorry, the conditioning was wrong in 6.1. Please check whether the above explanation helps you to understand what's going
+%  on now.}
 % \begin{align}\label{eq:marginal}
 % P(X=x_{1}^{n} \mid  \Theta= \theta) &= \sum_{j=1}^3 P(Y_i = c_j)
 %                                  P(X=x_{1}^{n} \mid Y_{1}^{n}=y_{1}^{n},\Theta=\theta)
@@ -100,14 +147,12 @@ of summing over the possible outcomes $ c_{1},c_{2},c_{3} $.}
 % &=  \prod_{i=1}^{n} \sum_{j=1}^{3} P(X_{i}=x_{1},Y_{i}=c_{j} \mid  \Theta= \theta)
 % \end{align}
 
-\philip{We thus see that the sums are marginalisation steps.}\chris{I think all this can be written in a concise way as follows:
-\begin{align*}
-P(X_1^n=x_{1}^{n} \mid \Theta= \theta) &= \sum_{j_1=1}^3 \sum_{j_2=1}^3 \cdots \sum_{j_n=1}^3 P(X_1^n=x_{1}^{n}, Y_1=c_{j_1}, \ldots, Y_n=c_{j_n} \mid \Theta= \theta) \\
-&= \sum_{j_1=1}^3 \sum_{j_2=1}^3 \cdots \sum_{jn2=1}^3 \prod_{i=1}^{n} P(X_{i}=x_{i},Y_{i}=c_{j_i} \mid  \Theta= \theta) \\
-&= \prod_{i=1}^{n} \sum_{j=1}^3 P(X_{i}=x_{i},Y_{i}=c_{j} \mid  \Theta= \theta) \, ,
-\end{align*}
+\begin{align}
+P(X_1^n=x_{1}^{n} \mid \Theta= \theta) &= \sum_{j_1=1}^3 \sum_{j_2=1}^3 \cdots \sum_{j_n=1}^3 P(X_1^n=x_{1}^{n}, Y_1=c_{j_1}, \ldots, Y_n=c_{j_n} \mid \Theta= \theta) \label{eq:marginal} \\
+&= \sum_{j_1=1}^3 \sum_{j_2=1}^3 \cdots \sum_{jn2=1}^3 \prod_{i=1}^{n} P(X_{i}=x_{i},Y_{i}=c_{j_i} \mid  \Theta= \theta) \nonumber \\
+&= \prod_{i=1}^{n} \sum_{j=1}^3 P(X_{i}=x_{i},Y_{i}=c_{j} \mid  \Theta= \theta) \, , \nonumber
+\end{align}
 where the second equality uses the fact that we have a mixture model and hence, the $P(X_1^n=x_1^n, Y_1^n=y_1^n \mid \Theta = \theta)$ factorizes.
-}
 Now that we have related mixture models to the probability of the observed data, we can hope to estimate
 their parameters using the maximum likelihood principle.
 
@@ -165,11 +210,10 @@ until the likelihood does not increase any further. Notice that this procedure r
 fix the number of mixture components in advance.
 
 More formally, assume a data set $ X=x $. Furthermore, define $ Y $ as a random variable over latent data that can
-take on $ |\mathcal{Y}| $ possible values $c_1, c_2, \ldots, c_{|\mathcal{Y}|}$\chris{or $y_1, y_2, \ldots$??}. Then the likelihood function is 
+take on $ |\mathcal{Y}| $ possible values $c_1, c_2, \ldots, c_{|\mathcal{Y}|}$. Then the likelihood function is 
 \begin{align}
-L_{x}(\theta) = P(X=x \mid \Theta=\theta) = \underset{j=1}{\overset{|\mathcal{Y}|}{\sum}} P(X=x, Y=y_{j} \mid \Theta=\theta)
+L_{x}(\theta) = P(X=x \mid \Theta=\theta) = \underset{j=1}{\overset{|\mathcal{Y}|}{\sum}} P(X=x, Y=c_{j} \mid \Theta=\theta)
 \end{align}
-\chris{before, these values were called $c_j$...}
 where $ \Theta $ ranges over the parameters of the joint distributiforon $ P_{XY} $. Recall that EM
 probabilistically fills in missing data. However, since we are doing maximum likelihood estimation, we
 are not so much interested in the missing data itself but rather in the sufficient statistics of
@@ -225,40 +269,48 @@ We make the additional assumption that choosing a coin to generate a particular 
 to generate all the other sequences. This has the effect that in our model the latent data points will be independent\footnote{The assumption
 that the mixture components in a mixture model are independent is actually quite common.}.
 
-\paragraph{E-step} Initially we arbitrarily assume that the coins have biases of $ 0.4, 0.5 $ and $ 0.65 $, meaning that we initialize the binomial parameters of the data-generating
+\paragraph{E-step} Initially we arbitrarily assume that the coins have biases of $ \Sexpr{params[1]}, \Sexpr{params[2]}  $ and $ \Sexpr{params[3]} $, meaning that we initialize the binomial parameters of the data-generating
 distributions as follows:
 \begin{equation}
-\theta^{(0)}_{c_{1}} = 0.4 \hskip 0.5cm  \theta^{(0)}_{c_{2}} = 0.5 \hskip 0.5cm  \theta^{(0)}_{c_{3}} = 0.65
+\theta^{(0)}_{c_{1}} = \Sexpr{params[1]} \hskip 0.5cm  \theta^{(0)}_{c_{2}} = \Sexpr{params[2]} \hskip 0.5cm  \theta^{(0)}_{c_{3}} = \Sexpr{params[3]}
 \end{equation}
 We also assume that the fair coin is more likely to be used and hence set its initial mixture weight to $ 0.5 $ and the mixture weights of the 
 other two coins to $ 0.25 $ (any other choice would also be fine). Let 
 us take a closer look at our data. To shorten notation, we write it as a list where the i$ ^{th} $ entry is the value of $ x_{i} $.
-$$ [6, 5, 4, 2, 2, 6, 5, 5, 4, 2, 5, 2, 4, 4, 6, 4, 5, 6, 3, 3 ] $$ 
+$$ \left[ \Sexpr{data} \right] $$ 
 Then for each $ x_{i} $ we check how likely each coin is to have generated that point. In order to compute the posterior for each coin given a data point, we need
 the likelihood for that data point. For the first observation we get the following likelihood values.
+<<exampleLikelihoods, echo=F>>=
+exampleLiks = c(dbinom(data[1], 10, params[1]),dbinom(data[1], 10, params[2]),dbinom(data[1], 10, params[3]))
+@
+
 \begin{align}
-&P(X_{1}=6 \mid Y_{1} = c_{1}) = P(X_{1}=6 \mid Y_{1}=c_{1},\Theta = 0.4) = 0.1114767& \\
-&P(X_{1}=6 \mid Y_{1} = c_{2}) = P(X_{1}=6 \mid Y_{2}=c_{2},\Theta = 0.5) = 0.2050781& \nonumber \\ 
-&P(X_{1}=6 \mid Y_{1} = c_{3}) = P(X_{1}=6 \mid Y_{3}=c_{3},\Theta = 0.65) = 0.2376685& \nonumber
+&P(X_{1}=\Sexpr{data[1]} \mid Y_{1} = c_{1}) = P(X_{1}=\Sexpr{data[1]} \mid Y_{1}=c_{1},\Theta = \Sexpr{params[1]}) = \Sexpr{exampleLiks[1]}& \\
+&P(X_{1}=\Sexpr{data[1]} \mid Y_{1} = c_{2}) = P(X_{1}=\Sexpr{data[1]} \mid Y_{2}=c_{2},\Theta = \Sexpr{params[2]}) = \Sexpr{exampleLiks[2]}& \nonumber \\ 
+&P(X_{1}=\Sexpr{data[1]} \mid Y_{1} = c_{3}) = P(X_{1}=\Sexpr{data[1]} \mid Y_{3}=c_{3},\Theta = \Sexpr{params[3]}) = \Sexpr{exampleLiks[3]}& \nonumber
 \end{align}
 
 Recall that the mixture weights are nothing else than priors over mixture components. Hence, in order to get the joint distribution over observed and
 latent data, we multiply the likelihoods by the mixture weights.
 \begin{align}
-&P(X_{1}=6,Y_{1} = c_{1}) = 0.25 \times P(X_{1}=6 \mid Y_{1}=c_{1},\Theta = 0.4) = 0.02786918 \\
-&P(X_{1}=6,Y_{1} = c_{2}) = 0.5 \times P(X_{1}=6 \mid Y_{2}=c_{2},\Theta= 0.5)  = 0.1025391 \nonumber \\ 
-&P(X_{1}=6,Y_{1} = c_{3}) =  0.25 \times P(X_{1}=6 \mid Y_{3}=c_{3},\Theta = 0.65)  = 0.05941712 \nonumber
+&P(X_{1}=6,Y_{1} = c_{1}) = \Sexpr{priors[1]} \times P(X_{1}=\Sexpr{data[1]} \mid Y_{1}=c_{1},\Theta = \Sexpr{params[1]}) = \Sexpr{priors[1]*exampleLiks[1]} \\
+&P(X_{1}=6,Y_{1} = c_{2}) = \Sexpr{priors[2]} \times P(X_{1}=\Sexpr{data[1]} \mid Y_{2}=c_{2},\Theta = \Sexpr{params[2]}) = \Sexpr{priors[2]*exampleLiks[2]} \nonumber \\ 
+&P(X_{1}=6,Y_{1} = c_{3}) = \Sexpr{priors[3]} \times P(X_{1}=\Sexpr{data[1]} \mid Y_{3}=c_{3},\Theta = \Sexpr{params[3]}) = \Sexpr{priors[3]*exampleLiks[3]} \nonumber
 \end{align}
 
 We are ultimately interested in the posterior over mixture components. Because we are dealing with a categorical
 distribution here, the posterior probability is exactly the expected
 number of times that each coin has generated data point $ x_{1} $. This is to say that
-$\E[Y=c_{j} \mid X_{1}=6, \Theta = \theta^{0}] = P(Y_{1}=c_{j} \mid X_{1}=6, \Theta=\theta^{0}) $. The
-posterior given $ x_{1}=6 $ is shown below.
+$\E[Y=c_{j} \mid X_{1}=\Sexpr{data[1]}, \Theta = \theta^{0}] = P(Y_{1}=c_{j} \mid X_{1}=\Sexpr{data[1]}, \Theta=\theta^{0}) $. The
+posterior given $ x_{1}=\Sexpr{data[1]} $ is shown below.
+%Compute index of first data point in list of ordered outcomes
+<<idxOfFirstDatapoint, echo=F>>=
+idx = which(unique_data == data[1])
+@
 \begin{align}\label{eq:posterior}
-P(Y_{1} = c_{1} \mid X_{1}=6,\Theta= \theta^{0}) = \frac{P(X_{1}=6,Y_{1} = c_{1} \mid \Theta= \theta^{0})}{P(X_1 = 6 \mid \Theta= \theta^{0})} = 0.146814 \\
-P(Y_{1} = c_{2} \mid X_{1}=6,\Theta= \theta^{0}) = \frac{P(X_{1}=6,Y_{1} = c_{2} \mid \Theta= \theta^{0})}{P(X_1 = 6 \mid \Theta= \theta^{0})} = 0.5401758 \nonumber \\
-P(Y_{1} = c_{3} \mid X_{1}=6,\Theta= \theta^{0}) = \frac{P(X_{1}=6,Y_{1} = c_{3} \mid \Theta= \theta^{0})}{P(X_1 = 6 \mid \Theta= \theta^{0})} = 0.3130094 \nonumber
+P(Y_{1} = c_{1} \mid X_{1}=\Sexpr{data[1]},\Theta= \theta^{0}) &= \frac{P(X_{1}=\Sexpr{data[1]},Y_{1} = c_{1} \mid \Theta= \theta^{0})}{P(X_1 = \Sexpr{data[1]} \mid \Theta= \theta^{0})} = \Sexpr{posteriors[idx,1]} \\
+P(Y_{1} = c_{2} \mid X_{1}=\Sexpr{data[1]},\Theta= \theta^{0}) &= \frac{P(X_{1}=\Sexpr{data[1]},Y_{1} = c_{2} \mid \Theta= \theta^{0})}{P(X_1 = \Sexpr{data[1]} \mid \Theta= \theta^{0})} = \Sexpr{posteriors[idx,2]} \nonumber \\
+P(Y_{1} = c_{3} \mid X_{1}=\Sexpr{data[1]},\Theta= \theta^{0}) &= \frac{P(X_{1}=\Sexpr{data[1]},Y_{1} = c_{3} \mid \Theta= \theta^{0})}{P(X_1 = \Sexpr{data[1]} \mid \Theta= \theta^{0})} = \Sexpr{posteriors[idx,3]} \nonumber
 \end{align}
 
 We compute these expectations over mixture components for each data point and add them up. The reason we can simply add the expectation is that
@@ -271,45 +323,22 @@ a mixture model where the latent variables are always categorical. Thus, in orde
 sufficient statistics for a categorical distribution. Recall that these sufficient statistics are simply the counts per outcome observed in
 the data. Thus the expected sufficient statistics for a categorical are the expected counts per outcome. But these are simply the posterior
 probabilities! Thus we need to multiply the posteriors per of each observed outcome with the number of times this outcome was
-seen in the data and sum over all observed outcomes. For mixture component $ c_{1} $ (the first coin with parameter $ \theta^{0}_{c_{1}} = 0.4 $) this gives
+seen in the data and sum over all observed outcomes. For mixture component $ c_{1} $ (the first coin with parameter $ \theta^{0}_{c_{1}} = \Sexpr{params[1]} $) this gives
 \begin{align}
-\E(Y = c_{1} \mid X=x,\Theta= \theta^{0}) = 2 \times 0.5674795 + 3 \times 0.4568744 \label{eq:c1Expectation} \\ 
-+ 4 \times 0.3436451 + 5 \times 0.237068 + 6 \times 0.1114767 = 5.946387 \nonumber \ .
+\E(Y = c_{1} \mid X=x,\Theta= \theta^{0}) = \Sexpr{occurrences[1]} \times \Sexpr{posteriors[1,1]} + \Sexpr{occurrences[2]} \times \Sexpr{posteriors[2,1]} \label{eq:c1Expectation} \\ 
++ \Sexpr{occurrences[3]} \times \Sexpr{posteriors[3,1]} + \Sexpr{occurrences[4]} \times \Sexpr{posteriors[4,1]} + \Sexpr{occurrences[5]} \times \Sexpr{posteriors[5,1]} = \Sexpr{sum(binomPosteriors[,1])} \nonumber \ .
 \end{align}
-By parallel calculations we get $ \E(Y = c_{2}\mid X=x,\Theta= \theta^{0}) = 10.7153 $ and $ \E(Y = c_{3}\mid X=x,\Theta= \theta^{0}) = 3.338238 $. 
+By parallel calculations we get $ \E(Y = c_{2}\mid X=x,\Theta= \theta^{0}) = \Sexpr{sum(binomPosteriors[,2])} $ and $ \E(Y = c_{3}\mid X=x,\Theta= \theta^{0}) = 
+\Sexpr{sum(binomPosteriors[,3])} $. 
 These are our expected sufficient statistics. Importantly, we get 
 $ \E[Y = c_{1}\mid X=x,\Theta= \theta^{0}] + \E[Y = c_{2}\mid X=x,\Theta= \theta^{0}] + \E[Y = c_{3}\mid X=x,\Theta= \theta^{0}] \approx 20 $ (there is some slight numerical imprecision
 caused by our computer). Notice that this is a useful debugging technique when implementing the algorithm: if the expected number of mixture components
 does not add up to the number of latent variables in your model, then you almost certainly have a bug in your code!
-
 \begin{table}
 \center
 <<mixturePosterior, echo=F, results="asis", cache=T>>=
-posterior = function(priors, likelihoods) {
-
-numerator = priors*likelihoods
-result = numerator/ sum(numerator)
-return(result)
-}
-
-estep = function(data, priors, params) {
-data_size = length(data)
-expectations = matrix(0, data_size, 3)
-for (i in 1:data_size) {
-	data_point = data[i]
-	expectations[i,] = posterior(priors, c(dbinom(data_point, 10, params[1]), dbinom(data_point, 10, params[2]), dbinom(data_point, 10, params[3])))
-	}
-return(expectations)
-}
-
-data = c(6, 5, 4, 2, 2, 6, 5, 5, 4, 2, 5, 2, 4, 4, 6, 4, 5, 6, 3, 3 )
-occurrences = matrix(table(sort(data)))
-data = sort(unique(data))
-priors = c(0.25,0.5,0.25)
-params = c(0.4,0.5,0.65)
-posteriors = estep(data, priors, params)
-output = cbind(data, occurrences, posteriors)
-colnames(output) = c("outcome", "#occurrences", "$c_1$", "$c_2$", "$c_3$")
+output = cbind(matrix(unique_data, nrow(occurrences), 1), occurrences, posteriors)
+colnames(output) = c("outcome", "#occurrences", "c_1", "c_2", "c_3")
 kable(output, align="c")
 @
 \caption{Posteriors per outcome for the mixture components of the coin flip data set from our EM example.}
@@ -327,11 +356,11 @@ because we did not care about $ X $ at this stage, only about the expectations o
 we have to sum the posteriors differently. Now we actually need to discriminate between
 observed outcomes. We only sum over observations that had the same outcome. Working with Table~\ref{tab:posteriors} this means that we multiply each
 cell, which contains the posterior for one observation, by the number of times each outcome has been observed in the data set. In other words, we are summing
-the posteriors over the observations that were equal to the given outcome. For the pairs $ (X=2,Y=c_{1}) $
-and $ (X=4,Y = c_{3}) $ this gives:
+the posteriors over the observations that were equal to the given outcome. For the pairs $ (X=\Sexpr{unique_data[1]},Y=c_{1}) $
+and $ (X=\Sexpr{unique_data[3]},Y = c_{3}) $ this gives:
 \begin{align}
-\E[X=2,Y=c_{1} \mid \Theta=\theta^{0}_{c^{1}}] = 4 \times 0.5674795 = 2.269918 \\
-\E[X=4,Y=c_{3} \mid \Theta=\theta^{0}_{c^{3}}] = 5 \times 0.0944114 = 0.472057
+\E[X=\Sexpr{unique_data[1]},Y=c_{1} \mid \Theta=\theta^{0}_{c^{1}}] &= \Sexpr{occurrences[1]} \times \Sexpr{posteriors[1,1]} = \Sexpr{binomPosteriors[1,1]} \\
+\E[X=\Sexpr{unique_data[3]},Y=c_{3} \mid \Theta=\theta^{0}_{c^{3}}] &= \Sexpr{occurrences[3]} \times \Sexpr{posteriors[3,3]} = \Sexpr{binomPosteriors[3,3]}
 \end{align} 
 The expected number of times each outcome has been drawn from each coin can be found in Table~\ref{tab:binomCounts}. 
 
@@ -342,8 +371,8 @@ know $ m $ because we don't actually know how many draws stem from each coin. In
 that each coin (mixture component) was used. We have already computed these expectations and noted them down in Table~\ref{tab:posteriors}. Thus, for coin $ c_{1} $
 the expected sufficient binomial statistic is
 \begin{align}
-\E\left[\sum_{i=1}^{nm} x_{i}\mid c_{1}\right] &= 2 \times 2.2699180 + 3 \times 0.9137487+ 4 \times 1.7182254  \\
-&+ 5 \times 1.1853398 + 6 \times 0.5872594 = 23.60424 \nonumber
+\E\left[\sum_{i=1}^{nm} x_{i}\mid c_{1}\right] &= \Sexpr{unique_data[1]} \times \Sexpr{binomPosteriors[1,1]} + \Sexpr{unique_data[2]} \times \Sexpr{binomPosteriors[2,1]} + \Sexpr{unique_data[3]} \times \Sexpr{binomPosteriors[3,1]}  \\
+&\Sexpr{unique_data[4]} \times \Sexpr{binomPosteriors[4,1]} + \Sexpr{unique_data[5]} \times \Sexpr{binomPosteriors[5,1]} = \Sexpr{expectedValues[1]} \nonumber
 \end{align}
 The expected sufficient statistics for all coins are given in Table~\ref{tab:binomPosteriors}.
 
@@ -352,14 +381,8 @@ for our model means that we have completed the E-step!
 
 \begin{table}
 \center
-<<binomCounts, echo=F, results="asis", cache=T>>=
-rows = nrow(posteriors)
-cols = ncol(posteriors)
-binomPosteriors = matrix(0,rows,cols)
-for (i in 1:rows) {
-	binomPosteriors[i,] = posteriors[i,] * occurrences[i,1]
-}
-output = cbind(data, binomPosteriors)
+<<binomCounts, echo=F, results="asis", cache=F>>=
+output = cbind(unique_data, binomPosteriors)
 colnames(output) = c("outcome", "c_1", "c_2", "c_3")
 kable(output, align="c")
 @
@@ -369,13 +392,7 @@ kable(output, align="c")
 
 \begin{table}
 \center 
-<<binomPosteriors, echo=F, results="asis", cache=T>>=
-binomPosteriorExp = matrix(0,1,cols)
-
-for (j in 1:cols) {
-	binomPosteriorExp[1,j] = sum(binomPosteriors[,j] * data)
-}
-
+<<binomPosteriors, echo=F, results="asis", cache=F>>=
 output = binomPosteriorExp
 colnames(output) = c("c_1", "c_2", "c_3")
 kable(output, align="c")
@@ -400,7 +417,7 @@ $ \#c_{m},~m \not = j $ be the number of failures. Then clearly $ \frac{\#c_{j}}
 latent variables, we simply use their expected sufficient statistics (their expected counts) instead. Thus we set 
 $ \theta_{j}^{(1)} = \frac{\E[Y = c_{j} \mid X=x,\Theta= \theta^{0}]}{20} $\footnote{When implementing the algorithm, numerical imprecisions occur due to the limited
 memory of our computers. To ensure that the distribution obtained from the M-step really sums to 1, you should use the sum 
-$ \sum_{j=1}^{3} \frac{\E[Y = c_{j} \mid X=x,\Theta= \theta^{0}]}{20} $. This sum should be equal to 20\chris{even when dividing by 20 as above???} up to at least the third decimal but may not be exactly equal to
+$ \sum_{j=1}^{3} \E[Y = c_{j} \mid X=x,\Theta= \theta^{0}] $. This sum should be equal to 20 up to at least the third decimal but may not be exactly equal to
 20. Having a distribution that does not exactly sum to 1 may not be to bad after 1 M-step. However, since the M-step gets repeated after every iteration, the
 error introduced by numerical imprecision would grow exponentially, if we always divided by 20 instead of the above sum.\chris{I don't get the last sentence here, please clarify. What should I divide by now?}}. The updated mixture weights then are 
 \begin{align}
@@ -420,16 +437,17 @@ mixture component $ c_{j} $ is
 
 For example, if we want to find the conditional distribution for $ c_{1} $, we need to compute the binomial MLE \textit{only
 for the data associated with $ c_{1} $}! We already know from Equation~\eqref{eq:c1Expectation} that the total expected 
-occurrence of $ c_{1} $ in our data is $ 5.946387 $. You can verify that this is exactly the sum of the first column in
+occurrence of $ c_{1} $ in our data is $ \Sexpr{sum(binomPosteriors[,1])} $. You can verify that this is exactly the sum of the first column in
 Table~\ref{tab:binomCounts}. We also know that the MLE for repeated binomial trials is $ \frac{\sum^{nm}_{i=1}x_{i}}{nm} $ where
 $ n $ is the number of Bernoulli trials in each binomial draw (10 in our case) and $ m $ is the number of of binomial draws. Since we do
-not observe the number of draws from $ c_{1} $ our best guess is the posterior expectation. Thus we set $ m = 5.946387 $. We also do not
+not observe the number of draws from $ c_{1} $ our best guess is the posterior expectation. Thus we set $ m = \Sexpr{sum(binomPosteriors[,1])} $. We also do not
 directly observe the number of successes per draw from $ c_{1} $ and instead compute the number of expected successes. The number of 
 expected successes happens to be the expected sufficient statistic for the binomial. We have already computed those sufficient statistics
 in Table~\ref{tab:binomPosteriors}. For coin $ c_{1} $ the binomial MLE is thus
 \begin{equation}
-\theta_{c_{j}}^{(1)} =  \frac{\E\left[\sum_{i=1}^{nm} x_{i}\mid c_{1}\right]}{n\E\left[c_{j}\right]} = \frac{23.60424}{10 \times 5.946387}
-= 
+\theta_{c_{j}}^{(1)} =  \frac{\E\left[\sum_{i=1}^{nm} x_{i}\mid c_{1}\right]}{n\E\left[c_{j}\right]} 
+= \frac{\Sexpr{binomPosteriorExp[1,1]}}{10 \times \Sexpr{sum(binomPosteriors[,1])}}
+= \Sexpr{newBinoms[1]}
 \end{equation}
 
 The updated binomial distributions are given in Table~\ref{tab:newBinoms}. This completes our parameter
@@ -440,12 +458,6 @@ after a pre-specified number of iterations.
 \begin{table}
 \center
 <<newBinoms, echo=F, results="asis">>=
-newBinoms = matrix(0,1, cols)
-
-for (j in 1:cols) {
-	newBinoms[1,j] = binomPosteriorExp[1,j]/(10 * sum(binomPosteriors[,j]))
-}
-
 output = newBinoms
 colnames(output) = c("c_1", "c_2", "c_3")
 kable(output, align="c")
