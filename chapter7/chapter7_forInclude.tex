@@ -158,8 +158,6 @@ P(X=x, Z=z | \Theta = \theta) = P(X=x|Z=z, \Theta=\theta) P(Z=z|\Theta = \theta)
 where we have chosen a factorization that provides a separate term for a distribution over only the
 latent data.
 
-
-
 Recall that the goal of the EM algorithm is to iteratively increase the likelihood through consecutive
 updates of parameter estimates. These updates are achieved through maximum likelihood estimation based
 on expected sufficient statistics. We are now going to show that a) EM computes a lower bound on the
@@ -192,12 +190,15 @@ the variational distribution and the model posterior over latent variables.
 &= -D(Q||P) + \log(P(X=x=|\Theta=\theta)) \label{eq:ELBO2}
 \end{align}
 Equation~\eqref{eq:ELBO1} gives us two insights. First it quantifies the gap between the lower bound
-and the actual data likelihood. Second, since KL divergence is always positive, the bound only becomes
+and the actual data likelihood. This gap is equal to the KL divergence between the variational distribution
+and the model posterior over latent variables. Second, since KL divergence is always positive, the bound only becomes
 tight when $ P=Q $. But this is exactly what is happening in the E-step! The E-step sets $ P=Q $ and
-then computes expectations under that distribution (see Equation~\eqref{eq:ELBO1}). Because the E-step
-maximizes a lower bound on the marginal likelihood given model parameters $ \theta $ and the M-step
-maximizes the likelihood with respect to the expected sufficient statistics computed under $ Q $ (which
-in EM is just the model posterior over latent variables) it follows that EM increase the data likelihood
+then computes expectations under that distribution (see Equation~\eqref{eq:ELBO1}). Thus, the E-step increases
+the lower bound on the marginal log-likelihood.
+
+Looking back at Equation~\eqref{eq:ELBO1}, we also see that the M-step increase the lower bound because 
+it maximises $ \E\left[P(X=x, Y=y| \Theta = \theta)\right] $. We conclude that both steps
+are increasing the lower bound on the log-likelihood. We therefore conclude that EM increases the data likelihood
 in every iteration (or leaves it unchanged at worst).
 
 We will finish with a quick rejoinder on variational inference. EM is special case of variational inference.
