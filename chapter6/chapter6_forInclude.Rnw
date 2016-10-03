@@ -80,7 +80,31 @@ Mixture models are extremely useful whenever we have different ways to think abo
 of conceptualising our data can be encoded by one of the mixture components of the mixture model. The modelling
 of the data under that view is done by the conditional distribution induced by the mixture component.
 This technique can help us to build a better overall model of our data. Let us introduce a running example that
-we use for the rest of this section. 
+we use for the rest of this section. \philip{A graphical depiction of the model used in the example is given in Figure~\ref{fig:mixtureGraphical}.}
+\begin{figure}
+\center
+\begin{tikzpicture}
+\node[latent] 					(c1)		{$ c_{1} $};
+\node[latent, right = of c1] 	(c2) 	{$ c_{2} $};
+\node[latent, right = of c2] 	(c3) 	{$ c_{3} $};
+\node[latent, right = of c3] 	(c4) 	{$ c_{4} $};
+
+\node[obs, below = of c1] (x1) {$ x_{1} $};
+\node[obs, below = of c2] (x2) {$ x_{2} $};
+\node[obs, below = of c3] (x3) {$ x_{3} $};
+\node[obs, below = of c4] (x4) {$ x_{4} $};
+
+\edge{c1}{x1};
+\edge{c2}{x2};
+\edge{c3}{x3};
+\edge{c4}{x4};
+\end{tikzpicture}
+\caption{A graphical model of the mixture model used in our example. Only four data points are shown. Shaded nodes observed values, light nodes indicate
+latent values. A graphical model shows the dependencies between variables in a probabilistic model. In this example we see that a) the latent variables
+are independent of each other and b) the observed variables are independent given the latent variables. (Aside: formally the graphical model actually shows the
+\textit{independencies} assumed by our model! Reasoning about it in terms of dependencies is often easier, though.)}
+\label{fig:mixtureGraphical}
+\end{figure}
 
 \paragraph{Example of a mixture model} Assume we observe 20 sequences of coin tosses. Each sequence
 contains 10 flips. We also know that there are 3 coins with which these sequences could possibly have been
@@ -101,7 +125,8 @@ In order to model the contribution of each coin, we introduce a latent RV $ Y $ 
 In the present case, each mixture component is linked to a binomial distribution, parametrized by the biases of
 the coins. We will also adopt the often-used assumption
 that the mixture components are independent of each other. This means that the coin that generated each
-sequence of coin flips was chosen independently of the coins used for the other sequences. As usual, we call our data $ x $. 
+sequence of coin flips was chosen independently of the coins used for the other sequences. \philip{Our independence assumptions
+are also encoded in the graphical model in Figure~\eqref{fig:mixtureGraphical}.} As usual, we call our data $ x $. 
 This information suffices to formulate our mixture model.
 \begin{align} 
 &P(X_1^n=x_{1}^{n},Y_{1}^{n}=y_{1}^{n}\mid \Theta=\theta) \label{eq:mixtureExample} \\
@@ -233,7 +258,8 @@ estimate we then compute the expected sufficient statistics of our model which w
 \begin{equation} \label{Estep}
 t(y,x)^{(l+1)} = \E(t(Y,x) \mid X = x,\Theta = \theta^{(l)})
 \end{equation} 
-\chris{would it make sense to always write $\E_Y(\ldots)$ to indicate where the expectation is taken over?}
+\chris{would it make sense to always write $\E_Y(\ldots)$ to indicate where the expectation is taken over?}\philip{Yeah, I guess we could do that. Do you think we'd have
+to explain that kind of notation or would people understand it?}
 
 Equation~\eqref{Estep} is known as the \textbf{E(xpectation)-step} of the EM algorithm. This name
 comes from the fact that in this step we compute the expected sufficient statistics. 
@@ -418,8 +444,7 @@ latent variables, we simply use their expected sufficient statistics (their expe
 $ \theta_{j}^{(1)} = \frac{\E[Y = c_{j} \mid X=x,\Theta= \theta^{0}]}{20} $\footnote{When implementing the algorithm, numerical imprecisions occur due to the limited
 memory of our computers. To ensure that the distribution obtained from the M-step really sums to 1, you should use the sum 
 $ \sum_{j=1}^{3} \E[Y = c_{j} \mid X=x,\Theta= \theta^{0}] $. This sum should be equal to 20 up to at least the third decimal but may not be exactly equal to
-20. Having a distribution that does not exactly sum to 1 may not be to bad after 1 M-step. However, since the M-step gets repeated after every iteration, the
-error introduced by numerical imprecision would grow exponentially, if we always divided by 20 instead of the above sum.\chris{I don't get the last sentence here, please clarify. What should I divide by now?}}. The updated mixture weights then are 
+20. Having a distribution that does not exactly sum to 1 may not be to bad after 1 M-step. \philip{However, this slightly wrong distribution will then lead to slightly wrong estimates in the E-step. If in the next M-step the distribution does again not sum to 1, the error induced by the numerical imprecision magnifies with each iteration. Therefore you should always divide by $ \sum_{j=1}^{3} \E[Y = c_{j} \mid X=x,\Theta= \theta^{0}] $ in order to ensure proper normalisation.}.\chris{I don't get the last sentence here, please clarify. What should I divide by now?}\philip{Better?}}. The updated mixture weights then are 
 \begin{align}
 P(Y=c_{1} \mid \Theta= \theta^{1}) = \Sexpr{new_weights[1]} \\
 P(Y=c_{2} \mid \Theta= \theta^{1}) = \Sexpr{new_weights[2]} \nonumber \\
