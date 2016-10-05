@@ -125,12 +125,12 @@
 In the previous chapter we have mentioned that it may happen that a likelihood function has multiple 
 maxima and that sometimes it may be hard or impossible to find the global maximum (i.e.\ the maximum
 with the overall highest likelihood value). Such a situation occurs whenever the probabilistic model
-that we use to model our observations is a \textbf{latent} or \textbf{hidden variable model}. Latent variable
+that we use to model our observations is a \textbf{latent-} or \textbf{hidden-variable model}. Latent-variable
 models are models that besides modelling observed data also model a portion of unobserved data. For
 example, if we look at the income distribution of a population we may want to further differentiate
 between age groups. If the age of all or some members of the population is not provided in the data, we
 can still model it as a latent variable. The difficulty is that we will have to make inferences about the
-age of an individual based on other information that we have about it (e.g. the income). 
+age of an individual based on other information that we have about it (e.g.\ the income). 
 
 While it may in general be quite hard to formulate latent-variable models, there are certain standard
 latent-variable models that have wide-spread applications. One such class are \textbf{mixture models}.
@@ -178,7 +178,8 @@ as an underspecified dependence on any parameters that the model may have. We wi
 \edge{c3}{x3};
 \edge{c4}{x4};
 \end{tikzpicture}
-\caption{A graphical model of the mixture model used in our example. Only four data points are shown. Shaded nodes observed values, light nodes indicate
+\caption{A graphical model of the mixture model used in our
+  example. Only four data points are shown. Shaded nodes indicate observed values, light nodes indicate
 latent values. A graphical model shows the dependencies between variables in a probabilistic model. In this example we see that a) the latent variables
 are independent of each other and b) the observed variables are independent given the latent variables. (Aside: formally the graphical model actually shows the
 \textit{independencies} assumed by our model! Reasoning about it in terms of dependencies is often easier, though.)}
@@ -200,7 +201,7 @@ A mixture model comes to the rescue. Instead of assuming that only one coin has 
 we assume that all three coins have contributed to generating the 20 sequences. However, their contributions
 may not be equal. This inequality is exactly what the mixture weights capture. 
 
-In order to model the contribution of each coin, we introduce a latent RV $ Y $ over mixture components with values $ c_{1}, c_{2}, c_{3} $ representing the three coins.
+In order to model the contribution of each coin, we introduce a latent RV $ Y $ over mixture components with labels $ c_{1}, c_{2}, c_{3} $ representing the three coins.
 In the present case, each mixture component is linked to a binomial distribution, parametrized by the biases of
 the coins. We will also adopt the often-used assumption
 that the mixture components are independent of each other. This means that the coin that generated each
@@ -253,13 +254,13 @@ observed data only.
 
 \begin{align}
 P(X_1^n=x_{1}^{n} \mid \Theta= \theta) &= \sum_{j_1=1}^3 \sum_{j_2=1}^3 \cdots \sum_{j_n=1}^3 P(X_1^n=x_{1}^{n}, Y_1=c_{j_1}, \ldots, Y_n=c_{j_n} \mid \Theta= \theta) \label{eq:marginal} \\
-&= \sum_{j_1=1}^3 \sum_{j_2=1}^3 \cdots \sum_{jn2=1}^3 \prod_{i=1}^{n} P(X_{i}=x_{i},Y_{i}=c_{j_i} \mid  \Theta= \theta) \nonumber \\
+&= \sum_{j_1=1}^3 \sum_{j_2=1}^3 \cdots \sum_{j_n=1}^3 \prod_{i=1}^{n} P(X_{i}=x_{i},Y_{i}=c_{j_i} \mid  \Theta= \theta) \nonumber \\
 &= \prod_{i=1}^{n} \sum_{j=1}^3 P(X_{i}=x_{i},Y_{i}=c_{j} \mid  \Theta= \theta) \, , \nonumber
 \end{align}
 where the second equality uses the fact that we have assumed independence between the mixture components and hence
 the expression $P(X_1^n=x_1^n, Y_1^n=y_1^n \mid \Theta = \theta)$ factorizes.
 Now that we have related mixture models to the probability of the observed data, we can hope to estimate
-their parameters using the maximum likelihood principle.
+their parameters using the maximum-likelihood principle.
 
 There is one remaining problem, however: if the mixture weights $P(Y_i=y_i)$ are unknown, there is no closed-form solution for estimating the likelihood function. This is because
 the likelihood depends on the parameters of the mixture components whose distribution, given
@@ -348,7 +349,7 @@ To make the algorithm complete, we still miss a
 the latent data were actually observed. Once we pretend to observe the expected statistics, the maximization 
 step can be performed using the maximum-likelihood estimation:
 \begin{equation} \label{Mstep}
-\theta^{(l+1)} = \underset{\theta}{\arg\max}  P(X=x, t(Y,X) = t(y,x)^{(l+1)} \mid \theta)
+\theta^{(l+1)} = \underset{\theta}{\arg\max} \, P(X=x, t(Y,X) = t(y,x)^{(l+1)} \mid \theta)
 \end{equation}
 
 \begin{Definition}[EM algorithm]\label{def:EM}
@@ -392,8 +393,8 @@ distributions as follows:
 \begin{equation}
 \phi^{(0)}_{1} = 0.4 \hskip 0.5cm  \phi^{(0)}_{2} = 0.5 \hskip 0.5cm  \phi^{(0)}_{3} = 0.65
 \end{equation}
-We also assume that the fair coin is more likely to be used and hence set its initial mixture weight to $ 0.5 $ and the mixture weights of the 
-other two coins to $ 0.25 $ (any other choice would also be fine). Let 
+We also assume that the fair coin is more likely to be used and hence set its initial mixture weight to $ w_2^{(0)}=0.5 $ and the mixture weights of the 
+other two coins to $ w_1^{(0)}=w_3^{(0)}=0.25 $ (any other choice would also be fine). Let 
 us take a closer look at our data. To shorten notation, we write it as a list where the i$ ^{th} $ entry is the value of $ x_{i} $.
 $$ \left[ 6, 5, 4, 2, 2, 6, 5, 5, 4, 2, 5, 2, 4, 4, 6, 4, 5, 6, 3, 3 \right] $$ 
 Then for each $ x_{i} $ we check how likely each coin is to have generated that point. In order to compute the posterior for each coin given a data point, we need
@@ -556,8 +557,8 @@ c\_1 & c\_2 & c\_3\\
 \paragraph{M-step} As pointed out before, the M-step is rather trivial once we have all the necessary expectations. Recall that according to our model, 
 the mixture components are categorically
 distributed and thus in the M-step we want to find the MLE of that categorical. In general, the MLE for $ w_{j} $ of a categorical is
-$ \frac{\#c_{j}}{n} $\footnote{This fact can easily be seen by letting $ \#c_{j} $ be the number of successes in the realisation of a binomial RV and the sum of all
-$ \#c_{m},~m \not = j $ be the number of failures. Then clearly $ \frac{\#c_{j}}{n} $ is the MLE.}. In our case $ n=20 $. Since we have not observed the
+$ \frac{\#c_{j}}{m} $\footnote{This fact can easily be seen by letting $ \#c_{j} $ be the number of successes in the realisation of a binomial RV and the sum of all
+$ \#c_{k},~k \not = j $ be the number of failures. Then clearly $ \frac{\#c_{j}}{m} $ is the MLE.}. In our case $ m=20 $. Since we have not observed the
 latent variables, we simply use their expected sufficient statistics (their expected counts) instead. Thus we set 
 $ w_{j}^{(1)} = \frac{\E[\id{Y = c_{j}} \mid X=x,\Theta= \theta^{(0)}]}{20} $\footnote{When implementing the algorithm, numerical imprecisions occur due to the limited
 memory of our computers. To ensure that the distribution obtained from the M-step really sums to 1, you should use the sum 
