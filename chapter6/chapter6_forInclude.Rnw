@@ -401,7 +401,8 @@ kable(output, align="c")
 Next we turn to the sufficient statistics for the binomial distributions linked to the mixture components. These are the counts of the observed outcomes. However,
 since the binomials are conditional distributions (they are conditioned on the identity of the coins), the counts have to be taken with respect to their conditioning
 contexts. In other words: we cannot count the observed outcomes independently but we have to count pairs of observed and latent variables. Formally this means that 
-for one binomially distributed observation $ x_{i} $ that $ \E[\id{X_{i}=x_{i},Y_{i}=c_{j}} \mid \Theta=\theta^{(0)}] = P(Y_{i}=c_{j} \mid X_{i}=x_{i}, \Theta=\theta^{(0)}) $. This is again
+for one binomially distributed observation $ x_{i} $ the expected number of times that we see the
+pair $ (x_{i},c_{j}) $ is $ \E[\id{x_{i},c_{j}} \mid \Theta=\theta^{(0)}] = P(Y_{i}=c_{j} \mid X_{i}=x_{i}, \Theta=\theta^{(0)}) $. This is again
 just the posterior that we find in Table~\ref{tab:posteriors}. 
 
 To get the expectations for the mixture components, we summed the columns in Table~\ref{tab:posteriors}, effectively conflating all outcomes of $ X $. We did this
@@ -409,11 +410,11 @@ because we did not care about $ X $ at this stage, only about the expectations o
 we have to sum the posteriors differently. Now we actually need to discriminate between
 observed outcomes. We only sum over observations that had the same outcome. Working with Table~\ref{tab:posteriors} this means that we multiply each
 cell, which contains the posterior for one observation, by the number of times each outcome has been observed in the data set. In other words, we are summing
-the posteriors over the observations that were equal to the given outcome. For the pairs $ (X=\Sexpr{unique_data[1]},Y=c_{1}) $
-and $ (X=\Sexpr{unique_data[3]},Y = c_{3}) $ this gives:
+the posteriors over the observations that were equal to the given outcome. For the pairs $ (\Sexpr{unique_data[1]},c_{1}) $
+and $ (\Sexpr{unique_data[3]},c_{3}) $ this gives:
 \begin{align}
-\E[\id{X=\Sexpr{unique_data[1]},Y=c_{1}} \mid \Theta=\theta^{(0)}] &= \Sexpr{occurrences[1]} \times \Sexpr{posteriors[1,1]} = \Sexpr{binomPosteriors[1,1]} \\
-\E[\id{X=\Sexpr{unique_data[3]},Y=c_{3}} \mid \Theta=\theta^{(0)}] &= \Sexpr{occurrences[3]} \times \Sexpr{posteriors[3,3]} = \Sexpr{binomPosteriors[3,3]}
+\E[\id{\Sexpr{unique_data[1]},c_{1}} \mid  X = \Sexpr{unique_data[1]}, \Theta=\theta^{(0)}] &= \Sexpr{occurrences[1]} \times \Sexpr{posteriors[1,1]} = \Sexpr{binomPosteriors[1,1]} \\
+\E[\id{\Sexpr{unique_data[3]},c_{3}} \mid X = \Sexpr{unique_data[3]}, \Theta=\theta^{(0)}] &= \Sexpr{occurrences[3]} \times \Sexpr{posteriors[3,3]} = \Sexpr{binomPosteriors[3,3]}
 \end{align} 
 The expected number of times each outcome has been drawn from each coin can be found in Table~\ref{tab:binomCounts}. 
 
@@ -498,7 +499,7 @@ directly observe the number of successes per draw from $ c_{1} $ and instead com
 expected successes happens to be the expected sufficient statistic for the binomial. We have already computed those sufficient statistics
 in Table~\ref{tab:binomPosteriors}. For coin $ c_{1} $ the binomial MLE is thus
 \begin{equation}
-\phi_{j}^{(1)} =  \frac{\E\left[\sum_{i=1}^{nm} x_{i}\mid Y = c_{1}\right]}{n\E\left[Y = c_{j}\right]} 
+\phi_{1}^{(1)} =  \frac{\E\left[\sum_{i=1}^{nm} x_{i}\mid Y = c_{1}\right]}{n\E\left[Y = c_{1}\right]} 
 = \frac{\Sexpr{binomPosteriorExp[1,1]}}{10 \times \Sexpr{sum(binomPosteriors[,1])}}
 = \Sexpr{newBinoms[1]}
 \end{equation}
