@@ -498,7 +498,7 @@ directly observe the number of successes per draw from $ c_{1} $ and instead com
 expected successes happens to be the expected sufficient statistic for the binomial. We have already computed those sufficient statistics
 in Table~\ref{tab:binomPosteriors}. For coin $ c_{1} $ the binomial MLE is thus
 \begin{equation}
-\phi_{j}^{(1)} =  \frac{\E\left[\sum_{i=1}^{nm} x_{i}\mid Y = c_{1}\right]}{n\E\left[Y = c_{j}\right]} 
+\phi_{1}^{(1)} =  \frac{\E\left[\sum_{i=1}^{nm} x_{i}\mid Y = c_{1}\right]}{n\E\left[Y = c_{1}\right]} 
 = \frac{\Sexpr{binomPosteriorExp[1,1]}}{10 \times \Sexpr{sum(binomPosteriors[,1])}}
 = \Sexpr{newBinoms[1]}
 \end{equation}
