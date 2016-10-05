@@ -1,6 +1,6 @@
 \documentclass[a4paper,11pt,leqno]{report}
 
-\usepackage{amsmath, amssymb, mdframed, caption, subcaption, graphicx, enumitem, tikz}
+\usepackage{amsmath, amssymb, mdframed, caption, subcaption, graphicx, enumitem, tikz, bbm}
 \usepackage{nicefrac}
 \usetikzlibrary{bayesnet}
 
@@ -15,6 +15,8 @@
 \newcommand{\supp}{\operatorname{supp}} 
 \newcommand{\E}{\mathbb{E}}
 \newcommand{\eps}{\varepsilon}
+
+\newcommand{\id}[1]{\mathbbm{1}\left(#1\right)}
 
 \newcommand{\philip}[1]{ \textcolor{red}{\textbf{Philip:} #1}}
 \newcommand{\chris}[1]{ \textcolor{blue}{\textbf{Chris:} #1}}
