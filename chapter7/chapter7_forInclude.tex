@@ -11,6 +11,7 @@ The beauty about information theory is that it is based on probability theory an
 In this chapter, we are going to discuss the bare basics of information theory. These basics are often enough to understand many information theoretic arguments
 that researchers make in fields like computer science, psychology and linguistics.
 
+\subsection{Basic Information-Theoretic Quantities}
 Shannon's idea of information is as simple as it is compelling. Intuitively, if we are observing a realisation of a random variable, this realisation is surprising
 if it is unlikely to occur according to the distribution of that random variable. However, if the probability for the realisation is very low, than on average it
 does not occur very often, meaning that if we sample from the RV repeatedly, we are not surprised very often. We are not surprised when the probability
@@ -81,7 +82,7 @@ $ H(X) = \log(n) $.
 H(X) &= \underset{x \in \supp(X)}{\sum}-\log(P(X=x))P(X=x) \\
 &= \underset{x \in \supp(X)}{\sum} -\log(\frac{1}{|\supp(X)|})P(X=x) \\
 &= \underset{x \in \supp(X)}{\sum}\log(n)P(X=x) = \log(n) \, .
-\vspace \square
+\hspace{1cm} \square
 \end{align}
 
 \begin{Exercise}
@@ -173,8 +174,7 @@ EM performs the optimal update in each iteration.
 Let us start by expanding the data log-likelihood and then lower-bounding it.
 \begin{align}
 &\log(P(X=x \mid \Theta=\theta)) = \log(\sum_y P(X=x, Y=y \mid  \Theta = \theta))  \\
-&=?? \sum_{y} \log(P(X=x, Y=y \mid  \Theta = \theta))  \\
-&= \sum_{y} \log\left(Q(Y=y \mid \Phi=\phi)\frac{P(X=x, Y=y \mid  \Theta = \theta)}{Q(Y=y \mid \Phi=\phi)}\right) \\
+&= \log\left(\sum_{y} Q(Y=y \mid \Phi=\phi)\frac{P(X=x, Y=y \mid  \Theta = \theta)}{Q(Y=y \mid \Phi=\phi)}\right) \\
 &\geq \sum_{y} Q(Y=y \mid \Phi=\phi) \log\left(\frac{P(X=x, Y=y \mid  \Theta = \theta)}{Q(Y=y \mid \Phi=\phi)}\right)
 \label{eq:ELBO1}
 \end{align}
@@ -192,17 +192,18 @@ In the next step, we factorise the model distribution in order to recover a KL d
 the variational distribution and the model posterior over latent variables.
 \begin{align}
 &\sum_{y} Q(Y=y \mid \Phi=\phi) \log\left(\frac{P(X=x, Y=y \mid  \Theta = \theta)}{Q(Y=y \mid \Phi=\phi)}\right) \\
-&=??? \sum_{y} Q(Y=y \mid \Phi=\phi) \log\left(\frac{P(Y=y \mid X=x, \Theta = \theta)}{Q(Y=y \mid \Phi=\phi)}\right) + \log(P(X=x \mid \Theta=\theta)) \\
+&= \sum_{y} Q(Y=y \mid \Phi=\phi) \log\left(\frac{P(Y=y \mid X=x, \Theta = \theta)P(X=x \mid \Theta = \theta)}{Q(Y=y \mid \Phi=\phi)}\right) \\
+&= \sum_{y} Q(Y=y \mid \Phi=\phi) \log\left(\frac{P(Y=y \mid X=x, \Theta = \theta)}{Q(Y=y \mid \Phi=\phi)}\right) + \log(P(X=x \mid \Theta=\theta)) \\
 &= -D(Q||P) + \log(P(X=x \mid \Theta=\theta)) \label{eq:ELBO2}
 \end{align}
-Equation~\eqref{eq:ELBO1}\chris{wrong number?} gives us two insights. First it quantifies the gap between the lower bound
+Equation~\eqref{eq:ELBO2} gives us two insights. First it quantifies the gap between the lower bound
 and the actual data likelihood. This gap is equal to the KL divergence between the variational distribution
 and the model posterior over latent variables. Second, since KL divergence is always positive, the bound only becomes
 tight when $ P=Q $. But this is exactly what is happening in the E-step! The E-step sets $ P=Q $ and
 then computes expectations under that distribution (see Equation~\eqref{eq:ELBO1}). Thus, the E-step increases
 the lower bound on the marginal log-likelihood.
 
-Looking back at Equation~\eqref{eq:ELBO1}, we also see that the M-step increase the lower bound because 
+Looking back at Equation~\eqref{eq:ELBO1}, we also see that the M-step increases the lower bound because 
 it maximises $ \E\left[P(X=x, Y=y\mid \Theta = \theta)\right] $. We conclude that both steps
 are increasing the lower bound on the log-likelihood. We therefore conclude that EM increases the data likelihood
 in every iteration (or leaves it unchanged at worst).
