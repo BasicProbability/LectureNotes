@@ -1,4 +1,4 @@
-\section{Basics of Information Theory}
+\chapter{Basics of Information Theory}
 
 When we talk about \textit{information}, we often use the term in qualitative sense. We say things like 
 \textit{This is valuable information} or 
@@ -26,10 +26,13 @@ under this conception because by just choosing the most probable outcome we can 
 an outcome beforehand, it's occurrence is not teaching me anything.
 
 The goal of Shannon was to find a function that captures this intuitive idea. He eventually found it and showed that it is the only function to have properties
-that encompass the intuition. This function is called the \textbf{entropy} of a RV and it is simply the expected \textbf{surprisal} value.
+that encompass the intuition. This function is called the
+\textbf{entropy} of a RV and it is simply the expected
+\textbf{surprisal} value, expressed in bits.
 
 \begin{Definition}[Surprisal]
-The surprisal (value) of an outcome $ x \in \supp(X) $ of some RV $ X $ is defined as $ -\log_{2}(P(X=x))$.
+The surprisal (value) of an outcome $ x \in \supp(X) $ of some RV $ X
+$ is defined as $ -\log_{2}(P(X=x)) = \log_2(\frac{1}{P(X=x)})$.
 \end{Definition} 
 
 Notice that we are using the logarithm of base 2 here. This is because surprisal and entropy are standardly measured in bits. Intuitively, the surprisal measures
@@ -76,7 +79,9 @@ $ H(X) = \log(n) $.
 \paragraph{Proof:}
 \begin{align}
 H(X) &= \underset{x \in \supp(X)}{\sum}-\log(P(X=x))P(X=x) \\
-&= \underset{x \in \supp(X)}{\sum}\log(n)P(X=x) = \log(n) \, . ~~~~\square
+&= \underset{x \in \supp(X)}{\sum} -\log(\frac{1}{|\supp(X)|})P(X=x) \\
+&= \underset{x \in \supp(X)}{\sum}\log(n)P(X=x) = \log(n) \, .
+\vspace \square
 \end{align}
 
 \begin{Exercise}
@@ -95,11 +100,11 @@ conditional entropy. We have seen in Section~\ref{sec:jointconditionaldistributi
 \begin{Definition}[Conditional Entropy]
 For two jointly distributed RVs $ X,Y $ and $y \in \supp(Y)$ such that $P(Y=y)>0$, the conditional entropy of $ X $ given that $ Y=y $ is defined as
 \begin{align*}
-H(X|Y=y) &:= \E_X[-\log_{2}(P(X=x|Y=y))] \\
-&= - \!\! \sum_{x \in \supp(X)} P(X=x|Y=y) \log_2(P(X=x|Y=y))\, . 
+H(X \mid Y=y) &:= \E_X[-\log_{2}(P(X=x \mid Y=y))] \\
+&= - \!\! \sum_{x \in \supp(X)} P(X=x \mid Y=y) \log_2(P(X=x \mid Y=y))\, . 
 \end{align*}
 The conditional entropy of $X$ given $Y$ is defined as
-$$ H(X|Y) := \E_Y[ H(X|Y) ] = \sum_{y \in \supp(Y)} P(Y=y) H(X|Y=y) \, .$$
+$$ H(X \mid Y) := \E_Y[ H(X \mid Y) ] = \sum_{y \in \supp(Y)} P(Y=y) H(X \mid Y=y) \, .$$
 \end{Definition}
 
 With this definition at hand we show that the joint entropy decomposes according to the
@@ -108,17 +113,17 @@ chain rule.
 \begin{align*}
 H(X,Y) &= \underset{\substack{x \in \supp(X)\\y \in \supp(Y)}}{\sum} -\log(P(X=x,Y=y)) \times P(X=x, Y=y) \\
 \begin{split}
-&= \underset{\substack{x \in \supp(X)\\ y \in \supp(Y)}}{\sum} -\log(P(X=x| Y=y)) \times P(X=x,Y=y) \\ 
+&= \underset{\substack{x \in \supp(X)\\ y \in \supp(Y)}}{\sum} -\log(P(X=x \mid  Y=y)) \times P(X=x,Y=y) \\ 
 &\qquad - \underset{y \in \supp(Y)}{\sum}\log(P(Y=y)) \times \sum_{x \in \supp(X)} P(X=x,Y=y) 
 \end{split} \\
 \begin{split}
-&=\sum_{y \in \supp(Y)} P(Y=y) \times \sum_{x \in \supp(X)} -\log(P(X=x| Y=y)) \times P(X=x|Y=y) \\ &\qquad - \underset{y \in \supp(Y)}{\sum}\log(P(Y=y)) \times P(Y=y)
+&=\sum_{y \in \supp(Y)} P(Y=y) \times \sum_{x \in \supp(X)} -\log(P(X=x \mid  Y=y)) \times P(X=x \mid Y=y) \\ &\qquad - \underset{y \in \supp(Y)}{\sum}\log(P(Y=y)) \times P(Y=y)
 \end{split} \\
-&= H(X|Y) + H(Y)
+&= H(X \mid Y) + H(Y)
 \end{align*}
 
 \begin{Exercise}
-Prove that $ H(X,Y|Z) = H(X|Z) + H(Y|Z) $ if $ X \bot Y|Z $.
+Prove that $ H(X,Y \mid Z) = H(X \mid Z) + H(Y \mid Z) $ if $ X \bot Y \mid Z $.
 \end{Exercise}
 
 Now that we have seen some information-theoretic concepts, you may be happy to hear that there is an information-theoretic interpretation
@@ -128,7 +133,7 @@ one more concept, however.
 \begin{Definition}[Relative Entropy]
 The relative entropy of RVs \\ $ X,Y $ with distributions $P_X, P_Y$ and $\supp(X) \subseteq \supp(Y) $ is defined as
 $$ D(P_X||P_Y) := \sum_{x \in \supp(X)} P(X=x) \log \frac{P(X=x)}{P(Y=x)} \ . $$
-If $ P(X=y) = 0 $ for any $ y \in \supp(Y) $ we define $ D(P_X||P_Y) = \infty $. As with entropy, we often abbreviate $D(P_X||P_Y)$ with  $D(X||Y)$.
+If $ P(Y=x) = 0 $ for any $ x \in \supp(X) $ we define $ D(P_X||P_Y) = \infty $. As with entropy, we often abbreviate $D(P_X||P_Y)$ with  $D(X||Y)$.
 \end{Definition}
 
 The relative entropy is commonly known as \textbf{Kullback-Leibler (KL)} divergence. It measures the entropy of $ X $ as scaled to $ Y $. Intuitively,
@@ -144,7 +149,7 @@ It is worthwhile to point out the difference between relative and conditional en
 know what value $ Y $ takes on. In the case of relative entropy you do not know the value of $ Y $, only its distribution.
 
 \begin{Exercise}
-Show that $ D(X,Y||Y) = H(X|Y) $. Furthermore show that $ D(X,Y||Y) = H(X) $ if $ X\bot Y $.
+Show that $ D(X,Y||Y) = H(X \mid Y) $. Furthermore show that $ D(X,Y||Y) = H(X) $ if $ X\bot Y $.
 \end{Exercise}
 
 
@@ -153,13 +158,13 @@ Show that $ D(X,Y||Y) = H(X|Y) $. Furthermore show that $ D(X,Y||Y) = H(X) $ if 
 Let us start by remembering why we need EM. We have a model that defines a joint distribution
 over observed ($ x $) and latent data ($ z $). Such a model generally looks as follows:
 \begin{equation}
-P(X=x, Z=z | \Theta = \theta) = P(X=x|Z=z, \Theta=\theta) P(Z=z|\Theta = \theta)
+P(X=x, Z=z  \mid  \Theta = \theta) = P(X=x \mid Z=z, \Theta=\theta) P(Z=z \mid \Theta = \theta)
 \end{equation}
 where we have chosen a factorization that provides a separate term for a distribution over only the
 latent data.
 
 Recall that the goal of the EM algorithm is to iteratively increase the likelihood through consecutive
-updates of parameter estimates. These updates are achieved through maximum likelihood estimation based
+updates of parameter estimates. These updates are achieved through maximum-likelihood estimation based
 on expected sufficient statistics. We are now going to show that a) EM computes a lower bound on the
 marginal log-likelihood of the data in each iteration and b) that this lower bound becomes tight when the
 expected sufficient statistics are taken with respect to the model posterior. The latter implies that
@@ -167,9 +172,10 @@ EM performs the optimal update in each iteration.
 
 Let us start by expanding the data log-likelihood and then lower-bounding it.
 \begin{align}
-&\log(P(X=x|\Theta=\theta)) = \sum_{y} \log(P(X=x, Y=y| \Theta = \theta))  \\
-&= \sum_{y} \log\left(Q(Y=y|\Phi=\phi)\frac{P(X=x, Y=y| \Theta = \theta)}{Q(Y=y|\Phi=\phi)}\right) \\
-&\geq \sum_{y} Q(Y=y|\Phi=\phi) \log\left(\frac{P(X=x, Y=y| \Theta = \theta)}{Q(Y=y|\Phi=\phi)}\right)
+&\log(P(X=x \mid \Theta=\theta)) = \log(\sum_y P(X=x, Y=y \mid  \Theta = \theta))  \\
+&=?? \sum_{y} \log(P(X=x, Y=y \mid  \Theta = \theta))  \\
+&= \sum_{y} \log\left(Q(Y=y \mid \Phi=\phi)\frac{P(X=x, Y=y \mid  \Theta = \theta)}{Q(Y=y \mid \Phi=\phi)}\right) \\
+&\geq \sum_{y} Q(Y=y \mid \Phi=\phi) \log\left(\frac{P(X=x, Y=y \mid  \Theta = \theta)}{Q(Y=y \mid \Phi=\phi)}\right)
 \label{eq:ELBO1}
 \end{align}
 Here, we have used \href{https://en.wikipedia.org/wiki/Jensen\%27s_inequality}{Jensen's Inequality} to
@@ -185,11 +191,11 @@ we are are following conventions from the field of \textbf{variational inference
 In the next step, we factorise the model distribution in order to recover a KL divergence term between
 the variational distribution and the model posterior over latent variables.
 \begin{align}
-&\sum_{y} Q(Y=y|\Phi=\phi) \log\left(\frac{P(X=x, Y=y| \Theta = \theta)}{Q(Y=y|\Phi=\phi)}\right) \\
-&= \sum_{y} Q(Y=y|\Phi=\phi) \log\left(\frac{P(Y=y|X=x, \Theta = \theta)}{Q(Y=y|\Phi=\phi)}\right) + \log(P(X=x|\Theta=\theta)) \\
-&= -D(Q||P) + \log(P(X=x=|\Theta=\theta)) \label{eq:ELBO2}
+&\sum_{y} Q(Y=y \mid \Phi=\phi) \log\left(\frac{P(X=x, Y=y \mid  \Theta = \theta)}{Q(Y=y \mid \Phi=\phi)}\right) \\
+&=??? \sum_{y} Q(Y=y \mid \Phi=\phi) \log\left(\frac{P(Y=y \mid X=x, \Theta = \theta)}{Q(Y=y \mid \Phi=\phi)}\right) + \log(P(X=x \mid \Theta=\theta)) \\
+&= -D(Q||P) + \log(P(X=x \mid \Theta=\theta)) \label{eq:ELBO2}
 \end{align}
-Equation~\eqref{eq:ELBO1} gives us two insights. First it quantifies the gap between the lower bound
+Equation~\eqref{eq:ELBO1}\chris{wrong number?} gives us two insights. First it quantifies the gap between the lower bound
 and the actual data likelihood. This gap is equal to the KL divergence between the variational distribution
 and the model posterior over latent variables. Second, since KL divergence is always positive, the bound only becomes
 tight when $ P=Q $. But this is exactly what is happening in the E-step! The E-step sets $ P=Q $ and
@@ -197,11 +203,11 @@ then computes expectations under that distribution (see Equation~\eqref{eq:ELBO1
 the lower bound on the marginal log-likelihood.
 
 Looking back at Equation~\eqref{eq:ELBO1}, we also see that the M-step increase the lower bound because 
-it maximises $ \E\left[P(X=x, Y=y| \Theta = \theta)\right] $. We conclude that both steps
+it maximises $ \E\left[P(X=x, Y=y\mid \Theta = \theta)\right] $. We conclude that both steps
 are increasing the lower bound on the log-likelihood. We therefore conclude that EM increases the data likelihood
 in every iteration (or leaves it unchanged at worst).
 
-We will finish with a quick rejoinder on variational inference. EM is special case of variational inference.
+We will finish with a quick rejoinder on variational inference. EM is a special case of variational inference.
 Variational inference is any inference procedure which uses an auxiliary distribution $ Q $ to compute
 a lower bound on the likelihood. In the general setting, the auxiliary distribution can be different from the 
 model posterior. This means that the bound never gets tight. However, in models in which the exact posterior 
@@ -217,12 +223,12 @@ instead of variables.
 %actual posterior. We can formalize this by introducing an auxiliary distribution\footnote{We follow
 %standard notation here by denoting the auxiliary distribution $ Q $ instead of $ P $. Also, the
 %parameter variable is chosen so as to distinguish it from the parameter variable of our model.} 
-%$ Q(z|\Phi=\phi) $ under
+%$ Q(z\mid\Phi=\phi) $ under
 %which we compute the expected sufficient statistics. We want to find the auxiliary distribution that
-%is closest to actual posterior $ P_{Z|X=x,\Theta=\theta} $. We measure closeness in an information-theoretic
+%is closest to actual posterior $ P_{Z\midX=x,\Theta=\theta} $. We measure closeness in an information-theoretic
 %sense using KL-divergence. Formally, our goal is to find 
 %\begin{equation}
-%Q^{*}_{Z|\Phi=\phi} = \underset{Q_{Z|\Phi=\phi}}{\mbox{arg min}}~D\left( Q_{Z|\Phi=\phi} || P_{Z|X=x,\Theta=\theta} \right) \ .
+%Q^{*}_{Z\mid\Phi=\phi} = \underset{Q_{Z\mid\Phi=\phi}}{\mbox{arg min}}~D\left( Q_{Z\mid\Phi=\phi} || P_{Z \mid X=x,\Theta=\theta} \right) \ .
 %\end{equation}
 
 
@@ -237,3 +243,8 @@ The information-theoretic formulation of EM was pioneered in this \href{http://w
 \href{https://arxiv.org/abs/1601.00670}{tutorial on variational inference} can be found on the archive.
 
 \end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "chapter7"
+%%% End:
