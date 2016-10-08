@@ -11,7 +11,7 @@ The beauty about information theory is that it is based on probability theory an
 In this chapter, we are going to discuss the bare basics of information theory. These basics are often enough to understand many information theoretic arguments
 that researchers make in fields like computer science, psychology and linguistics.
 
-\subsection{Basic Information-Theoretic Quantities}
+\section{Basic Information-Theoretic Quantities}
 Shannon's idea of information is as simple as it is compelling. Intuitively, if we are observing a realisation of a random variable, this realisation is surprising
 if it is unlikely to occur according to the distribution of that random variable. However, if the probability for the realisation is very low, than on average it
 does not occur very often, meaning that if we sample from the RV repeatedly, we are not surprised very often. We are not surprised when the probability
@@ -52,12 +52,11 @@ It measures the information of a binary decision, like a coin flip or an answer 
 The entropy of the Bernoulli is 1 bit when the distribution is uniform, i.e.\ when both choices are equally 
 probable. 
 
-\begin{figure}
-\center
-\includegraphics[scale=0.4]{binaryEntropy.png}
-\caption{Binary entropy function.}
-\label{fig:binaryEntropy}
-\end{figure}
+<<binaryEntropy, echo=F, cache=T, fig.cap="Binary entropy function",fig.align="center", fig.pos="t!">>=
+x = seq(0,1,.001)
+y = -(x*log(x)+(1-x)*log(1-x))
+plot(x,y,ylab="H(X)", xlab=expression(theta),type="l")
+@
 
 From the plot is it also easy to see that entropy is never negative. It holds in general that entropy is non-negative,
 because entropy is defined as expectation of surprisal and surprisal is the negative logarithm of probabilities. 
