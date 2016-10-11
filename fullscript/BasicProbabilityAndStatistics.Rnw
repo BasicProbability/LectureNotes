@@ -69,6 +69,8 @@ library(knitr)
 \input{../chapter5/chapter5_forInclude}
 <<child="../chapter6/chapter6_forInclude.Rnw">>=
 @
+<<child="../chapter7/chapter7_forInclude.Rnw">>=
+@
 
 
 \end{document}
