@@ -131,6 +131,7 @@ H(X,Y) &= \underset{\substack{x \in \supp(X)\\y \in \supp(Y)}}{\sum} -\log(P(X=x
 \begin{Exercise}
 Prove that $ H(X,Y | Z) = H(X | Z) + H(Y | Z) $ if $ X \bot Y \mid Z $.
 \end{Exercise}
+As corollary, we get that $H(X,Y)=H(X)+H(Y)$ for independent random variables $X$ and $Y$. More generally, the entropy of $n$ independent random variables is $H(X_1^n) = \sum_{i=1}^n H(X_i)$.
 
 
 \section{An Information-Theoretic View on EM}

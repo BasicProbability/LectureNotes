@@ -183,7 +183,7 @@ Note however, that this non-increase of uncertainty only holds on average, as il
 Consider the binary random variables $X$ and $Y$, with joint distribution
 \begin{align*}
 &P(X=0,Y=0) = \frac{1}{2}, \quad P(X=0,Y=1) = \frac{1}{4}\\
-&P(X=1,Y=0) = 0, \quad P(X=1,Y=1) = \frac{1}{2}.
+&P(X=1,Y=0) = 0, \quad P(X=1,Y=1) = \frac{1}{4}.
 \end{align*}
 By marginalization, we find that $P(X=0) = \frac{3}{4}$ and $P(X=1) = \frac{1}{4}$, while $P(Y=0) = P(Y=1) = \frac{1}{2}$. This allows us to make the following computations:
 \begin{align*}
@@ -215,6 +215,7 @@ H(X,Y) &= \underset{\substack{x \in \supp(X)\\y \in \supp(Y)}}{\sum} -\log(P(X=x
 \begin{Exercise}
 Prove that $ H(X,Y | Z) = H(X | Z) + H(Y | Z) $ if $ X \bot Y \mid Z $.
 \end{Exercise}
+As corollary, we get that $H(X,Y)=H(X)+H(Y)$ for independent random variables $X$ and $Y$. More generally, the entropy of $n$ independent random variables is $H(X_1^n) = \sum_{i=1}^n H(X_i)$.
 
 
 \section{An Information-Theoretic View on EM}
