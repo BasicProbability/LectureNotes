@@ -21,6 +21,7 @@
 \newcommand{\hlkwb}[1]{\textcolor[rgb]{0.69,0.353,0.396}{#1}}%
 \newcommand{\hlkwc}[1]{\textcolor[rgb]{0.333,0.667,0.333}{#1}}%
 \newcommand{\hlkwd}[1]{\textcolor[rgb]{0.737,0.353,0.396}{\textbf{#1}}}%
+\let\hlipl\hlkwb
 
 \usepackage{framed}
 \makeatletter
@@ -465,7 +466,7 @@ Recall that the sufficient statistic for the binomial is
 $ \sum_{i=1}^{n} x_{i} $ where $ x_{i} $ is the $ i^{th} $ Bernoulli trial of that binomial. 
 When dealing with $ m $ i.i.d. binomial draws, this becomes $ \sum_{i=1}^{nm} x_{i} $. Notice that we do not
 know $ m $ because we don't actually know how many draws stem from each coin. Instead, we use the expected number of times
-that each coin (mixture component) was used. We have already computed these expectations and noted them down in Table~\ref{tab:posteriors}. Thus, for coin $ c_{1} $
+that each coin (mixture component) was used. We have already computed these expectations and noted them down in Table~\ref{tab:binomCounts}. Thus, for coin $ c_{1} $
 the expected sufficient binomial statistic is
 \begin{align}
 \E\left[\sum_{i=1}^{nm} x_{i}\mid c_{1}\right] &= 2 \times 2.269918 + 3 \times 0.9137487 + 4 \times 1.7182254  \\
