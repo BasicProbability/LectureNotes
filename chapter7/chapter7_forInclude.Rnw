@@ -8,37 +8,24 @@ who with his famous 1948 article \textit{A Mathematical Theory of Communication}
 digital communication and can be seen as one of the main contributors to our modern communication systems like the telephone, the internet etc. 
 
 The beauty about information theory is that it is based on probability theory and many results from probability theory seamlessly carry over to information theory.
-In this chapter, we are going to discuss the bare basics of information theory. These basics are often enough to understand many information theoretic arguments
+In this chapter, we are going to discuss the bare basics of information theory. These basics are often enough to understand many information-theoretic arguments
 that researchers make in fields like computer science, psychology and linguistics.
 
-\section{Basic Information-Theoretic Quantities}
-Shannon's idea of information is as simple as it is compelling. Intuitively, if we are observing a realisation of a random variable, this realisation is surprising
-if it is unlikely to occur according to the distribution of that random variable. However, if the probability for the realisation is very low, than on average it
-does not occur very often, meaning that if we sample from the RV repeatedly, we are not surprised very often. We are not surprised when the probability
-mass of the distribution is concentrated on only a small subset of its support. 
+\section{Surprisal and Entropy}
+Shannon's idea of information is as simple as it is compelling. The amount of \emph{surprisal} of an event $E$ is defined as the inverse probability $1/P(E)$. Intuitively, rare events (where $P(E)$ is small) are more surprising than those occurring with high probability (where $P(E)$ is high). If we are observing a realisation of a random variable, this realisation is surprising if it is unlikely to occur according to the distribution of that random variable. However, if the probability for the realisation is very low, then on average it does not occur very often, meaning that if we sample from the RV repeatedly, we are not surprised very often. We are not surprised when the probability mass of the distribution is concentrated on only a small subset of its support. 
 
-On the other hand, we quite often are surprised,
-if we cannot predict what the outcome of our next draw from the RV might be. We are surprised when the distribution over values of the RV is (close to) uniform. Thus,
-we are going to be most surprised on average if we are observing realisations of a uniformly distributed RV.
+On the other hand, we quite often are surprised, if we cannot predict what the outcome of our next draw from the RV might be. We are surprised when the distribution over values of the RV is (close to) uniform. Thus, we are going to be most surprised on average if we are observing realisations of a uniformly distributed RV.
 
-Shannon's idea was that observing RVs that cause a lot of surprises is informative because we cannot predict the outcomes and with each new outcome we have effectively
-learned something  (namely that the $ i^{th} $ outcome took on the value that it did). Observing RVs with very concentrated distributions is not very informative
-under this conception because by just choosing the most probable outcome we can correctly predict most actually observed outcomes. Obviously, if I manage to predict
-an outcome beforehand, it's occurrence is not teaching me anything.
+Shannon's idea was that observing RVs that cause a lot of surprises is informative because we cannot predict the outcomes and with each new outcome we have effectively learned something (namely that the $ i^{th} $ outcome took on the value that it did). Observing RVs with very concentrated distributions is not very informative under this conception because by just choosing the most probable outcome we can correctly predict most actually observed outcomes. Obviously, if I manage to predict an outcome beforehand, its occurrence is not teaching me anything.
 
-The goal of Shannon was to find a function that captures this intuitive idea. He eventually found it and showed that it is the only function to have properties
-that encompass the intuition. This function is called the
-\textbf{entropy} of a RV and it is simply the expected
-\textbf{surprisal} value, expressed in bits.
+The goal of Shannon was to find a function that captures this intuitive idea. He eventually found it and showed that it is the only function to have properties that encompass the intuition. This function is called the \textbf{entropy} of a RV and it is simply the expected \textbf{surprisal} value, expressed in bits.
 
 \begin{Definition}[Surprisal]
 The surprisal (value) of an outcome $ x \in \supp(X) $ of some RV $ X
 $ is defined as $ -\log_{2}(P(X=x)) = \log_2(\frac{1}{P(X=x)})$.
 \end{Definition} 
 
-Notice that we are using the logarithm of base 2 here. This is because surprisal and entropy are standardly measured in bits. Intuitively, the surprisal measures
-how many bits one needs to encode an observed outcome given that one knows the distribution underlying that outcome. The entropy measures how many bits one
-will need on average to encode an outcome that is generated by the distribution $ P_{X} $.
+Notice that we are using the logarithm of base 2 here. This is because surprisal and entropy are standardly measured in bits. Intuitively, the surprisal measures how many bits one needs to encode an observed outcome given that one knows the distribution underlying that outcome. Check \href{http://www.umsl.edu/~fraundorfp/egsurpriNOLOGS.html}{this website} to get a feeling for surprisal values measured in bits.
 
 \begin{Definition}[Entropy]
 The entropy $H(P_X)$ of a RV $ X $ with distribution $P_X$ is defined as 
@@ -46,16 +33,16 @@ $$H(P_X) := \E[-\log_{2}(P(X=x))] = - \!\! \sum_{x \in \supp(X)} P(X=x) \log_2(P
 For the ease of notation, we often write $H(X)$ instead of $H(P_X)$.
 \end{Definition}
 
-Figure~\ref{fig:binaryEntropy} shows the entropy of the Bernoulli distribution as a function of the
-parameter $ \theta $. The entropy function of the Bernoulli is often called the \textbf{binary entropy}.
-It measures the information of a binary decision, like a coin flip or an answer to a yes/no-question.
-The entropy of the Bernoulli is 1 bit when the distribution is uniform, i.e.\ when both choices are equally 
-probable. 
+\href{https://en.wikipedia.org/wiki/Shannon%27s_source_coding_theorem}{Shannon's source-coding theorem} states that the entropy $H(X)$ of a random variable $X$ measures how many bits one will need on average to encode an outcome that is generated by the distribution $ P_{X} $.
+
+The simplest and simultaneously most important example of entropy is given in Figure~\ref{fig:binaryEntropy} which shows the entropy of the Bernoulli distribution as a function of the parameter $ \theta \in [0,1]$. The entropy function of the Bernoulli is often called the \textbf{binary entropy} $h(\theta) := \theta \cdot \log_2(\theta) + (1-\theta) \log_2(1-\theta)$. It measures the information of a binary decision, like a coin flip or an answer to a yes/no-question.
+The entropy of the Bernoulli attains its maximum of 1 bit when the distribution is uniform, i.e.\ when both choices are equally 
+probable. The entropy is 0 if and only if the coin is fully biased towards heads or tails.
 
 <<binaryEntropy, echo=F, cache=T, fig.cap="Binary entropy function",fig.align="center", fig.pos="t!">>=
 x = seq(0,1,.001)
-y = -(x*log(x)+(1-x)*log(1-x))
-plot(x,y,ylab="H(X)", xlab=expression(theta),type="l")
+y = -(x*log2(x)+(1-x)*log2(1-x))
+plot(x,y,ylab=expression(h(theta)), xlab=expression(theta),type="l")
 @
 
 From the plot is it also easy to see that entropy is never negative. It holds in general that entropy is non-negative,
@@ -63,13 +50,7 @@ because entropy is defined as expectation of surprisal and surprisal is the nega
 Because $ \log(x) \leq 0 $ for $ x \in (0,1] $, it is clear that $ -\log(x) \geq 0 $ for $ x $ in the same
 interval. Notice that from here on we drop the subscript and by convention let $ \log = \log_{2} $.
 
-A standard interpretation of the entropy is that it quantifies uncertainty. As we have pointed out
-before, a uniform distribution means that you are most uncertain and
-indeed the uniform distribution maximizes the entropy. However, the more choices you have to pick from, the more uncertain you are going to be. 
-The entropy function also captures this intuition. Notice that if a discrete distribution is uniform,
-all probabilities are $ \frac{1}{|\supp(X)|} $. Clearly, as we increase $ |\supp(X)| $, we decrease the
-probabilities. By decreasing the probabilities, we increase their negative logarithms, and hence their
-surprisal. Let us make this intuition more formal.
+A standard interpretation of the entropy is that it quantifies uncertainty. As we have pointed out before, a uniform distribution means that you are most uncertain and indeed the uniform distribution maximizes the entropy. However, the more choices you have to pick from uniformly, the more uncertain you are going to be.  The entropy function also captures this intuition. Notice that if a discrete distribution is uniform, all probabilities are $ \frac{1}{|\supp(X)|} $. Clearly, as we increase $ |\supp(X)| $, we decrease the probabilities. By decreasing the probabilities, we increase their negative logarithms, and hence their average surprisal. Let us make this intuition more formal.
 
 \begin{Theorem}
 A discrete RV $ X $ with uniform distribution and support of size $ n $ has entropy
@@ -91,6 +72,7 @@ you do not know a thing about chess yet, you assume that each move is equally pr
 what is the entropy of moving the king?
 \end{Exercise}
 
+\section{Conditional Entropy}
 At the outset of this section we promised you that you could easily transfer results from probability 
 theory to information theory. We will not be able to show any kind of linearity for entropy because it contains
 log-terms and the logarithm is not linear. We can however find alternative expressions for joint entropy (where 
@@ -100,15 +82,39 @@ conditional entropy. We have seen in Section~\ref{sec:jointconditionaldistributi
 \begin{Definition}[Conditional Entropy]
 For two jointly distributed RVs $ X,Y $ and $y \in \supp(Y)$ such that $P(Y=y)>0$, the conditional entropy of $ X $ given that $ Y=y $ is defined as
 \begin{align*}
-H(X \mid Y=y) &:= \E_X[-\log_{2}(P(X=x \mid Y=y))] \\
-&= - \!\! \sum_{x \in \supp(X)} P(X=x \mid Y=y) \log_2(P(X=x \mid Y=y))\, . 
+H(X | Y=y) &:= \E_X[-\log_{2}(P(X=x | Y=y))] \\
+&= - \!\! \sum_{x \in \supp(X)} P(X=x | Y=y) \log_2(P(X=x | Y=y))\, . 
 \end{align*}
 The conditional entropy of $X$ given $Y$ is defined as
-$$ H(X \mid Y) := \E_Y[ H(X \mid Y) ] = \sum_{y \in \supp(Y)} P(Y=y) H(X \mid Y=y) \, .$$
+$$ H(X | Y) := \E_Y[ H(X | Y) ] = \sum_{y \in \supp(Y)} P(Y=y) H(X | Y=y) \, .$$
 \end{Definition}
 
-With this definition at hand we show that the joint entropy decomposes according to the
-chain rule.
+Intuitively, $H(X | Y)$ is the (average) uncertainty of $X$ after learning $Y$. Intuitively, learning $Y$ (and in fact any information) cannot increase your uncertainty about $X$. Formally, one can prove the following 
+\begin{Lemma}[see e.g.\ Proposition~4 of \href{http://homepages.cwi.nl/~schaffne/courses/inftheory/2016/notes/CramerFehr.pdf}{this script}] \label{lemma:noincrease}
+For any two random variables $X,Y$ with joint distribution $P_{XY}$, it holds that $H(X | Y) \leq H(X)$.
+\end{Lemma}
+Note however, that this non-increase of uncertainty only holds on average, as illustrated by the following example:
+
+\paragraph{Example}
+Consider the binary random variables $X$ and $Y$, with joint distribution
+\begin{align*}
+&P(X=0,Y=0) = \frac{1}{2}, \quad P(X=0,Y=1) = \frac{1}{4}\\
+&P(X=1,Y=0) = 0, \quad P(X=1,Y=1) = \frac{1}{4}.
+\end{align*}
+By marginalization, we find that $P(X=0) = \frac{3}{4}$ and $P(X=1) = \frac{1}{4}$, while $P(Y=0) = P(Y=1) = \frac{1}{2}$. This allows us to make the following computations:
+\begin{align*}
+H(X,Y) &= \frac{1}{2}\log 2 + \frac{1}{4} \log 4  + \frac{1}{4} \log 4 = \frac{3}{2}\\
+H(X) &= h\left(\frac{1}{4}\right) = h\left(\frac{3}{4}\right) \approx 0.81\\
+H(Y) &= h\left(\frac{1}{2}\right) = 1\\
+H(X|Y) &= P(Y=0) \cdot H(X | Y=0) + P(Y=1) \cdot H(X | Y=1)\\
+&= \frac{1}{2} \cdot 0 + \frac12 \cdot 1 = \frac12 \\
+H(Y|X) &= P(X=0) \cdot H(Y | X=0) + P(X=1) \cdot H(Y | X=1)\\
+&= \frac{3}{4} \cdot h\left(\frac{1}{3} \right) + \frac{1}{4} \cdot 0 \approx 0.69
+\end{align*}
+% We also could have computed $H(X|Y)$ and $H(Y|X)$ directly through the definition of conditional entropy.
+Note that for this specific distribution, learning the outcome $Y=1$ increases the uncertainty about $X$, $H(X|Y=1) > H(X)$, but on average, we always have $H(X|Y) \leq H(X)$. It is important to remember that Lemma~\ref{lemma:noincrease} only holds on average, not for specific values of $Y$. Note also that in this example, $H(X|Y) \neq H(Y|X)$. 
+
+It is not a coincidence that the joint entropy $H(X,Y)$ in the example above is equal to $H(X|Y)+H(Y)$ and $H(Y|X)+H(X)$. One can prove this chain rule in general:
 
 \begin{align*}
 H(X,Y) &= \underset{\substack{x \in \supp(X)\\y \in \supp(Y)}}{\sum} -\log(P(X=x,Y=y)) \times P(X=x, Y=y) \\
@@ -119,13 +125,15 @@ H(X,Y) &= \underset{\substack{x \in \supp(X)\\y \in \supp(Y)}}{\sum} -\log(P(X=x
 \begin{split}
 &=\sum_{y \in \supp(Y)} P(Y=y) \times \sum_{x \in \supp(X)} -\log(P(X=x \mid  Y=y)) \times P(X=x \mid Y=y) \\ &\qquad - \underset{y \in \supp(Y)}{\sum}\log(P(Y=y)) \times P(Y=y)
 \end{split} \\
-&= H(X \mid Y) + H(Y)
+&= H(X | Y) + H(Y) \; .
 \end{align*}
 
 \begin{Exercise}
-Prove that $ H(X,Y \mid Z) = H(X \mid Z) + H(Y \mid Z) $ if $ X \bot Y \mid Z $.
+Prove that $ H(X,Y | Z) = H(X | Z) + H(Y | Z) $ if $ X \bot Y \mid Z $.
 \end{Exercise}
 
+
+\section{An Information-Theoretic View on EM}
 Now that we have seen some information-theoretic concepts, you may be happy to hear that there is an information-theoretic interpretation
 of EM. This interpretation helps us to get a better intuition for the algorithm. To formulate that interpretation we need
 one more concept, however.
@@ -149,11 +157,9 @@ It is worthwhile to point out the difference between relative and conditional en
 know what value $ Y $ takes on. In the case of relative entropy you do not know the value of $ Y $, only its distribution.
 
 \begin{Exercise}
-Show that $ D(X,Y||Y) = H(X \mid Y) $. Furthermore show that $ D(X,Y||Y) = H(X) $ if $ X\bot Y $.
+Show that $ D(X,Y||Y) = H(X | Y) $. Furthermore show that $ D(X,Y||Y) = H(X) $ if $ X\bot Y $.
 \end{Exercise}
 
-
-\section{An Information-Theoretic View on EM}
 
 Let us start by remembering why we need EM. We have a model that defines a joint distribution
 over observed ($ x $) and latent data ($ z $). Such a model generally looks as follows:
