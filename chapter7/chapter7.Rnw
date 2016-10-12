@@ -15,6 +15,11 @@
 \newcommand{\E}{\mathbb{E}}
 \newcommand{\eps}{\varepsilon}
 
+\DeclareSymbolFont{extraup}{U}{zavm}{m}{n}
+\DeclareMathSymbol{\varheart}{\mathalpha}{extraup}{86}
+\DeclareMathSymbol{\vardiamond}{\mathalpha}{extraup}{87}
+
+
 \newcommand{\philip}[1]{ \textcolor{red}{\textbf{Philip:} #1}}
 \newcommand{\chris}[1]{ \textcolor{blue}{\textbf{Chris:} #1}}
 
