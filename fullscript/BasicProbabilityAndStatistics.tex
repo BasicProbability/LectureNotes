@@ -21,7 +21,6 @@
 \newcommand{\hlkwb}[1]{\textcolor[rgb]{0.69,0.353,0.396}{#1}}%
 \newcommand{\hlkwc}[1]{\textcolor[rgb]{0.333,0.667,0.333}{#1}}%
 \newcommand{\hlkwd}[1]{\textcolor[rgb]{0.737,0.353,0.396}{\textbf{#1}}}%
-\let\hlipl\hlkwb
 
 \usepackage{framed}
 \makeatletter
@@ -695,7 +694,7 @@ The entropy ``does not care'' about the actual outcomes or labels of a random va
 Compute the entropy of $Y \sim Binomial(n=2,p=1/2)$.
 \end{Exercise}
 
-The simplest and simultaneously most important example of entropy is given in Figure~\ref{fig:binaryEntropy} which shows the entropy of the Bernoulli distribution as a function of the parameter $ \theta \in [0,1]$. The entropy function of the Bernoulli is often called the \textbf{binary entropy} $h(\theta) := \theta \cdot \log_2(\theta) + (1-\theta) \log_2(1-\theta)$. It measures the information of a binary decision, like a coin flip or an answer to a yes/no-question.
+The simplest and simultaneously most important example of entropy is given in Figure~\ref{fig:binaryEntropy} which shows the entropy of the Bernoulli distribution as a function of the parameter $ \theta \in [0,1]$. The entropy function of the Bernoulli is often called the \textbf{binary entropy} $h(\theta) := -\theta \cdot \log_2(\theta) - (1-\theta) \log_2(1-\theta)$. It measures the information of a binary decision, like a coin flip or an answer to a yes/no-question.
 The entropy of the Bernoulli attains its maximum of 1 bit when the distribution is uniform, i.e.\ when both choices are equally 
 probable. The entropy is 0 if and only if the coin is fully biased towards heads or tails. As explained above, the entropy of the distributions $(\theta, 1-\theta)$ and $(1-\theta,\theta)$ is the same and therefore $h(\theta)=h(1-\theta)$ and the graph is symmetric around $1/2$.
 
