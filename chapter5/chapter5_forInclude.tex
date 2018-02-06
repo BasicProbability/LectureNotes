@@ -88,7 +88,7 @@ $ X_{1}^{n} $, a statistic is the value of a function $ g $ on those RVs, i.e.\ 
 
 Arguably the most important statistic in all of statistics is the \textbf{sample mean}. The sample mean is just the average of the
 values of the RVs $ X_{1}^{n} $, i.e.\ of the data points. It is usually denoted by $ \overline{\mu} $. The
-sample mean can be seen as guess of the expectation of $ X_{i} $. The expectation is sometimes also
+sample mean can be seen as a guess of the expectation of $ X_{i} $. The expectation is sometimes also
 called mean and $ \overline{\mu} $ estimates it from a data sample; hence the name sample mean. Some distributions even have their
 mean $ \mu $ as a parameter. To indicate that we are just making a guess at $ \mu $ we put a horizontal bar on top.
 This same indicator (or a similar one, like a caret, in which case we would write $ \hat{\mu} $) can be used for other quantities, as well.
@@ -190,7 +190,7 @@ the smaller is the chance that we commit a large error when estimating the mean 
 the weak law of large numbers.
 
 \begin{Theorem}[Weak law of large numbers]\label{weakLaw}
-For $n \in \mathbb{N}$, let $X_{1}^{n},$ be  i.i.d.\ distributed random variables with distribution $ P_{X} $, expectation $ \E[X] \in \mathbb{R} $
+For $n \in \mathbb{N}$, let $X_{1}^{n},$ be  i.i.d.~random variables with distribution $ P_{X} $, expectation $ \E[X] \in \mathbb{R} $
 and variance $ var(X) = \sigma^{2} \in \mathbb{R} $. Further let
 $ X_{1}^{n} $ have sample mean $ \overline{\mu} = \frac{1}{n} \underset{i=1}{\overset{n}{\sum}X_{i}} $. Then for any real $ \eps > 0 $, it holds that 
 $$ \underset{n \rightarrow \infty}{\lim}P(|\mathbb{E}[X] - \overline{\mu}| \geq \eps) = 0 \ . $$
